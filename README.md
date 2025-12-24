@@ -2,17 +2,17 @@
 
 **Software Services | Interactive Learning | Content Innovation**
 
-The JT Dev Studio is a professional development studio. It is a high-performance software suite designed to help users create, learn, and innovate. 
+The JT Dev Studio is an on-going professional development studio. With high-performance software tools and resources tailored to help users create, learn, and innovate. 
 From industry-leading walkthrough guides to professional-grade AI tools, the Studio is built to empower your digital presence and technical mastery.
 
 ---
 
 ## ✨ What We Offer
 
-### 🏗️ Engineering & Software Services
+### 🧑‍💻 Engineering & Software Services
 I help users bridge the gap between idea and execution. The Studio houses a variety of software services designed to streamline content creation and technical development.
 
-### 🧠 Masterclass Walkthrough Guides
+### 📖 Setup Walkthrough Guides
 We provide professional how-to guides developed for the modern engineer:
 *   **Version Control**: Mastery of Git and professional GitHub collaborative workflows.
 *   **Next.js Development**: High-performance patterns for the React ecosystem.
@@ -31,7 +31,7 @@ Built with precision using the industry's most advanced tools:
 
 ---
 
-## 🔮 Roadmap: Coming Soon to the Studio
+## 🎬 Roadmap: Coming Soon to the Studio
 
 We are constantly expanding our suite of professional software:
 *   **AI Resume & Document Suite**: Generate professional-grade resumes and cover letters using the latest AI models.
