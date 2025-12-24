@@ -29,17 +29,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const initSession = async () => {
       try {
-        console.log('[AuthContext] Fetching initial session...')
-        const { data: { session }, error } = await supabase.auth.getSession()
+        console.log('[AuthContext] Fetching initial user...')
+        // Use getUser() instead of getSession() - it validates the JWT with Supabase
+        // and is more reliable for detecting sessions set by server actions
+        const { data: { user: currentUser }, error } = await supabase.auth.getUser()
         
         if (error) {
-          console.error('[AuthContext] getSession error:', error.message)
+          // getUser() returns an error if no session exists, which is normal
+          console.log('[AuthContext] getUser result:', error.message)
         }
         
-        console.log(`[AuthContext] Initial session result: ${session?.user?.email || 'No session'}`)
+        console.log(`[AuthContext] Initial user result: ${currentUser?.email || 'No user'}`)
         
         if (mounted) {
-          setUser(session?.user || null)
+          setUser(currentUser || null)
           setLoading(false)
           setHasMounted(true)
         }
@@ -65,9 +68,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     )
 
+    // Also check session when tab becomes visible (handles redirect scenarios)
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'visible' && mounted) {
+        const { data: { user: currentUser } } = await supabase.auth.getUser()
+        if (mounted) {
+          setUser(currentUser || null)
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
     return () => {
       mounted = false
       subscription.unsubscribe()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 

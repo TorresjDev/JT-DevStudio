@@ -61,8 +61,10 @@ export default function UserMenu({
   }
 
   const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture
-  const displayName = user.user_metadata?.full_name || user.email?.split('@')[0]
+  const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'
   const isGithub = user.app_metadata?.provider === 'github'
+  // Get initials for avatar fallback (first 2 letters of display name)
+  const initials = displayName.slice(0, 2).toUpperCase()
 
   return (
     <div className="relative">
@@ -80,8 +82,8 @@ export default function UserMenu({
               className="rounded-full border border-[#DAA520]/20 object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-[#DAA520]/20">
-              <UserIcon className="w-4 h-4 text-[#DAA520]" />
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-[#DAA520]/30 to-[#DAA520]/10 flex items-center justify-center border border-[#DAA520]/30">
+              <span className="text-xs font-bold text-[#DAA520]">{initials}</span>
             </div>
           )}
           {isGithub && (

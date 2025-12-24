@@ -1,20 +1,40 @@
 'use client'
 
 import { useState } from 'react'
+
 import { motion } from 'framer-motion'
-import { login, signup, signInWithGithub } from './actions'
+import { login, signup, signInWithGithub, type AuthResult } from './actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { LogIn, UserPlus, Github, Mail, Lock } from 'lucide-react'
+import { LogIn, UserPlus, Github, Mail, Lock, AlertCircle } from 'lucide-react'
 
 export default function LoginPage() {
+
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setIsLoading(true)
-    // The form action will handle the redirect, so we don't need to do much here
-    // But we can add some loading state if we want better UX
+    setError(null)
+
+    const formData = new FormData(e.currentTarget)
+    const action = isLogin ? login : signup
+    
+    try {
+      const result: AuthResult = await action(formData)
+      
+      if (result.success && result.redirectTo) {
+        window.location.href = result.redirectTo
+      } else if (result.error) {
+        setError(result.error)
+        setIsLoading(false)
+      }
+    } catch (err) {
+      setError('An unexpected error occurred')
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -49,7 +69,18 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form action={isLogin ? login : signup} onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-red-400 text-sm"
+            >
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{error}</span>
+            </motion.div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
               <label className="text-xs font-medium text-white/50 ml-1">Email Address</label>
               <div className="relative group">
