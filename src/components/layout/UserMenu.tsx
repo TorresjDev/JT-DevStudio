@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { signout } from '@/app/login/actions'
 import { Button } from '@/components/ui/button'
-import { 
-  LogOut, 
-  User as UserIcon, 
+import {
+  LogOut,
+  User as UserIcon,
   ChevronDown,
-  Github
+  Github,
+  Settings
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -19,11 +20,11 @@ import { useAuth } from '@/context/AuthContext'
 // Supabase client for sign out action
 const supabase = createClient()
 
-export default function UserMenu({ 
-  showName = true, 
+export default function UserMenu({
+  showName = true,
   dropdownPlacement = "top",
   dropdownAlign = "right"
-}: { 
+}: {
   showName?: boolean,
   dropdownPlacement?: "top" | "bottom"
   dropdownAlign?: "left" | "right"
@@ -92,7 +93,7 @@ export default function UserMenu({
             </div>
           )}
         </div>
-        
+
         {showName && (
           <div className="hidden md:flex flex-col items-start text-left">
             <span className="text-xs font-bold text-white/90 leading-none">{displayName}</span>
@@ -118,14 +119,23 @@ export default function UserMenu({
               <p className="text-xs font-medium text-white/40 mb-1">Signed in as</p>
               <p className="text-sm font-bold text-white truncate">{user.email}</p>
             </div>
-            
-            <Link 
-              href="/about" 
+
+            <Link
+              href="/about"
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-all group"
             >
               <UserIcon className="w-4 h-4 group-hover:text-[#DAA520] transition-colors" />
               <span className="text-sm font-medium">Profile Details</span>
+            </Link>
+
+            <Link
+              href="/settings"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-3 py-2 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-all group"
+            >
+              <Settings className="w-4 h-4 group-hover:text-[#DAA520] transition-colors" />
+              <span className="text-sm font-medium">Settings</span>
             </Link>
 
             <button
