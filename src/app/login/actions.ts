@@ -113,7 +113,7 @@ export async function signup(formData: FormData): Promise<AuthResult> {
   }
 
   revalidatePath('/', 'layout')
-  return { success: true, redirectTo: '/' }
+  return { success: true, redirectTo: '/auth/confirm-email' }
 }
 
 /**
