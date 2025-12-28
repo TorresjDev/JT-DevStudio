@@ -42,6 +42,19 @@ export const apiRateLimiter = isConfigured
     : null
 
 /**
+ * Rate limiter for authentication endpoints
+ * Allows 5 attempts per 15 minutes per IP (brute-force protection)
+ */
+export const authRateLimiter = isConfigured
+    ? new Ratelimit({
+        redis: Redis.fromEnv(),
+        limiter: Ratelimit.slidingWindow(5, '15 m'),
+        analytics: true,
+        prefix: 'ratelimit:auth',
+    })
+    : null
+
+/**
  * Helper function to check rate limit
  * Returns { success: true } if rate limit not configured (dev mode)
  */
