@@ -170,8 +170,8 @@ export default function LoginPage() {
           <span
             key={label}
             className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${met
-                ? 'bg-green-500/10 text-green-400'
-                : 'bg-white/5 text-white/30'
+              ? 'bg-green-500/10 text-green-400'
+              : 'bg-white/5 text-white/30'
               }`}
           >
             {met ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
@@ -268,7 +268,7 @@ export default function LoginPage() {
                         onChange={(e) => handleInputChange('username', e.target.value.toLowerCase())}
                         required={!isLogin}
                         className={`bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${usernameStatus === 'taken' ? 'border-red-500/50' :
-                            usernameStatus === 'available' ? 'border-green-500/50' : ''
+                          usernameStatus === 'available' ? 'border-green-500/50' : ''
                           }`}
                       />
                       {usernameStatus !== 'idle' && (
@@ -330,10 +330,10 @@ export default function LoginPage() {
                       onChange={(e) => handleInputChange('confirmEmail', e.target.value)}
                       required={!isLogin}
                       className={`bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${formData.confirmEmail && formData.email !== formData.confirmEmail
-                          ? 'border-red-500/50'
-                          : formData.confirmEmail && formData.email === formData.confirmEmail
-                            ? 'border-green-500/50'
-                            : ''
+                        ? 'border-red-500/50'
+                        : formData.confirmEmail && formData.email === formData.confirmEmail
+                          ? 'border-green-500/50'
+                          : ''
                         }`}
                     />
                     {formData.confirmEmail && (
@@ -395,10 +395,10 @@ export default function LoginPage() {
                       onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                       required={!isLogin}
                       className={`bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${formData.confirmPassword && formData.password !== formData.confirmPassword
-                          ? 'border-red-500/50'
-                          : formData.confirmPassword && formData.password === formData.confirmPassword
-                            ? 'border-green-500/50'
-                            : ''
+                        ? 'border-red-500/50'
+                        : formData.confirmPassword && formData.password === formData.confirmPassword
+                          ? 'border-green-500/50'
+                          : ''
                         }`}
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
@@ -439,7 +439,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-8">
-            <div className="relative mb-6">
+            <div className="relative mb-4">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-white/10"></div>
               </div>
@@ -447,6 +447,12 @@ export default function LoginPage() {
                 <span className="bg-[#121212] px-2 text-white/30">Or continue with</span>
               </div>
             </div>
+
+            {/* OAuth trust reassurance */}
+            <p className="text-center text-xs text-white/30 mb-4 flex items-center justify-center gap-1.5">
+              <Lock className="w-3 h-3" />
+              You&apos;ll be securely redirected to our authentication partner
+            </p>
 
             <div className="grid grid-cols-2 gap-3">
               <form action={signInWithGithub}>
