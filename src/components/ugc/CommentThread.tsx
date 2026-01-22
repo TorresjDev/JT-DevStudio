@@ -7,7 +7,7 @@
  * Supports editing, deleting, and replying to comments.
  */
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { formatDistanceToNow } from './utils'
 import { useAuth } from '@/context/AuthContext'
@@ -28,7 +28,7 @@ interface CommentThreadProps {
  * Depth = How many levels deep in the reply chain
  * MaxDepth = Limit nesting to prevent infinite indentation
  */
-export function CommentThread({ 
+function CommentThreadBase({
   comment, 
   postId,
   depth = 0, 
@@ -192,6 +192,13 @@ export function CommentThread({
 }
 
 /**
+ * ⚡ Performance Optimization:
+ * Wrapped in React.memo to prevent unnecessary re-renders of the entire tree
+ * when parent state updates.
+ */
+export const CommentThread = React.memo(CommentThreadBase)
+
+/**
  * Comments Section
  * 
  * Container for all comments on a post
@@ -201,7 +208,7 @@ interface CommentsSectionProps {
   comments: CommentThreadType[]
 }
 
-export function CommentsSection({ postId, comments }: CommentsSectionProps) {
+function CommentsSectionBase({ postId, comments }: CommentsSectionProps) {
   const { user } = useAuth()
 
   return (
@@ -242,3 +249,9 @@ export function CommentsSection({ postId, comments }: CommentsSectionProps) {
     </section>
   )
 }
+
+/**
+ * ⚡ Performance Optimization:
+ * Wrapped in React.memo to prevent unnecessary re-renders when parent posts change.
+ */
+export const CommentsSection = React.memo(CommentsSectionBase)
