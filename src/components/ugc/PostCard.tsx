@@ -7,6 +7,7 @@
  * Shows title, excerpt, author info, and metadata.
  */
 
+import { memo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatDistanceToNow } from './utils'
@@ -17,7 +18,7 @@ interface PostCardProps {
   showAuthor?: boolean
 }
 
-export function PostCard({ post, showAuthor = true }: PostCardProps) {
+function PostCardBase({ post, showAuthor = true }: PostCardProps) {
   // Create an excerpt from the content (first 150 characters)
   const excerpt = post.content.length > 150 
     ? post.content.substring(0, 150) + '...' 
@@ -96,6 +97,11 @@ export function PostCard({ post, showAuthor = true }: PostCardProps) {
     </article>
   )
 }
+
+/**
+ * Optimized with React.memo to prevent unnecessary re-renders in feeds/lists
+ */
+export const PostCard = memo(PostCardBase)
 
 /**
  * Post Card Skeleton
