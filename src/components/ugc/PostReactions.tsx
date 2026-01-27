@@ -30,26 +30,30 @@ const REACTION_TYPES: ReactionType[] = ['like', 'love', 'fire']
 
 export function PostReactions({ 
   postId, 
-  initialCounts = [],
-  initialUserReactions = []
+  initialCounts,
+  initialUserReactions
 }: PostReactionsProps) {
   const { user } = useAuth()
   const [isPending, startTransition] = useTransition()
   
   const [counts, setCounts] = useState<Record<ReactionType, number>>(() => {
     const initial: Record<ReactionType, number> = { like: 0, love: 0, fire: 0 }
-    for (const count of initialCounts) {
-      initial[count.reaction_type] = count.count
+    if (initialCounts) {
+      for (const count of initialCounts) {
+        initial[count.reaction_type] = count.count
+      }
     }
     return initial
   })
   
   const [userReactions, setUserReactions] = useState<Set<ReactionType>>(
-    new Set(initialUserReactions)
+    new Set(initialUserReactions || [])
   )
 
   // Fetch reactions on mount if not provided
   useEffect(() => {
+    if (initialCounts !== undefined || initialUserReactions !== undefined) return
+
     async function fetchReactions() {
       const [reactionCounts, userReacts] = await Promise.all([
         getPostReactions(postId),
@@ -65,7 +69,7 @@ export function PostReactions({
     }
     
     fetchReactions()
-  }, [postId])
+  }, [postId, initialCounts, initialUserReactions])
 
   const handleReaction = (reactionType: ReactionType) => {
     if (!user) {

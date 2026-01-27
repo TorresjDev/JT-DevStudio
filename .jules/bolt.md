@@ -1,0 +1,3 @@
+## 2024-05-23 - Supabase Client & Server Actions Overhead
+**Learning:** `createClient` in `src/utils/supabase/server.ts` calls `cookies()`, creating a new client instance each time. Server Actions (like `getUserReactions`) that create their own client trigger redundant `supabase.auth.getUser()` calls when used alongside other data fetching in Server Components.
+**Action:** In Server Components, fetch data in parallel using `Promise.all` and pass results to Client Components to avoid waterfall and redundant auth checks. Avoid calling multiple Server Actions that each perform their own auth check if possible, or refactor to share the client.
