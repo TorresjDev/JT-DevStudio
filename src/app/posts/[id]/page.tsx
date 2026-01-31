@@ -14,6 +14,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import DOMPurify from 'isomorphic-dompurify'
 import { getPost, getThreadedComments, getPostMedia, getMediaUrl } from '@/lib/ugc'
+import { getPostReactions, getUserReactions } from '@/lib/ugc/reactions'
 import { CommentsSection, PostReactions, DeletePostButton, formatDistanceToNow, formatDate } from '@/components/ugc'
 import { createClient } from '@/utils/supabase/server'
 
@@ -75,10 +76,12 @@ async function PostContent({ postId }: { postId: string }) {
   }
 
   try {
-    const [post, comments, media, currentUserId] = await Promise.all([
+    const [post, comments, media, reactions, userReactions, currentUserId] = await Promise.all([
       getPost(postId),
       getThreadedComments(postId),
       getPostMedia(postId),
+      getPostReactions(postId),
+      getUserReactions(postId),
       getCurrentUserId(),
     ])
 
@@ -228,7 +231,11 @@ async function PostContent({ postId }: { postId: string }) {
         />
 
         {/* Reactions */}
-        <PostReactions postId={postId} />
+        <PostReactions
+          postId={postId}
+          initialCounts={reactions}
+          initialUserReactions={userReactions}
+        />
 
         {/* Delete Button - Only shows for post owner */}
         <DeletePostButton
