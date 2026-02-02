@@ -7,7 +7,7 @@
  * Supports editing, deleting, and replying to comments.
  */
 
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import Image from 'next/image'
 import { formatDistanceToNow } from './utils'
 import { useAuth } from '@/context/AuthContext'
@@ -27,8 +27,11 @@ interface CommentThreadProps {
  * 
  * Depth = How many levels deep in the reply chain
  * MaxDepth = Limit nesting to prevent infinite indentation
+ *
+ * ⚡ Performance: Memoized to prevent re-rendering entire thread trees when parent updates.
+ * This is crucial for deep nested threads where one update shouldn't re-render everything.
  */
-export function CommentThread({ 
+function CommentThreadBase({
   comment, 
   postId,
   depth = 0, 
@@ -190,6 +193,8 @@ export function CommentThread({
     </div>
   )
 }
+
+export const CommentThread = memo(CommentThreadBase)
 
 /**
  * Comments Section
