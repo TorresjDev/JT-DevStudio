@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
 
@@ -96,8 +96,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  // Memoize context value to prevent unnecessary consumer re-renders
+  // This ensures consumers only re-render when auth state actually changes,
+  // not when AuthProvider receives a re-render from its parent.
+  const value = useMemo(() => ({
+    user,
+    loading,
+    hasMounted
+  }), [user, loading, hasMounted])
+
   return (
-    <AuthContext.Provider value={{ user, loading, hasMounted }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )
