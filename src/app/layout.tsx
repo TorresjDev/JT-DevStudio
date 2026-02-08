@@ -21,16 +21,16 @@ export default function RootLayout({
 		<html lang="en" suppressHydrationWarning>
 			<body className={inter.className}>
 				<AuthProvider>
-					<Navigation />
 					<ThemeProvider
-						enableSystem={false}
+						enableSystem
 						disableTransitionOnChange
 						attribute="class"
 						defaultTheme="dark"
 					>
+						<Navigation />
 						<LayoutContent>{children}</LayoutContent>
+						<Footer />
 					</ThemeProvider>
-					<Footer />
 				</AuthProvider>
 			</body>
 		</html>

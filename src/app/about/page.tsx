@@ -8,23 +8,27 @@ import { createClient } from "@/utils/supabase/server";
 import { Github, Globe, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default async function AboutPage() {
+export default async function AboutPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ username?: string }>;
+}) {
+	const { username: queryUsername } = await searchParams;
 	const supabase = await createClient();
 	const { data: { user } } = await supabase.auth.getUser();
 
-	// Extract GitHub username if available
-	const githubUsername = user?.user_metadata?.user_name || user?.user_metadata?.preferred_username;
-	const isGithubUser = !!githubUsername;
+	// Extract GitHub username if available from session
+	const sessionUsername = user?.user_metadata?.user_name || user?.user_metadata?.preferred_username;
+	
+	// Priority: 1. query param, 2. logged in user, 3. creator default
+	const githubUsername = queryUsername || sessionUsername || "torresjdev";
+	const isCreator = githubUsername === "torresjdev";
+	const isSelf = !!sessionUsername && githubUsername === sessionUsername;
 	
 	let profile = null;
 
 	try {
-		if (isGithubUser) {
-			profile = await getGitHubProfile(githubUsername);
-		} else if (!user) {
-			// If not logged in, show the site owner's profile (original behavior)
-			profile = await getGitHubProfile();
-		}
+		profile = await getGitHubProfile(githubUsername);
 	} catch (e) {
 		console.error("Error fetching github profile:", e);
 	}
@@ -100,16 +104,18 @@ export default async function AboutPage() {
 			<div className="relative p-6 md:p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-xl">
 				<p className="text-lg md:text-xl leading-relaxed text-gray-200/90 font-light text-center md:text-left">
 					<span className="mr-2 text-2xl">💻</span>
-					{isGithubUser ? (
+					{isSelf ? (
 						`Welcome ${profile?.name || githubUsername}! Here is a quick look at your development activity and profile stats directly from GitHub.`
+					) : isCreator ? (
+						`Welcome to my portfolio! I'm ${profile?.name || "the creator"}. Here's a look at my development activity and projects.`
 					) : (
-						"I'm a software engineer with hands-on experience in full-stack development. Link your GitHub to showcase your technical footprint here."
+						`Viewing profile for ${profile?.name || githubUsername}. Showcase your own technical footprint by linking your GitHub.`
 					)}
 				</p>
 			</div>
 
 			{/* GitHub Stats Grid */}
-			{(isGithubUser || (!user && profile)) && profile ? (
+			{profile ? (
 				<section className="space-y-8 animate-in slide-in-from-bottom-5 duration-700 delay-200">
 					<div className="flex justify-center">
 						<div className="relative group overflow-hidden rounded-xl border border-white/10 shadow-2xl hover:shadow-[#DAA520]/10 hover:border-[#DAA520]/30 transition-all duration-500 bg-black/40">

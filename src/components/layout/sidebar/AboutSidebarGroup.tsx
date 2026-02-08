@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -14,7 +14,12 @@ import Icon from "../../ui/icon";
 
 export default function AboutSidebarGroup() {
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
 	const { isMobile, setOpenMobile } = useSidebar();
+
+	const username = searchParams.get("username");
+	const isCreatorActive = pathname === "/about" && username === "torresjdev";
+	const isProfileActive = pathname === "/about" && !username;
 
 	return (
 		<SidebarGroup>
@@ -22,20 +27,32 @@ export default function AboutSidebarGroup() {
 			<SidebarGroupContent>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<div className="flex items-center gap-2 cursor-pointer">
-							<SidebarMenuButton asChild isActive={pathname === "/about"}>
-								<Link
-									href="/about"
-									onClick={() => isMobile && setOpenMobile(false)}
-								>
-									<Icon
-										name="person"
-										className="rounded-full p-0.5 bg-white font-medium"
-									/>
-									<span className="">Profile</span>
-								</Link>
-							</SidebarMenuButton>
-						</div>
+						<SidebarMenuButton asChild isActive={isCreatorActive}>
+							<Link
+								href="/about?username=torresjdev"
+								onClick={() => isMobile && setOpenMobile(false)}
+							>
+								<Icon
+									name="code"
+									className="rounded-full p-0.5 bg-[#DAA520] font-medium text-black"
+								/>
+								<span className="">Creator</span>
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<SidebarMenuButton asChild isActive={isProfileActive}>
+							<Link
+								href="/about"
+								onClick={() => isMobile && setOpenMobile(false)}
+							>
+								<Icon
+									name="person"
+									className="rounded-full p-0.5 bg-white font-medium text-black"
+								/>
+								<span className="">Profile</span>
+							</Link>
+						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarGroupContent>
