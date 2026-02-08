@@ -6,10 +6,10 @@ import { landingCards } from "../lib/landing-cards";
 
 export default function LandingPage() {
 	return (
-		<main className="space-y-24 px-4 md:px-10 py-16 text-white max-w-7xl mx-auto overflow-y-scroll scroll-m-0">
+		<main className="space-y-24 px-4 md:px-10 py-16 text-foreground max-w-7xl mx-auto overflow-y-scroll scroll-m-0">
 			{/* Hero Section */}
 			<section className="text-center">
-				<h1 className="text-5xl font-extrabold">
+				<h1 className="text-5xl font-extrabold text-foreground tracking-tight">
 					Welcome to my Dev Studio
 					<div className="animate-flareSpark contents">
 						<Image
@@ -23,7 +23,7 @@ export default function LandingPage() {
 					</div>
 				</h1>
 
-				<p className="mt-4 text-xl text-gray-300">
+				<p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
 					Explore hands-on dev projects, AI tools, walkthroughs, and more —
 					built with cutting-edge tech.
 				</p>
@@ -60,7 +60,7 @@ export default function LandingPage() {
 				<h3 className="text-2xl font-semibold">
 					Want to collaborate or support?
 				</h3>
-				<p className="text-gray-400 mt-2">
+				<p className="text-muted-foreground mt-2">
 					Contact me or donate to support ongoing development.
 				</p>
 				<Link
@@ -86,10 +86,10 @@ function LandingCard({
 	return (
 		<Link
 			href={href}
-			className="block p-6 bg-zinc-900 rounded-lg shadow hover:bg-zinc-800 transition"
+			className="block p-6 bg-card border border-border rounded-lg shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 group"
 		>
-			<h4 className="text-xl font-bold text-yellow-400 mb-2">{title}</h4>
-			<p className="text-gray-300">{desc}</p>
+			<h4 className="text-xl font-bold text-primary mb-2 group-hover:text-primary/90 transition-colors">{title}</h4>
+			<p className="text-muted-foreground">{desc}</p>
 		</Link>
 	);
 }

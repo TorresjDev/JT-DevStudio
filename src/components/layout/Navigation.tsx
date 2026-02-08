@@ -2,6 +2,7 @@ import { Navbar, NavbarBrand, NavbarContent } from "@heroui/navbar";
 import Link from "next/link";
 import Image from "next/image";
 import UserMenu from "./UserMenu";
+import { ThemeToggle } from "../ui/theme-toggle";
 
 export default function Navigation() {
 	return (
@@ -33,7 +34,8 @@ export default function Navigation() {
 				</Link>
 			</NavbarContent>
 
-			<NavbarContent justify="end">
+			<NavbarContent justify="end" className="gap-4">
+				<ThemeToggle />
 				<UserMenu showName={false} dropdownPlacement="bottom" />
 			</NavbarContent>
 		</Navbar>

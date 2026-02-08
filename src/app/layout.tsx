@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className={`gradient-background ${inter.className}`}>
+			<body className={inter.className}>
 				<AuthProvider>
 					<Navigation />
 					<ThemeProvider

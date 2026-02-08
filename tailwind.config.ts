@@ -11,35 +11,86 @@ export default {
 		"./node_modules/@heroui/theme/dist/components/(button|navbar|ripple|spinner).js",
 	],
 	theme: {
+		container: {
+			center: true,
+			padding: "2rem",
+			screens: {
+				"2xl": "1400px",
+			},
+		},
 		extend: {
+			colors: {
+				border: "hsl(var(--border))",
+				input: "hsl(var(--input))",
+				ring: "hsl(var(--ring))",
+				background: "hsl(var(--background))",
+				foreground: "hsl(var(--foreground))",
+				primary: {
+					DEFAULT: "hsl(var(--primary))",
+					foreground: "hsl(var(--primary-foreground))",
+				},
+				secondary: {
+					DEFAULT: "hsl(var(--secondary))",
+					foreground: "hsl(var(--secondary-foreground))",
+				},
+				destructive: {
+					DEFAULT: "hsl(var(--destructive))",
+					foreground: "hsl(var(--destructive-foreground))",
+				},
+				muted: {
+					DEFAULT: "hsl(var(--muted))",
+					foreground: "hsl(var(--muted-foreground))",
+				},
+				accent: {
+					DEFAULT: "hsl(var(--accent))",
+					foreground: "hsl(var(--accent-foreground))",
+				},
+				popover: {
+					DEFAULT: "hsl(var(--popover))",
+					foreground: "hsl(var(--popover-foreground))",
+				},
+				card: {
+					DEFAULT: "hsl(var(--card))",
+					foreground: "hsl(var(--card-foreground))",
+				},
+				sidebar: {
+					DEFAULT: "hsl(var(--sidebar-background))",
+					foreground: "hsl(var(--sidebar-foreground))",
+					primary: "hsl(var(--sidebar-primary))",
+					"primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+					accent: "hsl(var(--sidebar-accent))",
+					"accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+					border: "hsl(var(--sidebar-border))",
+					ring: "hsl(var(--sidebar-ring))",
+				},
+			},
+			borderRadius: {
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)",
+			},
 			// Typography plugin customization (prose styles)
 			typography: () => ({
 				DEFAULT: {
 					css: {
-						"--tw-prose-body": "var(--black)",
-						"--tw-prose-headings": "var(--black)",
-						"--tw-prose-code": "var(--black)",
-						"--tw-prose-pre-code": "var(--white)",
-						"--tw-prose-pre-bg": "var(--shadow)",
-						"--tw-prose-quotes": "var(--black)",
-						"--tw-prose-bold": "var(--black)",
-						"--tw-prose-links": "var(--black)",
-						"--tw-prose-invert-links": "var(--black)",
-						"--tw-prose-invert-body": "var(--black)",
-						"--tw-prose-invert-headings": "var(--black)",
-						"--tw-prose-invert-code": "var(--black)",
-						"--tw-prose-invert-quotes": "var(--black)",
-						"--tw-prose-invert-bold": "var(--black)",
-						"--tw-prose-invert-pre-code": "var(--white)",
-						"--tw-prose-invert-pre-bg": "var(--shadow)",
+						"--tw-prose-body": "hsl(var(--foreground))",
+						"--tw-prose-headings": "hsl(var(--foreground))",
+						"--tw-prose-code": "hsl(var(--foreground))",
+						"--tw-prose-pre-code": "hsl(var(--background))",
+						"--tw-prose-pre-bg": "hsl(var(--foreground))",
+						"--tw-prose-quotes": "hsl(var(--foreground))",
+						"--tw-prose-bold": "hsl(var(--foreground))",
+						"--tw-prose-links": "hsl(var(--primary))",
+						"--tw-prose-invert-links": "hsl(var(--primary))",
 					},
 				},
 			}),
 		},
 	},
 	plugins: [
-		typography(), // ✅ call as function
+		typography(),
 		heroui(),
+		require("tailwindcss-animate"),
 	],
 } satisfies Config;
 
