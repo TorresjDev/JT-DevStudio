@@ -183,11 +183,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] overflow-hidden relative">
+    <div className="min-h-screen flex items-center justify-center bg-background overflow-hidden relative">
       {/* Dynamic Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-blue-500/10 blur-[120px] rounded-full" />
-        <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-purple-500/10 blur-[120px] rounded-full" />
+        <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/10 blur-[120px] rounded-full" />
+        <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-secondary/20 blur-[120px] rounded-full" />
       </div>
 
       <motion.div
@@ -196,20 +196,20 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full max-w-md p-8 relative z-10"
       >
-        <div className="bg-white/3 backdrop-blur-xl border-white/8 rounded-3xl p-8 shadow-2xl overflow-hidden relative">
+        <div className="glass-panel rounded-3xl p-8 overflow-hidden relative">
           {/* Subtle line effect */}
-          <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-blue-500/30 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
           <div className="text-center mb-8">
             <motion.h1
               key={isLogin ? 'login-head' : 'signup-head'}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-4xl font-bold bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent mb-2"
+              className="text-4xl font-bold text-foreground mb-2"
             >
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </motion.h1>
-            <p className="text-white/40 text-sm">
+            <p className="text-muted-foreground text-sm">
               {isLogin ? 'Enter your credentials to continue' : 'Join us and start your journey today'}
             </p>
           </div>
@@ -240,9 +240,9 @@ export default function LoginPage() {
                 >
                   {/* Full Name */}
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-white/50 ml-1">Full Name</label>
+                    <label className="text-xs font-medium text-muted-foreground ml-1">Full Name</label>
                     <div className="relative group">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-400 transition-colors" />
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                       <Input
                         name="fullName"
                         type="text"
@@ -250,16 +250,16 @@ export default function LoginPage() {
                         value={formData.fullName}
                         onChange={(e) => handleInputChange('fullName', e.target.value)}
                         required={!isLogin}
-                        className="bg-white/2 border-white/10 pl-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300"
+                        className="bg-secondary/50 border-input pl-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                       />
                     </div>
                   </div>
 
                   {/* Username */}
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-white/50 ml-1">Username</label>
+                    <label className="text-xs font-medium text-muted-foreground ml-1">Username</label>
                     <div className="relative group">
-                      <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-400 transition-colors" />
+                      <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                       <Input
                         name="username"
                         type="text"
@@ -267,7 +267,7 @@ export default function LoginPage() {
                         value={formData.username}
                         onChange={(e) => handleInputChange('username', e.target.value.toLowerCase())}
                         required={!isLogin}
-                        className={`bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${usernameStatus === 'taken' ? 'border-red-500/50' :
+                        className={`bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${usernameStatus === 'taken' ? 'border-destructive/50' :
                           usernameStatus === 'available' ? 'border-green-500/50' : ''
                           }`}
                       />
@@ -295,9 +295,9 @@ export default function LoginPage() {
 
             {/* Email */}
             <div className="space-y-1">
-              <label className="text-xs font-medium text-white/50 ml-1">Email Address</label>
+              <label className="text-xs font-medium text-muted-foreground ml-1">Email Address</label>
               <div className="relative group">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-400 transition-colors" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 <Input
                   name="email"
                   type="email"
@@ -319,9 +319,9 @@ export default function LoginPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-1 overflow-hidden"
                 >
-                  <label className="text-xs font-medium text-white/50 ml-1">Confirm Email</label>
+                  <label className="text-xs font-medium text-muted-foreground ml-1">Confirm Email</label>
                   <div className="relative group">
-                    <MailCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-400 transition-colors" />
+                    <MailCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                     <Input
                       name="confirmEmail"
                       type="email"
@@ -329,7 +329,7 @@ export default function LoginPage() {
                       value={formData.confirmEmail}
                       onChange={(e) => handleInputChange('confirmEmail', e.target.value)}
                       required={!isLogin}
-                      className={`bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${formData.confirmEmail && formData.email !== formData.confirmEmail
+                      className={`bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${formData.confirmEmail && formData.email !== formData.confirmEmail
                         ? 'border-red-500/50'
                         : formData.confirmEmail && formData.email === formData.confirmEmail
                           ? 'border-green-500/50'
@@ -352,9 +352,9 @@ export default function LoginPage() {
 
             {/* Password */}
             <div className="space-y-1">
-              <label className="text-xs font-medium text-white/50 ml-1">Password</label>
+              <label className="text-xs font-medium text-muted-foreground ml-1">Password</label>
               <div className="relative group">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-400 transition-colors" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 <Input
                   name="password"
                   type={showPassword ? 'text' : 'password'}
@@ -384,9 +384,9 @@ export default function LoginPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-1 overflow-hidden"
                 >
-                  <label className="text-xs font-medium text-white/50 ml-1">Confirm Password</label>
+                  <label className="text-xs font-medium text-muted-foreground ml-1">Confirm Password</label>
                   <div className="relative group">
-                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-400 transition-colors" />
+                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                     <Input
                       name="confirmPassword"
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -394,7 +394,7 @@ export default function LoginPage() {
                       value={formData.confirmPassword}
                       onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                       required={!isLogin}
-                      className={`bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${formData.confirmPassword && formData.password !== formData.confirmPassword
+                      className={`bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${formData.confirmPassword && formData.password !== formData.confirmPassword
                         ? 'border-red-500/50'
                         : formData.confirmPassword && formData.password === formData.confirmPassword
                           ? 'border-green-500/50'
@@ -441,15 +441,15 @@ export default function LoginPage() {
           <div className="mt-8">
             <div className="relative mb-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/10"></div>
+                <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-[#121212] px-2 text-white/30">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
             {/* OAuth trust reassurance */}
-            <p className="text-center text-xs text-white/30 mb-4 flex items-center justify-center gap-1.5">
+            <p className="text-center text-xs text-muted-foreground mb-4 flex items-center justify-center gap-1.5">
               <Lock className="w-3 h-3" />
               You&apos;ll be securely redirected to our authentication partner
             </p>
@@ -459,7 +459,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   variant="outline"
-                  className="w-full h-11 bg-white/2 border-white/10 hover:bg-white/5 hover:border-white/20 text-white/80 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                  className="w-full h-11 bg-secondary/50 border-input hover:bg-secondary hover:border-primary/20 text-foreground rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   <Github className="w-4 h-4" />
                   GitHub
@@ -469,7 +469,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   variant="outline"
-                  className="w-full h-11 bg-white/2 border-white/10 hover:bg-white/5 hover:border-white/20 text-white/80 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                  className="w-full h-11 bg-secondary/50 border-input hover:bg-secondary hover:border-primary/20 text-foreground rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   {/* Google Icon */}
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -499,7 +499,7 @@ export default function LoginPage() {
           <div className="mt-8 text-center">
             <button
               onClick={toggleMode}
-              className="text-sm text-white/40 hover:text-white transition-colors underline-offset-4 hover:underline"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"
             >
               {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
             </button>
