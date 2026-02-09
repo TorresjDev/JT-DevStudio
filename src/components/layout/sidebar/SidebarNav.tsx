@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { Sidebar, SidebarContent, SidebarFooter } from "../../ui/sidebar";
 import AboutSidebarGroup from "./AboutSidebarGroup";
 import PostSidebarGroup from "./PostSidebarGroup";
@@ -9,7 +10,9 @@ export function SidebarNav() {
 	return (
 		<Sidebar className="top-[60px]">
 			<SidebarContent>
-				<AboutSidebarGroup />
+				<Suspense fallback={null}>
+					<AboutSidebarGroup />
+				</Suspense>
 				<PostSidebarGroup />
 				<SupportSidebarGroup />
 				{/* need group for ai resume builder*/}

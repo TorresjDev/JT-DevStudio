@@ -48,7 +48,7 @@ export default function AboutSidebarGroup() {
 							>
 								<Icon
 									name="person"
-									className="rounded-full p-0.5 bg-white font-medium text-black"
+									className="rounded-full p-0.5 bg-foreground/10 font-medium text-foreground"
 								/>
 								<span className="">Profile</span>
 							</Link>

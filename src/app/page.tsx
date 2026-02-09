@@ -6,7 +6,7 @@ import { landingCards } from "../lib/landing-cards";
 
 export default function LandingPage() {
 	return (
-		<main className="space-y-24 px-4 md:px-10 py-16 text-foreground max-w-7xl mx-auto overflow-y-scroll scroll-m-0">
+		<main className="space-y-24 px-4 md:px-10 py-16 text-foreground max-w-7xl mx-auto">
 			{/* Hero Section */}
 			<section className="text-center">
 				<h1 className="text-5xl font-extrabold text-foreground tracking-tight">
