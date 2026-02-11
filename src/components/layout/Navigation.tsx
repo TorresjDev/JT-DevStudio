@@ -4,29 +4,32 @@ import Image from "next/image";
 import UserMenu from "./UserMenu";
 import { ThemeToggle } from "../ui/theme-toggle";
 
-export default function Navigation() {
+import { SidebarTrigger } from "@/components/ui/sidebar";
+
+export function Navigation() {
 	return (
-		<Navbar className="absolute top-0 left-0 max-w-[100vw]! z-60 bg-transparent border-b h-14">
-			<NavbarContent justify="start" className="relative">
+		<Navbar className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b h-14 w-full">
+			<NavbarContent justify="start" className="gap-3 relative">
+				<SidebarTrigger className="-ml-1" />
 				<Link href="/">
-					<NavbarBrand>
+					<NavbarBrand className="gap-2">
 						<Image
 							src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/dev/dev-xl.svg"
 							alt="jt dev logo"
-							width="45"
-							height="45"
+							width="40"
+							height="40"
 						/>
-						<p className="font-extrabold ps-1 ms-1 md:ms-3 text-3xl text-[#DAA520]/90">
+						<p className="font-extrabold text-2xl text-[#DAA520]/90 whitespace-nowrap hidden sm:block">
 							Dev Studio
 						</p>
 
 						<div className="animate-flareSpark">
 							<Image
 								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/gif/anime/fire-burn-fabio-nikolaus.gif"
-								height={33}
-								width={33}
+								height={28}
+								width={28}
 								alt="fire giphy"
-								className="pb-2"
+								className="pb-1"
 								unoptimized={true}
 							/>
 						</div>

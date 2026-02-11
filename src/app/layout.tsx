@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import { ThemeProvider } from "./provider";
-import Navigation from "../components/layout/Navigation";
 import Footer from "../components/layout/Footer";
 import { generateMetadata } from "../lib/metadata";
 import { LayoutContent } from "../components/layout/LayoutContent";
@@ -23,11 +22,9 @@ export default function RootLayout({
 				<AuthProvider>
 					<ThemeProvider
 						enableSystem
-						disableTransitionOnChange
 						attribute="class"
 						defaultTheme="dark"
 					>
-						<Navigation />
 						<LayoutContent>{children}</LayoutContent>
 						<Footer />
 					</ThemeProvider>
