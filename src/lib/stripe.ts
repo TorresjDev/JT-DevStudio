@@ -22,6 +22,3 @@ export const getStripe = () => {
 
 	return stripe;
 };
-
-// Keep the old export for backward compatibility
-export { getStripe as stripe };

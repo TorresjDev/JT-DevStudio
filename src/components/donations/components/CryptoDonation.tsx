@@ -40,4 +40,3 @@ export const CryptoDonation: React.FC<CryptoDonationProps> = ({
 	);
 };
 
-export default CryptoDonation;
