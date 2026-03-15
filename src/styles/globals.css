@@ -51,6 +51,7 @@
 
 @layer base {
   :root {
+<<<<<<< Updated upstream
     /* Light Mode - Zinc/Slate Neutral Base */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -72,10 +73,34 @@
 
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
+=======
+    /* TweakCN Premium Theme - Light Mode */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 4%;
+
+    --primary: 221 83% 53%; /* Modern Blue */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 10%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 6% 10%;
+>>>>>>> Stashed changes
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 210 40% 98%;
 
+<<<<<<< Updated upstream
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
@@ -115,10 +140,59 @@
 
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
+=======
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.75rem;
+    
+    /* Charts */
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* Sidebar - Premium Minimalist */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 6% 10%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 221 83% 53%;
+  }
+
+  .dark {
+    /* TweakCN Premium Theme - Dark Mode */
+    --background: 240 10% 4%; /* Deep Premium Black */
+    --foreground: 0 0% 100%;
+
+    --card: 240 10% 4%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 221 83% 53%; /* Modern Blue */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 100%;
+>>>>>>> Stashed changes
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
+<<<<<<< Updated upstream
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
@@ -132,6 +206,28 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+=======
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 221 83% 53%;
+
+    /* Charts */
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* Sidebar - Premium Dark */
+    --sidebar-background: 240 10% 4%;
+    --sidebar-foreground: 240 5% 65%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4% 16%;
+    --sidebar-accent-foreground: 240 5% 96%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 221 83% 53%;
+>>>>>>> Stashed changes
   }
 }
 

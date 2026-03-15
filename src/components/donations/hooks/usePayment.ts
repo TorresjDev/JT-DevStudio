@@ -33,8 +33,28 @@ export const usePayment = () => {
 
 			const stripe = await stripePromise;
 
+<<<<<<< Updated upstream
 			if (!stripe) {
 				throw new Error("Stripe failed to load.");
+=======
+				const data = await response.json();
+
+				if (!response.ok) {
+					throw new Error(data.error || "Failed to create session.");
+				}
+
+				if (data.url) {
+					window.location.href = data.url;
+				} else {
+					throw new Error("No checkout URL returned.");
+				}
+
+				donations.handleDonationSuccess();
+			} catch (err) {
+				const errorMessage =
+					err instanceof Error ? err.message : "An unknown error occurred";
+				donations.handleDonationError(errorMessage, "stripe_error");
+>>>>>>> Stashed changes
 			}
 
 			const { error } = await stripe.redirectToCheckout({ sessionId: data.id });

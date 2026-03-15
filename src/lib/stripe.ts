@@ -16,7 +16,7 @@ export const getStripe = () => {
 		}
 
 		stripe = new Stripe(stripeSecretKey, {
-			apiVersion: "2025-08-27.basil",
+			apiVersion: "2026-02-25.clover",
 		});
 	}
 

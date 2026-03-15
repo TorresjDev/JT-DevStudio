@@ -8,7 +8,7 @@ import UserMenu from "../UserMenu";
 
 export function SidebarNav() {
 	return (
-		<Sidebar className="top-[60px]">
+		<Sidebar collapsible="icon" className="top-[60px]">
 			<SidebarContent>
 				<Suspense fallback={null}>
 					<AboutSidebarGroup />
