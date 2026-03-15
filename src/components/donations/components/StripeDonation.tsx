@@ -4,21 +4,27 @@ import { Button } from "@/components/ui/button";
 import { usePayment } from "../hooks/usePayment";
 
 interface StripeDonationProps {
+	amount: number;
 	compact?: boolean;
 	className?: string;
 }
 
 export const StripeDonation: React.FC<StripeDonationProps> = ({
+	amount,
 	compact = false,
 	className = "",
 }) => {
 	const { processStripePayment, isStripeLoading, error } = usePayment();
 
+	const handleStripeDonation = () => {
+		processStripePayment(amount);
+	};
+
 	return (
 		<div className={className}>
 			<Button
-				onClick={processStripePayment}
-				disabled={isStripeLoading}
+				onClick={handleStripeDonation}
+				disabled={isStripeLoading || amount < 1}
 				variant="default"
 				size={compact ? "sm" : "default"}
 				className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all"
@@ -33,5 +39,3 @@ export const StripeDonation: React.FC<StripeDonationProps> = ({
 		</div>
 	);
 };
-
-export default StripeDonation;

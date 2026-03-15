@@ -63,6 +63,26 @@ export default {
 					border: "hsl(var(--sidebar-border))",
 					ring: "hsl(var(--sidebar-ring))",
 				},
+				emerald: {
+					DEFAULT: "hsl(145 52% 55%)",
+					light: "hsl(145 52% 65%)",
+					dark: "hsl(145 52% 45%)",
+				},
+				goldenrod: {
+					DEFAULT: "hsl(43 74% 49%)",
+					light: "hsl(43 74% 59%)",
+					dark: "hsl(43 74% 39%)",
+				},
+				silver: {
+					DEFAULT: "hsl(0 0% 75%)",
+					light: "hsl(0 0% 85%)",
+					dark: "hsl(0 0% 65%)",
+				},
+				maroon: {
+					DEFAULT: "hsl(0 100% 15%)",
+					light: "hsl(0 100% 25%)",
+					dark: "hsl(0 100% 5%)",
+				},
 			},
 			borderRadius: {
 				lg: "var(--radius)",

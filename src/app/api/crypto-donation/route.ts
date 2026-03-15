@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import axios, { AxiosResponse } from "axios";
 import { z } from "zod";
 import { paymentRateLimiter, checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -19,7 +18,7 @@ const donationSchema = z.object({
 		.max(10000, "Maximum donation is $10,000"),
 });
 
-interface CoinbaseResponse {
+interface CoinbaseChargeData {
 	data: {
 		code: string;
 		hosted_url: string;
@@ -37,9 +36,9 @@ export async function POST(request: Request) {
 			{
 				status: 429,
 				headers: {
-					'Retry-After': '60',
-					'X-RateLimit-Remaining': String(remaining ?? 0),
-				}
+					"Retry-After": "60",
+					"X-RateLimit-Remaining": String(remaining ?? 0),
+				},
 			}
 		);
 	}
@@ -62,41 +61,50 @@ export async function POST(request: Request) {
 			return NextResponse.json(
 				{
 					error: "Invalid donation amount",
-					details: validation.error.flatten().fieldErrors
+					details: validation.error.flatten().fieldErrors,
 				},
 				{ status: 400 }
 			);
 		}
 
 		const { amount } = validation.data;
+		const siteUrl = process.env.SITE_URL || "http://localhost:3000";
 
 		// Create the charge using Coinbase Commerce API
-		const response: AxiosResponse<CoinbaseResponse> = await axios.post(
+		const response = await fetch(
 			"https://api.commerce.coinbase.com/charges",
 			{
-				name: "Support My Journey",
-				description: "A contribution to support my development projects.",
-				pricing_type: "fixed_price",
-				local_price: {
-					amount: amount,
-					currency: "USD",
-				},
-				redirect_url: `${request.headers.get(
-					"origin"
-				)}/thank-you?method=crypto&amount=${amount}`,
-				cancel_url: `${request.headers.get("origin")}`,
-			},
-			{
+				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					"X-CC-Api-Key": COINBASE_API_KEY,
 					"X-CC-Version": "2018-03-22",
 				},
+				body: JSON.stringify({
+					name: "Support My Journey",
+					description:
+						"A contribution to support my development projects.",
+					pricing_type: "fixed_price",
+					local_price: {
+						amount: amount,
+						currency: "USD",
+					},
+					redirect_url: `${siteUrl}/thank-you?method=crypto&amount=${amount}`,
+					cancel_url: `${siteUrl}/support/donations`,
+				}),
 			}
 		);
 
+		if (!response.ok) {
+			const errorData = await response.text();
+			console.error("Coinbase API error:", errorData);
+			throw new Error("Failed to create Coinbase charge");
+		}
+
+		const data: CoinbaseChargeData = await response.json();
+
 		// Return the hosted payment page URL
-		return NextResponse.json({ hosted_url: response.data.data.hosted_url });
+		return NextResponse.json({ hosted_url: data.data.hosted_url });
 	} catch (error) {
 		console.error("Error creating crypto charge:", error);
 		return NextResponse.json(

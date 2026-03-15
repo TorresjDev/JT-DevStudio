@@ -1,8 +1,9 @@
-// app/api/crypto-charge/route.ts
 import { NextResponse } from "next/server";
-import axios from "axios";
 
 const COINBASE_API_KEY = process.env.COINBASE_API_KEY;
+
+/** Allow only Coinbase charge code / ID format to prevent SSRF when building the API URL. */
+const SAFE_CHARGE_CODE = /^[a-zA-Z0-9-]{1,64}$/;
 
 interface CoinbaseChargeResponse {
 	data: {
@@ -34,12 +35,22 @@ export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const chargeCode = searchParams.get("code");
 
-	if (!chargeCode) {
-		return NextResponse.json({ error: "Missing charge code" }, { status: 400 });
+	if (!chargeCode || !SAFE_CHARGE_CODE.test(chargeCode)) {
+		return NextResponse.json(
+			{ error: "Missing or invalid charge code" },
+			{ status: 400 }
+		);
+	}
+
+	if (!COINBASE_API_KEY) {
+		return NextResponse.json(
+			{ error: "Coinbase API configuration error" },
+			{ status: 500 }
+		);
 	}
 
 	try {
-		const response = await axios.get<CoinbaseChargeResponse>(
+		const response = await fetch(
 			`https://api.commerce.coinbase.com/charges/${chargeCode}`,
 			{
 				headers: {
@@ -49,8 +60,13 @@ export async function GET(request: Request) {
 			}
 		);
 
+		if (!response.ok) {
+			throw new Error(`Coinbase API returned ${response.status}`);
+		}
 
-		return NextResponse.json(response.data);
+		const data: CoinbaseChargeResponse = await response.json();
+
+		return NextResponse.json(data);
 	} catch (error) {
 		console.error("Error fetching charge details:", error);
 		return NextResponse.json(

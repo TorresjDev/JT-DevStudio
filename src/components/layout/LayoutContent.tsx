@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { SidebarNav } from '@/components/layout/sidebar/SidebarNav'
 import { Suspense } from 'react'
-import Navigation from './Navigation'
+import { Navigation } from '@/components/layout/Navigation'
 
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -23,10 +23,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen w-full">
-        {/* Global Top Navbar spanning full width */}
         <Navigation />
-        
-        {/* Main Application Shell */}
         <div className="flex flex-1 w-full relative">
           <SidebarNav />
           <SidebarInset>

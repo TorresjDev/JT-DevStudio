@@ -5,7 +5,7 @@
 
 @theme {
   /* Custom animation */
-  --animate-flare-spark: flare-spark 2.5s ease forwards;
+  --animate-flare-spark: flare-spark 3s ease forwards;
 
   /* Custom keyframes */
   @keyframes flare-spark {
@@ -71,7 +71,7 @@
     --ring: 221 83% 53%;
 
     --radius: 0.75rem;
-    
+
     /* Charts */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -121,7 +121,7 @@
     --ring: 221 83% 53%;
 
     --radius: 0.75rem;
-    
+
     /* Charts */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -144,6 +144,12 @@
 @layer base {
   * {
     border-color: hsl(var(--border));
+    /* Global transition for theme changes - refined for smoothness */
+    transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   body {
     background-color: hsl(var(--background));

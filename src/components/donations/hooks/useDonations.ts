@@ -47,4 +47,3 @@ export const useDonations = () => {
 	};
 };
 
-export default useDonations;

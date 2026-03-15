@@ -1,6 +1,5 @@
 "use client";
 import { useState, useCallback } from "react";
-import axios from "axios";
 import { PaymentMethod } from "../types/donations";
 import { useDonations } from "./useDonations";
 
@@ -10,35 +9,47 @@ export const usePayment = () => {
 		null
 	);
 
-	const processStripePayment = useCallback(async () => {
-		donations.handleDonationStart();
-		setCurrentMethod("stripe");
+	const processStripePayment = useCallback(
+		async (amount: number) => {
+			donations.handleDonationStart();
+			setCurrentMethod("stripe");
 
-		try {
-			const response = await fetch("/api/stripe-payment/donate-checkout", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-			});
-
-			const data = await response.json();
-
-			if (!response.ok) {
-				throw new Error(data.error || "Failed to create session.");
+			if (amount < 1) {
+				donations.handleDonationError(
+					"Please enter a valid donation amount.",
+					"invalid_amount"
+				);
+				return;
 			}
 
-			if (data.url) {
-				window.location.href = data.url;
-			} else {
-				throw new Error("No checkout URL returned.");
-			}
+			try {
+				const response = await fetch("/api/stripe-payment/donate-checkout", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ amount }),
+				});
 
-			donations.handleDonationSuccess();
-		} catch (err) {
-			const errorMessage =
-				err instanceof Error ? err.message : "An unknown error occurred";
-			donations.handleDonationError(errorMessage, "stripe_error");
-		}
-	}, [donations]);
+				const data = await response.json();
+
+				if (!response.ok) {
+					throw new Error(data.error || "Failed to create session.");
+				}
+
+				if (data.url) {
+					window.location.href = data.url;
+				} else {
+					throw new Error("No checkout URL returned.");
+				}
+
+				donations.handleDonationSuccess();
+			} catch (err) {
+				const errorMessage =
+					err instanceof Error ? err.message : "An unknown error occurred";
+				donations.handleDonationError(errorMessage, "stripe_error");
+			}
+		},
+		[donations]
+	);
 
 	const processCryptoPayment = useCallback(
 		async (amount: number) => {
@@ -54,8 +65,19 @@ export const usePayment = () => {
 			}
 
 			try {
-				const response = await axios.post("/api/crypto-donation", { amount });
-				const { hosted_url } = response.data;
+				const response = await fetch("/api/crypto-donation", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ amount }),
+				});
+
+				const data = await response.json();
+
+				if (!response.ok) {
+					throw new Error(data.error || "Failed to initiate crypto donation");
+				}
+
+				const { hosted_url } = data;
 
 				if (hosted_url) {
 					window.location.href = hosted_url;
@@ -89,5 +111,3 @@ export const usePayment = () => {
 		isCryptoLoading: donations.isLoading && currentMethod === "crypto",
 	};
 };
-
-export default usePayment;

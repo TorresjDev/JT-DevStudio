@@ -5,30 +5,30 @@ import UserMenu from "./UserMenu";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
-export default function Navigation() {
+export function Navigation() {
 	return (
 		<Navbar className="w-full border-b h-14 bg-background/80 backdrop-blur-md relative z-50">
 			<NavbarContent justify="start" className="relative gap-3">
 				<SidebarTrigger className="-ml-1" />
 				<Link href="/">
-					<NavbarBrand>
+					<NavbarBrand className="gap-2">
 						<Image
 							src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/dev/dev-xl.svg"
 							alt="jt dev logo"
-							width="45"
-							height="45"
+							width="40"
+							height="40"
 						/>
-						<p className="font-extrabold ps-1 ms-1 md:ms-3 text-3xl text-[#DAA520]/90">
+						<p className="font-extrabold text-2xl text-[#DAA520]/90 whitespace-nowrap hidden sm:block">
 							Dev Studio
 						</p>
 
 						<div className="animate-flareSpark">
 							<Image
 								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/gif/anime/fire-burn-fabio-nikolaus.gif"
-								height={33}
-								width={33}
+								height={28}
+								width={28}
 								alt="fire giphy"
-								className="pb-2"
+								className="pb-1"
 								unoptimized={true}
 							/>
 						</div>
