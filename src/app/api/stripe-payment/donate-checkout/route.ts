@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 			cancel_url: `${process.env.SITE_URL}/cancel`,
 		});
 
-		return NextResponse.json({ id: session.id }, { status: 200 });
+		return NextResponse.json({ id: session.id, url: session.url }, { status: 200 });
 	} catch (error) {
 		console.error(error);
 		return NextResponse.json(

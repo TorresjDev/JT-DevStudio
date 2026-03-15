@@ -3,11 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import UserMenu from "./UserMenu";
 import { ThemeToggle } from "../ui/theme-toggle";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Navigation() {
 	return (
-		<Navbar className="absolute top-0 left-0 max-w-[100vw]! z-60 bg-transparent border-b h-14">
-			<NavbarContent justify="start" className="relative">
+		<Navbar className="w-full border-b h-14 bg-background/80 backdrop-blur-md relative z-50">
+			<NavbarContent justify="start" className="relative gap-3">
+				<SidebarTrigger className="-ml-1" />
 				<Link href="/">
 					<NavbarBrand>
 						<Image

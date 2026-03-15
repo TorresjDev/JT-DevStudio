@@ -27,7 +27,6 @@ export default function RootLayout({
 						attribute="class"
 						defaultTheme="dark"
 					>
-						<Navigation />
 						<LayoutContent>{children}</LayoutContent>
 						<Footer />
 					</ThemeProvider>
