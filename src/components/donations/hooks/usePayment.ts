@@ -1,13 +1,8 @@
 "use client";
 import { useState, useCallback } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { PaymentMethod } from "../types/donations";
 import { useDonations } from "./useDonations";
-
-const stripePromise = loadStripe(
-	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-);
 
 export const usePayment = () => {
 	const donations = useDonations();
@@ -31,36 +26,10 @@ export const usePayment = () => {
 				throw new Error(data.error || "Failed to create session.");
 			}
 
-			const stripe = await stripePromise;
-
-<<<<<<< Updated upstream
-			if (!stripe) {
-				throw new Error("Stripe failed to load.");
-=======
-				const data = await response.json();
-
-				if (!response.ok) {
-					throw new Error(data.error || "Failed to create session.");
-				}
-
-				if (data.url) {
-					window.location.href = data.url;
-				} else {
-					throw new Error("No checkout URL returned.");
-				}
-
-				donations.handleDonationSuccess();
-			} catch (err) {
-				const errorMessage =
-					err instanceof Error ? err.message : "An unknown error occurred";
-				donations.handleDonationError(errorMessage, "stripe_error");
->>>>>>> Stashed changes
-			}
-
-			const { error } = await stripe.redirectToCheckout({ sessionId: data.id });
-
-			if (error) {
-				throw new Error(error.message);
+			if (data.url) {
+				window.location.href = data.url;
+			} else {
+				throw new Error("No checkout URL returned.");
 			}
 
 			donations.handleDonationSuccess();
