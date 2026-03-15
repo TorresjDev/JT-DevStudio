@@ -10,7 +10,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "../../ui/sidebar";
-import Icon from "../../ui/icon";
+import { Code, User } from "lucide-react";
 
 export default function AboutSidebarGroup() {
 	const pathname = usePathname();
@@ -32,9 +32,8 @@ export default function AboutSidebarGroup() {
 								href="/about?username=torresjdev"
 								onClick={() => isMobile && setOpenMobile(false)}
 							>
-								<Icon
-									name="code"
-									className="rounded-full p-0.5 bg-[#DAA520] font-medium text-black"
+								<Code
+									className="rounded-full p-0.5 bg-[#DAA520] font-medium text-black h-5 w-5"
 								/>
 								<span className="">Creator</span>
 							</Link>
@@ -46,9 +45,8 @@ export default function AboutSidebarGroup() {
 								href="/about"
 								onClick={() => isMobile && setOpenMobile(false)}
 							>
-								<Icon
-									name="person"
-									className="rounded-full p-0.5 bg-foreground/10 font-medium text-foreground"
+								<User
+									className="rounded-full p-0.5 bg-foreground/10 font-medium text-foreground h-5 w-5"
 								/>
 								<span className="">Profile</span>
 							</Link>

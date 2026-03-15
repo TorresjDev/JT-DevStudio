@@ -16,6 +16,7 @@ import {
 } from "./tooltip";
 import { useIsMobile } from "../../hooks/use-mobile";
 import Icon from "./icon";
+import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -180,7 +181,7 @@ const Sidebar = React.forwardRef<
 			return (
 				<div
 					className={cn(
-						"flex h-full w-[--sidebar-width] flex-col bg-transparent text-sidebar-foreground",
+						"flex h-full w-[var(--sidebar-width)] flex-col bg-transparent text-sidebar-foreground",
 						className
 					)}
 					ref={ref}
@@ -219,31 +220,31 @@ const Sidebar = React.forwardRef<
 				{/* This is what handles the sidebar gap on desktop */}
 				<div
 					className={cn(
-						"duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
+						"duration-200 relative h-svh w-[var(--sidebar-width)] bg-transparent transition-[width] ease-linear",
 						"group-data-[collapsible=offcanvas]:w-0",
 						"group-data-[side=right]:rotate-180",
 						variant === "floating" || variant === "inset"
-							? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]"
-							: "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
+							? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+var(--spacing,1rem))]"
+							: "group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)]"
 					)}
 				/>
 				<div
 					className={cn(
-						"duration-200 fixed inset-y-0 z-50 hidden h-svh-[94vh] w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex top-14",
+						"duration-200 fixed inset-y-0 z-50 hidden h-svh w-[var(--sidebar-width)] transition-[left,right,width] ease-linear md:flex top-14",
 						side === "left"
 							? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
 							: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
 						// Adjust the padding for floating and inset variants.
 						variant === "floating" || variant === "inset"
-							? "px-2 py-1 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
-							: "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
+							? "px-2 py-1 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+var(--spacing,1rem)+2px)]"
+							: "group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)] group-data-[side=left]:border-r group-data-[side=right]:border-l",
 						className
 					)}
 					{...props}
 				>
 					<div
 						data-sidebar="sidebar"
-						className="flex h-full w-[--sidebar-width*3] flex-col bg-sidebar/95 backdrop-blur-xl group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+						className="flex h-full w-full flex-col bg-sidebar/95 backdrop-blur-xl group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
 					>
 						{children}
 					</div>
@@ -286,15 +287,9 @@ const SidebarTrigger = React.forwardRef<
 			{...props}
 		>
 			{state === "expanded" ? (
-				<Icon
-					name="right_panel_open"
-					className="align-bottom text-white! text-5xl! md:text-4xl!"
-				/>
+				<PanelLeftClose className="h-4 w-4" />
 			) : (
-				<Icon
-					name="left_panel_open"
-					className="align-bottom text-white! text-5xl! md:text-4xl!"
-				/>
+				<PanelLeftOpen className="h-4 w-4" />
 			)}
 
 			<span className="sr-only">Toggle Sidebar</span>
