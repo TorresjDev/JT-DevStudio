@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 
 const COINBASE_API_KEY = process.env.COINBASE_API_KEY;
 
+/** Allow only Coinbase charge code / ID format to prevent SSRF when building the API URL. */
+const SAFE_CHARGE_CODE = /^[a-zA-Z0-9-]{1,64}$/;
+
 interface CoinbaseChargeResponse {
 	data: {
 		code: string;
@@ -32,9 +35,9 @@ export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const chargeCode = searchParams.get("code");
 
-	if (!chargeCode) {
+	if (!chargeCode || !SAFE_CHARGE_CODE.test(chargeCode)) {
 		return NextResponse.json(
-			{ error: "Missing charge code" },
+			{ error: "Missing or invalid charge code" },
 			{ status: 400 }
 		);
 	}
