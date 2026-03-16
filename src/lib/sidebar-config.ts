@@ -17,5 +17,10 @@ export const supportItems = [
 		url: "/support/donations",
 		icon: "💖",
 	},
+	{
+		title: "Contact",
+		url: "/contact",
+		icon: "📧",
+	},
 ];
 

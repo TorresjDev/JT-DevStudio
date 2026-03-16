@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { getGitHubProfile } from "../services/github";
+import { getGitHubProfile, getGitHubRepos, getGitHubReadme } from "../services/github";
 import { env } from "@/lib/env";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
-import { Github, Globe, AlertCircle } from "lucide-react";
+import { Github, Globe, AlertCircle, FileText, Star, GitFork, Mail, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TechStackDisplay } from "@/components/tech-stack";
+
 
 export default async function AboutPage({
 	searchParams,
@@ -26,9 +28,15 @@ export default async function AboutPage({
 	const isSelf = !!sessionUsername && githubUsername === sessionUsername;
 	
 	let profile = null;
+	let repos = [];
+	let readmeHtml = null;
 
 	try {
 		profile = await getGitHubProfile(githubUsername);
+		if (profile) {
+			repos = await getGitHubRepos(githubUsername);
+			readmeHtml = await getGitHubReadme(githubUsername).catch(() => null);
+		}
 	} catch (e) {
 		console.error("Error fetching github profile:", e);
 	}
@@ -63,7 +71,7 @@ export default async function AboutPage({
 							</p>
 						</div>
 
-						<div className="flex gap-4 items-center">
+						<div className="flex flex-wrap gap-4 items-center">
 							<Link
 								href={profile.html_url}
 								target="_blank"
@@ -81,6 +89,15 @@ export default async function AboutPage({
 								>
 									<Globe className="w-6 h-6 text-[#DAA520]/80 group-hover:text-[#DAA520]" />
 								</Link>
+							)}
+							
+							{isCreator && (
+								<Button asChild size="sm" className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold h-10 px-4 rounded-xl ml-auto md:ml-0">
+									<Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+										<FileText className="w-4 h-4 mr-2" />
+										Resume
+									</Link>
+								</Button>
 							)}
 						</div>
 					</div>
@@ -114,32 +131,106 @@ export default async function AboutPage({
 				</p>
 			</div>
 
-			{/* GitHub Stats Grid */}
+			{/* Work/Projects & GitHub Stats */}
 			{profile ? (
-				<section className="space-y-8 animate-in slide-in-from-bottom-5 duration-700 delay-200">
-					<div className="flex justify-center">
-						<div className="relative group overflow-hidden rounded-xl border border-border shadow-2xl hover:shadow-[#DAA520]/10 hover:border-[#DAA520]/30 transition-all duration-500 bg-card/40">
-							<img 
-								src={`https://githubcard.com/${profile.login}.svg?d=ej5sfIat`} 
-								alt="GitHub Card" 
-								className="w-full max-w-2xl h-auto object-contain transform group-hover:scale-[1.02] transition-transform duration-500" 
-							/>
-						</div>
-					</div>
+				<div className="space-y-16 animate-in slide-in-from-bottom-5 duration-700 delay-200">
+					{/* Top Repositories */}
+					{repos && repos.length > 0 && (
+						<section className="space-y-6">
+							<div className="flex justify-between items-center">
+								<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Top Repositories</h2>
+								<Link href={profile.html_url + "?tab=repositories"} target="_blank" className="text-sm font-medium text-muted-foreground hover:text-[#DAA520] transition-colors flex items-center gap-1">
+									View All <ExternalLink className="w-3 h-3" />
+								</Link>
+							</div>
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+								{repos.filter((r: any) => !r.fork).slice(0, 6).map((repo: any) => (
+									<Link href={repo.html_url} target="_blank" key={repo.id} className="group p-5 rounded-xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-lg hover:shadow-[#DAA520]/5 transition-all duration-300 flex flex-col justify-between h-full">
+										<div className="space-y-2">
+											<h3 className="font-bold text-lg group-hover:text-[#DAA520] transition-colors truncate">
+												{repo.name}
+											</h3>
+											<p className="text-sm text-muted-foreground line-clamp-2 min-h-[40px] text-left">
+												{repo.description || "No description provided."}
+											</p>
+										</div>
+										<div className="flex items-center gap-4 mt-6 text-xs text-muted-foreground">
+											<span className="flex items-center gap-1">
+												<Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> {repo.stargazers_count}
+											</span>
+											<span className="flex items-center gap-1">
+												<GitFork className="w-4 h-4 text-blue-500" /> {repo.forks_count}
+											</span>
+											{repo.language && (
+												<span className="ml-auto px-2 py-0.5 rounded-full bg-accent/20 text-accent-foreground">
+													{repo.language}
+												</span>
+											)}
+										</div>
+									</Link>
+								))}
+							</div>
+						</section>
+					)}
 
-					<div id="github-contributions" className="flex flex-col items-center gap-4 w-full">
-						<h2 className="text-xl md:text-2xl font-bold text-[#DAA520]/90 tracking-wide uppercase">
-							Contribution Activity
-						</h2>
-						<div className="w-full overflow-hidden rounded-xl border border-border bg-card p-4 md:p-6 shadow-inner hover:bg-accent/10 transition-colors">
-							<img
-								src={`https://ghchart.rshah.org/DAA520/${profile.login}`}
-								alt="GitHub Contributions"
-								className="w-full h-auto min-w-[600px] mx-auto opacity-90 dark:invert-0 hover:opacity-100 transition-opacity"
-							/>
+					{/* Stats & Tech Stack Side by Side */}
+					<section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+						<div className="lg:col-span-2 space-y-6">
+							<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">GitHub Activity</h2>
+							<div className="relative group overflow-hidden rounded-xl border border-border bg-card/40 p-2 shadow-2xl hover:shadow-[#DAA520]/10 hover:border-[#DAA520]/30 transition-all duration-500">
+								<img 
+									src={`https://githubcard.com/${profile.login}.svg?d=ej5sfIat`} 
+									alt="GitHub Card" 
+									className="w-full h-auto object-contain transform group-hover:scale-[1.01] transition-transform duration-500" 
+								/>
+							</div>
+
+							<div id="github-contributions" className="flex flex-col gap-4 w-full">
+								<div className="w-full overflow-hidden rounded-xl border border-border bg-card p-4 shadow-inner hover:bg-accent/10 transition-colors">
+									<img
+										src={`https://ghchart.rshah.org/DAA520/${profile.login}`}
+										alt="GitHub Contributions"
+										className="w-full h-auto min-w-[500px] mx-auto opacity-90 hover:opacity-100 transition-opacity"
+									/>
+								</div>
+							</div>
 						</div>
-					</div>
-				</section>
+
+						<div className="space-y-6">
+							<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Tech Stack</h2>
+							{isCreator ? (
+								<TechStackDisplay />
+							) : (
+								<div className="p-6 rounded-xl border border-border bg-card/40 backdrop-blur-sm Prose prose-invert prose-sm max-w-none max-h-[500px] overflow-y-auto shadow-xl">
+									{readmeHtml ? (
+										<div className="github-readme-content" dangerouslySetInnerHTML={{ __html: readmeHtml }} />
+									) : (
+										<div className="flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
+											<p className="text-sm">Profile README not found or empty.</p>
+											<p className="text-xs mt-1">Make sure you have a repository named `{profile.login}` with a README.md</p>
+										</div>
+									)}
+								</div>
+							)}
+						</div>
+
+					</section>
+
+					{/* Contact Section Footer */}
+					{isCreator && (
+						<section className="flex flex-col items-center justify-center p-8 rounded-2xl bg-linear-to-b from-accent/10 to-transparent border border-border backdrop-blur-sm text-center space-y-4">
+							<h2 className="text-2xl font-bold text-[#DAA520]">Let's Work Together</h2>
+							<p className="text-muted-foreground max-w-md">
+								Have a project in mind or just want to say hi? I'm always open to discussing new opportunities or tech.
+							</p>
+							<Button asChild className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-6 py-5 h-auto text-base rounded-xl">
+								<Link href="/contact" className="flex items-center gap-2">
+									<Mail className="w-5 h-5" /> Contact Me
+								</Link>
+							</Button>
+						</section>
+					)}
+				</div>
 			) : (
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 opacity-40 grayscale pointer-events-none">
 					<div className="h-48 bg-accent/5 rounded-2xl border border-border flex items-center justify-center">
