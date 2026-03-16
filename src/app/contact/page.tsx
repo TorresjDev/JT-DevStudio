@@ -20,6 +20,7 @@ export default function ContactPage() {
 		setStatus("loading");
 
 		try {
+			// 1. Save to Supabase DB (Backup)
 			const { error } = await supabase
 				.from("contact_messages")
 				.insert([
@@ -27,6 +28,21 @@ export default function ContactPage() {
 				]);
 
 			if (error) throw error;
+
+			// 2. Trigger Resend Email API
+			const emailResponse = await fetch("/api/contact", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					name: formData.name,
+					email: formData.email,
+					message: formData.message
+				}),
+			});
+
+			if (!emailResponse.ok) {
+				console.warn("API Email response failed, but message saved to database.");
+			}
 
 			setStatus("success");
 			setFormData({ name: "", email: "", message: "" });
