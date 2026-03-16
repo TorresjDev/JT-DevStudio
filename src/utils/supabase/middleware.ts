@@ -41,8 +41,10 @@ export async function updateSession(request: NextRequest) {
     '/posts',      // Public posts feed
     '/guides',     // Public documentation
     '/about',      // About page
+    '/contact',    // Contact page
     '/support',    // Support page
     '/login',      // Login page
+
     '/auth',       // Auth callbacks
     '/api',        // API routes (they handle their own auth)
   ]

@@ -101,12 +101,13 @@ const Footer = () => {
 					</p>
 					<p className="mt-2">
 						<a
-							href="mailto:j.torres3.dev@gmail.com"
+							href="mailto:jtorres3.dev@gmail.com"
 							className="hover:text-[#DAA520]"
 						>
-							j.torres3.dev@gmail.com
+							jtorres3.dev@gmail.com
 						</a>
 					</p>
+
 					<h3 className="font-bold text-[#DAA520]/90 mb-3 my-3">Connect</h3>
 					<div className="flex space-x-4 ">
 						{/* Social Media Icons */}
