@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -12,7 +13,7 @@ import {
 } from "../../ui/sidebar";
 import { Code, User } from "lucide-react";
 
-export default function AboutSidebarGroup() {
+function AboutSidebarGroupContent() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const { isMobile, setOpenMobile } = useSidebar();
@@ -55,5 +56,13 @@ export default function AboutSidebarGroup() {
 				</SidebarMenu>
 			</SidebarGroupContent>
 		</SidebarGroup>
+	);
+}
+
+export default function AboutSidebarGroup() {
+	return (
+		<Suspense fallback={null}>
+			<AboutSidebarGroupContent />
+		</Suspense>
 	);
 }
