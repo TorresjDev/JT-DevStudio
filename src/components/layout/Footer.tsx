@@ -1,56 +1,56 @@
-// components/Footer.js
+// components/Footer.tsx
 import Link from "next/link";
 import Image from "next/image";
 
 const Footer = () => {
 	return (
-		<footer className="mt-auto bg-transparent bg-blur text-[#C0C0C0]/90 py-8 border-t-1 justify-self-center w-full">
-			{/* Footer Content */}
+		<footer className="mt-auto bg-transparent bg-blur text-[#C0C0C0]/90 py-8 border-t justify-self-center w-full">
 			<div className="container mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-8">
-				{/* About Me Section */}
+				{/* About the Studio */}
 				<div>
 					<h2 className="text-2xl font-bold text-[#DAA520]/90 mb-4">
-						About Me
+						JT Dev Studio
 					</h2>
 					<p>
-						Hi, I’m <span className=" text-[#DAA520]">Jesus Torres</span>, a
-						software developer passionate about creating modern web and mobile
-						applications. Explore my work and connect with me to learn more.
+						<span className="text-[#DAA520]">Just Technology</span> Development
+						Studio — building tools, apps, and experiences that solve real
+						problems.
 					</p>
 				</div>
 
-				{/* Navigation Section */}
-				<div className="ms-12">
+				{/* Navigation */}
+				<div className="md:ms-12">
 					<h3 className="font-bold text-[#DAA520]/90 mb-3">Navigate</h3>
 					<ul className="space-y-2">
 						<li>
-							<Link href="/" className="hover:text-[#DAA520]">
+							<Link href="/" className="hover:text-[#DAA520] transition-colors">
 								Home
 							</Link>
 						</li>
 						<li>
-							<a
-								href="https://tiny.cc/Jtorres_dev"
-								target="_blank"
-								className="hover:text-[#DAA520]"
-							>
-								Portfolio
-							</a>
-						</li>
-						{/* <li>
-							<a href="/blog" className="hover:text-[#DAA520]">
-								Blog
-							</a>
+							<Link href="/services" className="hover:text-[#DAA520] transition-colors">
+								Services
+							</Link>
 						</li>
 						<li>
-							<a href="/contact" className="hover:text-[#DAA520]">
-								Contact
-							</a>
-						</li> */}
+							<Link href="/studio" className="hover:text-[#DAA520] transition-colors">
+								Studio
+							</Link>
+						</li>
+						<li>
+							<Link href="/profile" className="hover:text-[#DAA520] transition-colors">
+								Profile
+							</Link>
+						</li>
+						<li>
+							<Link href="/posts" className="hover:text-[#DAA520] transition-colors">
+								Posts
+							</Link>
+						</li>
 					</ul>
 				</div>
 
-				{/* Resources Section */}
+				{/* Resources */}
 				<div>
 					<h3 className="font-bold text-[#DAA520]/90 mb-3">Resources</h3>
 					<ul className="space-y-2">
@@ -58,7 +58,7 @@ const Footer = () => {
 							<a
 								href="https://nextjs.org"
 								target="_blank"
-								className="hover:text-[#DAA520]"
+								className="hover:text-[#DAA520] transition-colors"
 							>
 								Next.js
 							</a>
@@ -67,50 +67,55 @@ const Footer = () => {
 							<a
 								href="https://tailwindcss.com"
 								target="_blank"
-								className="hover:text-[#DAA520]"
+								className="hover:text-[#DAA520] transition-colors"
 							>
 								Tailwind CSS
 							</a>
 						</li>
 						<li>
 							<a
-								href="https://reactjs.org"
+								href="https://supabase.com"
 								target="_blank"
-								className="hover:text-[#DAA520]"
+								className="hover:text-[#DAA520] transition-colors"
 							>
-								React
+								Supabase
 							</a>
 						</li>
 						<li>
 							<a
-								href="https://developer.mozilla.org"
+								href="https://vercel.com"
 								target="_blank"
-								className="hover:text-[#DAA520]"
+								className="hover:text-[#DAA520] transition-colors"
 							>
-								MDN Web Docs
+								Vercel
 							</a>
 						</li>
 					</ul>
 				</div>
 
-				{/* Contact Section */}
+				{/* Contact */}
 				<div>
 					<h3 className="font-bold text-[#DAA520]/90 mb-3">Contact</h3>
 					<p className="text-gray-400">
-						Have a question or want to work together?
+						Have a project or want to work together?
 					</p>
 					<p className="mt-2">
 						<a
-							href="mailto:jtorres3.dev@gmail.com"
-							className="hover:text-[#DAA520]"
+							href="mailto:j.torres3.dev@gmail.com"
+							className="hover:text-[#DAA520] transition-colors"
 						>
-							jtorres3.dev@gmail.com
+							j.torres3.dev@gmail.com
 						</a>
 					</p>
+					<Link
+						href="/contact"
+						className="mt-2 inline-block text-sm text-[#DAA520] hover:text-[#DAA520]/80 transition-colors"
+					>
+						→ Send a project inquiry
+					</Link>
 
 					<h3 className="font-bold text-[#DAA520]/90 mb-3 my-3">Connect</h3>
 					<div className="flex space-x-4 ">
-						{/* Social Media Icons */}
 						<a
 							href="https://github.com/TorresjDev"
 							target="_blank"
@@ -118,8 +123,8 @@ const Footer = () => {
 						>
 							<Image
 								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/social/github.svg"
-								alt="github-image"
-								className="hover:w-[26px]"
+								alt="GitHub"
+								className="hover:w-[26px] transition-all"
 								width={24}
 								height={24}
 							></Image>
@@ -131,8 +136,8 @@ const Footer = () => {
 						>
 							<Image
 								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/social/linkedIn.svg"
-								alt="github-image"
-								className="hover:w-[26px]"
+								alt="LinkedIn"
+								className="hover:w-[26px] transition-all"
 								width={24}
 								height={24}
 							></Image>
@@ -144,7 +149,7 @@ const Footer = () => {
 			{/* Footer Bottom */}
 			<div className="text-center text-[#C0C0C0]-500 mt-3">
 				<p>
-					&nbsp; &copy; {new Date().getFullYear()} Jesus Torres. All rights
+					&nbsp; &copy; {new Date().getFullYear()} JT Dev Studio. All rights
 					reserved.
 				</p>
 			</div>

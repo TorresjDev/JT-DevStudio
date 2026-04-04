@@ -198,7 +198,7 @@ export default function LoginPage() {
       >
         <div className="glass-panel rounded-3xl p-8 overflow-hidden relative">
           {/* Subtle line effect */}
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
 
           <div className="text-center mb-8">
             <motion.h1

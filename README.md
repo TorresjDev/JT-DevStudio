@@ -1,100 +1,154 @@
-# 🚀 Welcome to My Development Studio
+# JT Dev Studio
 
-**Software Services | Interactive Learning | Content Innovation**
+**Just Technology Development Studio** — building tools, apps, and experiences that solve real problems.
 
-The JT Dev Studio is an on-going professional development studio. With high-performance software tools and resources tailored to help users create, learn, and innovate. 
-From industry-leading walkthrough guides to professional-grade AI tools, the Studio is built to empower your digital presence and technical mastery.
-
----
-
-## ✨ What We Offer
-
-### 🧑‍💻 Engineering & Software Services
-I help users bridge the gap between idea and execution. The Studio houses a variety of software services designed to streamline content creation and technical development.
-
-### 📖 Setup Walkthrough Guides
-We provide professional how-to guides developed for the modern engineer:
-*   **Version Control**: Mastery of Git and professional GitHub collaborative workflows.
-*   **Next.js Development**: High-performance patterns for the React ecosystem.
-*   **SDLC & Database Design**: Architectural precision for scalable applications.
-
-### 👤 Personalized Developer Experience
-The Studio is built to be dynamic. By integrating **GitHub Authentication**, the platform tailors the experience (such as the About Me section) directly to the user's own GitHub profile and data, creating a personalized landing page for every developer.
+**Live:** [jt-devstudio.tech](https://jt-devstudio.tech)
+**Owner:** Jesus Torres (JT)
+**Stack:** Next.js · React · TypeScript · Tailwind CSS · Supabase
 
 ---
 
-## 🛠️ The Tech Stack
-Built with precision using the industry's most advanced tools:
-*   **Next.js 15+** | **TypeScript** | **Tailwind CSS**
-*   **Supabase** (Secure Authentication & Database)
-*   **Stripe** & **Coinbase Commerce** (Professional Payment Integration)
+## What This Is
+
+JT Dev Studio is not a personal blog or a resume site. It is a working studio platform that:
+
+- Offers freelance web development and tech services to clients
+- Showcases original software products and builds in progress
+- Serves as a launchpad for independent revenue streams (SaaS, tools, games)
+- Hosts a standalone professional profile page for job applications
 
 ---
 
-## 🎬 Roadmap: Coming Soon to the Studio
+## Site Structure
 
-We are constantly expanding our suite of professional software:
-*   **AI Resume & Document Suite**: Generate professional-grade resumes and cover letters using the latest AI models.
-*   **Sound Wave Studio**: A specialized audio analysis and content creation environment.
-*   **Financial Investment Analizer**: Analyze investment opportunities and provide personalized investment recommendations.
-*   **AI Content Generator**: Advanced tools for rapid, high-quality content production.
-*   **Full Developer Analytics**: Deep insights into your GitHub and WakaTime activity.
-
----
-
-## 🤝 Let's Build Together
-
-Whether you are looking for technical consulting, software services, or simply want to master the stack, the Dev Studio is open.
-
-👉 **[Launch Dev Studio](https://jt-devstudio.tech)**
-👉 **[Support the Vision](https://jt-devstudio.tech/support)**
+| Route | Purpose |
+|---|---|
+| `/` | Studio front page — services snapshot, featured builds, CTA |
+| `/services` | Client-facing services and pricing |
+| `/profile` | Portfolio and hire-me page for job applications |
+| `/studio` | Original builds and products showcase |
+| `/contact` | Client intake form |
+| `/posts` | Blog and post feed |
+| `/support` | Support the studio (Stripe + crypto donations) |
+| `/ai-tools` | Experimental AI tools |
 
 ---
 
-## 📝 UGC Feature Setup
+## Tech Stack
 
-The User-Generated Content (UGC) platform allows authenticated users to create posts, upload media, and comment.
-
-### Quick Start (Local Development)
-
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Set environment variables** in `.env.local`:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   SITE_URL=http://localhost:3000
-   ```
-
-3. **Apply database migrations**:
-   - Open Supabase Dashboard → SQL Editor
-   - Run the SQL from `supabase/migrations/001_ugc_schema.sql`
-
-4. **Create storage bucket**:
-   - Supabase Dashboard → Storage → New bucket
-   - Name: `ugc-media`, Private: ✓
-
-5. **Run the dev server**:
-   ```bash
-   npm run dev
-   ```
-
-### Key Routes
-- `/posts` - Browse published posts
-- `/posts/[id]` - View post details + comments
-- `/editor/new` - Create new post
-- `/editor/[id]` - Edit your post
-
-### For Vercel Deployment
-Add these environment variables in Vercel:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SITE_URL` (your production domain)
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4, Framer Motion |
+| UI Components | shadcn/ui, Radix UI |
+| Database | Supabase (PostgreSQL + RLS) |
+| Auth | Supabase Auth (GitHub, Google, Email) |
+| Email | Resend |
+| Payments | Stripe, Coinbase Commerce |
+| Rate Limiting | Upstash Redis |
+| Editor | TipTap (ProseMirror) |
+| Validation | Zod |
+| Testing | Vitest |
+| Deployment | Vercel |
 
 ---
 
-**Crafted by Jesus Torres (JT)**  
-*Software Engineer | Creative Technologist*
+## Local Development
+
+### Prerequisites
+
+- Node.js 18+
+- A Supabase project
+- A Stripe account (test keys are fine)
+- A Resend account
+
+### Setup
+
+```bash
+git clone https://github.com/TorresjDev/Nextjs-App.git
+cd Nextjs-App
+npm install
+```
+
+Copy the environment variable template and fill in your values:
+
+```bash
+cp .env.example .env.local
+```
+
+### Required Environment Variables
+
+```env
+# App
+SITE_URL=http://localhost:3000
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+# GitHub (for /about and /profile)
+NEXT_GITHUB_USERNAME=
+
+# Resend (contact form email)
+RESEND_API_KEY=
+
+# Stripe (donations)
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# Coinbase Commerce (crypto donations)
+COINBASE_API_KEY=
+COINBASE_WEBHOOK_SECRET=
+
+# Upstash Redis (rate limiting — optional)
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+```
+
+### Database
+
+Run the migration in your Supabase project's SQL editor:
+
+```
+supabase/migrations/001_ugc_schema.sql
+```
+
+Create a private storage bucket named `ugc-media` in your Supabase project.
+
+### Run
+
+```bash
+npm run dev
+# http://localhost:3000
+```
+
+---
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Vitest tests |
+| `npm run test:coverage` | Test coverage report |
+
+---
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for the security policy and how to report vulnerabilities.
+
+---
+
+## About the Name
+
+**JT** stands for **Just Technology**. It is intentional — humble, professional, and direct. When people ask what JT stands for, the answer is: Just Technology.
+
+---
+
+*Built and maintained by Jesus Torres — [jt-devstudio.tech](https://jt-devstudio.tech)*
