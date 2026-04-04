@@ -1,23 +1,13 @@
 "use client";
-import { Suspense } from "react";
 import { Sidebar, SidebarContent, SidebarFooter } from "../../ui/sidebar";
-import AboutSidebarGroup from "./AboutSidebarGroup";
-import PostSidebarGroup from "./PostSidebarGroup";
-import SupportSidebarGroup from "./SupportSidebarGroup";
+import StudioSidebarGroup from "./AboutSidebarGroup";
 import UserMenu from "../UserMenu";
 
 export function SidebarNav() {
 	return (
 		<Sidebar collapsible="icon" className="top-[60px]">
-			<SidebarContent>
-				<Suspense fallback={null}>
-					<AboutSidebarGroup />
-				</Suspense>
-				<PostSidebarGroup />
-				<SupportSidebarGroup />
-				{/* need group for ai resume builder*/}
-				{/* need group for comments*/}
-				{/* need group for themes */}
+			<SidebarContent className="flex flex-col">
+				<StudioSidebarGroup />
 			</SidebarContent>
 			<SidebarFooter className="border-t border-white/5 pb-20 md:pb-4">
 				<UserMenu dropdownAlign="left" />
@@ -25,4 +15,3 @@ export function SidebarNav() {
 		</Sidebar>
 	);
 }
-

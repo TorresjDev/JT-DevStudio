@@ -1,28 +1,21 @@
-// This file contains the landing cards data for the application.
+// Landing page section card data — aligned with studio architecture
 export const landingCards = [
 	{
-		title: "About Me",
-		desc: "Portfolio, experience, and my tech journey.",
-		href: "/about",
+		title: "Services",
+		desc: "Web development, automation, AI integration, and tech consulting for your business.",
+		href: "/services",
+		icon: "Briefcase",
+	},
+	{
+		title: "Studio",
+		desc: "Original builds, SaaS products, and projects in progress — all made by JT.",
+		href: "/studio",
+		icon: "Rocket",
 	},
 	{
 		title: "Posts",
-		desc: "A live post feed with CRUD functionality — like Facebook, but simpler.",
+		desc: "Dev insights, tutorials, and behind-the-scenes looks at what we're building.",
 		href: "/posts",
-	},
-	{
-		title: "AI Tools",
-		desc: "Experimental LLM tools and search assistant (coming soon).",
-		href: "/ai-tools",
-	},
-	{
-		title: "Support",
-		desc: "Help fund future tools using Stripe or crypto APIs.",
-		href: "/support",
-	},
-	{
-		title: "Blog & Tutorials",
-		desc: "In-depth guides, tutorials, and development insights.",
-		href: "/posts",
+		icon: "FileText",
 	},
 ];

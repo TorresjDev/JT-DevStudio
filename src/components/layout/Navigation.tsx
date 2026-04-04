@@ -19,7 +19,7 @@ export function Navigation() {
 							height="40"
 						/>
 						<p className="font-extrabold text-2xl text-[#DAA520]/90 whitespace-nowrap hidden sm:block">
-							Dev Studio
+							JT Dev Studio
 						</p>
 
 						<div className="animate-flareSpark">
