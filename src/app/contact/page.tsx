@@ -48,13 +48,20 @@ export default function ContactPage() {
 
 		try {
 			// 1. Save to Supabase DB (Backup)
+			const messageWithCompany = formData.company
+				? `Company: ${formData.company}\n\n${formData.message}`
+				: formData.message;
+
 			const { error } = await supabase
 				.from("contact_messages")
 				.insert([
 					{
 						name: formData.name,
 						email: formData.email,
-						message: `[Service: ${formData.service}] [Budget: ${formData.budget}] [Timeline: ${formData.timeline}] [Company: ${formData.company || "N/A"}]\n\n${formData.message}`,
+						message: messageWithCompany,
+						service: formData.service,
+						budget: formData.budget,
+						timeline: formData.timeline,
 					}
 				]);
 
