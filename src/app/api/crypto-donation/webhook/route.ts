@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { recordDonation, requireWebhookSecret } from "@/lib/donations";
 
 /**
  * Coinbase Commerce Webhook endpoint
@@ -23,19 +24,21 @@ export async function POST(req: Request) {
 		);
 	}
 
-	const webhookSecret = process.env.COINBASE_WEBHOOK_SECRET;
+	const secretResult = requireWebhookSecret(
+		process.env.COINBASE_WEBHOOK_SECRET,
+		"COINBASE_WEBHOOK_SECRET"
+	);
 
-	// If webhook secret is not configured, skip signature verification
-	if (!webhookSecret) {
-		console.warn(
-			"COINBASE_WEBHOOK_SECRET is not configured. Webhook signature verification is disabled."
-		);
+	if (secretResult instanceof Response) {
+		return secretResult;
+	}
+
+	if (!secretResult) {
 		return NextResponse.json({ received: true }, { status: 200 });
 	}
 
-	// Verify the webhook signature
 	const expectedSig = crypto
-		.createHmac("sha256", webhookSecret)
+		.createHmac("sha256", secretResult)
 		.update(body)
 		.digest("hex");
 
@@ -48,27 +51,50 @@ export async function POST(req: Request) {
 	}
 
 	try {
-		const event = JSON.parse(body);
-		const eventType = event?.event?.type;
+		const payload = JSON.parse(body);
+		const eventType = payload?.event?.type;
+		const eventId = payload?.id as string | undefined;
 
 		switch (eventType) {
 			case "charge:confirmed": {
-				const charge = event.event.data;
-				const amount = charge?.pricing?.local?.amount ?? "unknown";
-				const currency = charge?.pricing?.local?.currency ?? "USD";
+				const charge = payload.event.data;
+				const amount = charge?.pricing?.local?.amount ?? null;
+				const currency = charge?.pricing?.local?.currency ?? null;
 
-				console.log(
-					`✅ Crypto donation confirmed: $${amount} ${currency} (Charge: ${charge?.code})`
-				);
+				if (!eventId) {
+					return NextResponse.json(
+						{ error: "Missing event id" },
+						{ status: 400 }
+					);
+				}
 
-				// Future: Save donation to database, send thank-you email, etc.
+				try {
+					const { duplicate } = await recordDonation({
+						provider: "coinbase",
+						provider_event_id: eventId,
+						amount: amount !== null ? Number(amount) : null,
+						currency,
+						status: "confirmed",
+						email: charge?.metadata?.email ?? null,
+					});
+
+					if (!duplicate) {
+						console.log(
+							`Crypto donation recorded: $${amount ?? "unknown"} ${currency ?? "USD"} (Charge: ${charge?.code})`
+						);
+					}
+				} catch (err) {
+					console.error("Failed to persist Coinbase donation:", err);
+					return NextResponse.json(
+						{ error: "Failed to persist donation" },
+						{ status: 500 }
+					);
+				}
 				break;
 			}
 			case "charge:failed": {
-				const charge = event.event.data;
-				console.log(
-					`❌ Crypto donation failed (Charge: ${charge?.code})`
-				);
+				const charge = payload.event.data;
+				console.log(`Crypto donation failed (Charge: ${charge?.code})`);
 				break;
 			}
 			default:

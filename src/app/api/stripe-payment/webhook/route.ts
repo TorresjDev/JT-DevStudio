@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "../../../../lib/stripe";
+import { recordDonation, requireWebhookSecret } from "@/lib/donations";
 import Stripe from "stripe";
 
 /**
@@ -28,14 +29,16 @@ export async function POST(req: Request) {
 		);
 	}
 
-	const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+	const secretResult = requireWebhookSecret(
+		process.env.STRIPE_WEBHOOK_SECRET,
+		"STRIPE_WEBHOOK_SECRET"
+	);
 
-	// If webhook secret is not configured, skip signature verification
-	// This allows the endpoint to exist without blocking deployment
-	if (!webhookSecret) {
-		console.warn(
-			"STRIPE_WEBHOOK_SECRET is not configured. Webhook signature verification is disabled."
-		);
+	if (secretResult instanceof Response) {
+		return secretResult;
+	}
+
+	if (!secretResult) {
 		return NextResponse.json({ received: true }, { status: 200 });
 	}
 
@@ -43,7 +46,7 @@ export async function POST(req: Request) {
 
 	try {
 		const stripe = getStripe();
-		event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+		event = stripe.webhooks.constructEvent(body, sig, secretResult);
 	} catch (err) {
 		const message = err instanceof Error ? err.message : "Unknown error";
 		console.error(`Webhook signature verification failed: ${message}`);
@@ -53,23 +56,38 @@ export async function POST(req: Request) {
 		);
 	}
 
-	// Handle the event
 	switch (event.type) {
 		case "checkout.session.completed": {
 			const session = event.data.object as Stripe.Checkout.Session;
 			const amountTotal = session.amount_total
-				? (session.amount_total / 100).toFixed(2)
-				: "unknown";
+				? session.amount_total / 100
+				: null;
 
-			console.log(
-				`✅ Donation received: $${amountTotal} USD (Session: ${session.id})`
-			);
+			try {
+				const { duplicate } = await recordDonation({
+					provider: "stripe",
+					provider_event_id: event.id,
+					amount: amountTotal,
+					currency: session.currency ?? null,
+					status: session.payment_status ?? "completed",
+					email: session.customer_details?.email ?? null,
+				});
 
-			// Future: Save donation to database, send thank-you email, etc.
+				if (!duplicate) {
+					console.log(
+						`Donation recorded: $${amountTotal ?? "unknown"} ${session.currency ?? "USD"} (Session: ${session.id})`
+					);
+				}
+			} catch (err) {
+				console.error("Failed to persist Stripe donation:", err);
+				return NextResponse.json(
+					{ error: "Failed to persist donation" },
+					{ status: 500 }
+				);
+			}
 			break;
 		}
 		default:
-			// Unexpected event type — log but don't error
 			console.log(`Unhandled Stripe event type: ${event.type}`);
 	}
 
