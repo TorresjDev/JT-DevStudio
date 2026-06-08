@@ -31,7 +31,7 @@ import type { ActionResult } from './posts'
 // Constants
 // =============================================================================
 
-const BUCKET_NAME = 'ugc-main'
+const BUCKET_NAME = 'ugc-media'
 const SIGNED_URL_EXPIRY = 60 // seconds (1 minute to complete upload)
 
 // =============================================================================
