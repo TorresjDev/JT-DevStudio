@@ -37,16 +37,16 @@ export async function updateSession(request: NextRequest) {
   // Define public routes that don't require authentication
   // This allows SEO crawlers to index content and improves first-time visitor UX
   const publicPaths = [
-    '/',           // Home page
-    '/posts',      // Public posts feed
-    '/guides',     // Public documentation
-    '/about',      // About page
-    '/contact',    // Contact page
-    '/support',    // Support page
-    '/login',      // Login page
-
-    '/auth',       // Auth callbacks
-    '/api',        // API routes (they handle their own auth)
+    '/',
+    '/profile',
+    '/services',
+    '/studio',
+    '/posts',
+    '/contact',
+    '/support',
+    '/login',
+    '/auth',
+    '/api',
   ]
 
   const isPublicPath = publicPaths.some(path =>
