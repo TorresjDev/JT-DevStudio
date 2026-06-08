@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { requireWebhookSecret } from '@/lib/donations'
+import { requireWebhookSecret } from '@/lib/webhook-secrets'
 
 describe('requireWebhookSecret', () => {
   const originalEnv = process.env.NODE_ENV

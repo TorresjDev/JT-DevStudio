@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { recordDonation, requireWebhookSecret } from "@/lib/donations";
+import { recordDonation } from "@/lib/donations";
+import { requireWebhookSecret } from "@/lib/webhook-secrets";
 
 /**
  * Coinbase Commerce Webhook endpoint

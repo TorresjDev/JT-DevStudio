@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "../../../../lib/stripe";
-import { recordDonation, requireWebhookSecret } from "@/lib/donations";
+import { recordDonation } from "@/lib/donations";
+import { requireWebhookSecret } from "@/lib/webhook-secrets";
 import Stripe from "stripe";
 
 /**
