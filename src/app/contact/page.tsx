@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, Github, Linkedin, Send, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
+import { Mail, Github, Linkedin, Send, CheckCircle, AlertCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
@@ -94,8 +94,18 @@ export default function ContactPage() {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const selectClasses = "w-full p-3 rounded-xl bg-background/50 border border-border focus:border-[#DAA520]/50 focus:ring-1 focus:ring-[#DAA520]/40 outline-none transition-all duration-200 text-sm appearance-none cursor-pointer";
-	const inputClasses = "w-full p-3 rounded-xl bg-background/50 border border-border focus:border-[#DAA520]/50 focus:ring-1 focus:ring-[#DAA520]/40 outline-none transition-all duration-200 text-sm";
+	const labelClasses = "text-sm font-medium text-muted-foreground";
+	const fieldGroupClasses = "space-y-1.5";
+	const gridRowClasses = "grid grid-cols-1 md:grid-cols-2 gap-5";
+	const fieldBaseClasses =
+		"w-full h-11 px-3 rounded-xl bg-background/50 border border-border text-foreground placeholder:text-muted-foreground focus:border-[#DAA520]/50 focus:ring-1 focus:ring-[#DAA520]/40 outline-none transition-all duration-200 text-sm";
+	const inputClasses = fieldBaseClasses;
+	const selectClasses = `${fieldBaseClasses} appearance-none cursor-pointer pr-10`;
+	const optionClasses = "bg-white text-neutral-900";
+	const placeholderOptionClasses = "bg-white text-neutral-500";
+	const optionStyle = { backgroundColor: "#ffffff", color: "#111111" };
+	const placeholderOptionStyle = { backgroundColor: "#ffffff", color: "#737373" };
+	const requiredMark = <span className="text-[#DAA520] ml-0.5" aria-hidden="true">*</span>;
 
 	return (
 		<section
@@ -175,11 +185,13 @@ export default function ContactPage() {
 								</Button>
 							</div>
 						) : (
-							<form onSubmit={handleSubmit} className="space-y-5 relative">
+							<form onSubmit={handleSubmit} className="space-y-6 relative">
 								{/* Row 1: Name + Email */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div className="space-y-2">
-										<label htmlFor="name" className="text-sm font-medium text-muted-foreground">Name *</label>
+								<div className={gridRowClasses}>
+									<div className={fieldGroupClasses}>
+										<label htmlFor="name" className={labelClasses}>
+											Name{requiredMark}
+										</label>
 										<input
 											type="text"
 											id="name"
@@ -191,8 +203,10 @@ export default function ContactPage() {
 											placeholder="Your Name"
 										/>
 									</div>
-									<div className="space-y-2">
-										<label htmlFor="email" className="text-sm font-medium text-muted-foreground">Email *</label>
+									<div className={fieldGroupClasses}>
+										<label htmlFor="email" className={labelClasses}>
+											Email{requiredMark}
+										</label>
 										<input
 											type="email"
 											id="email"
@@ -207,9 +221,9 @@ export default function ContactPage() {
 								</div>
 
 								{/* Row 2: Company + Service */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div className="space-y-2">
-										<label htmlFor="company" className="text-sm font-medium text-muted-foreground">Company / Project Name</label>
+								<div className={gridRowClasses}>
+									<div className={fieldGroupClasses}>
+										<label htmlFor="company" className={labelClasses}>Company / Project Name</label>
 										<input
 											type="text"
 											id="company"
@@ -220,63 +234,80 @@ export default function ContactPage() {
 											placeholder="Optional"
 										/>
 									</div>
-									<div className="space-y-2">
-										<label htmlFor="service" className="text-sm font-medium text-muted-foreground">Service Needed *</label>
-										<select
-											id="service"
-											name="service"
-											value={formData.service}
-											onChange={handleChange}
-											required
-											className={selectClasses}
-										>
-											<option value="" disabled>Select a service</option>
-											{SERVICE_OPTIONS.map((s) => (
-												<option key={s} value={s}>{s}</option>
-											))}
-										</select>
+									<div className={fieldGroupClasses}>
+										<label htmlFor="service" className={labelClasses}>
+											Service Needed{requiredMark}
+										</label>
+										<div className="relative">
+											<select
+												id="service"
+												name="service"
+												value={formData.service}
+												onChange={handleChange}
+												required
+												className={selectClasses}
+											>
+												<option value="" disabled className={placeholderOptionClasses} style={placeholderOptionStyle}>Select a service</option>
+												{SERVICE_OPTIONS.map((s) => (
+													<option key={s} value={s} className={optionClasses} style={optionStyle}>{s}</option>
+												))}
+											</select>
+											<ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+										</div>
 									</div>
 								</div>
 
 								{/* Row 3: Budget + Timeline */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div className="space-y-2">
-										<label htmlFor="budget" className="text-sm font-medium text-muted-foreground">Budget Range *</label>
-										<select
-											id="budget"
-											name="budget"
-											value={formData.budget}
-											onChange={handleChange}
-											required
-											className={selectClasses}
-										>
-											<option value="" disabled>Select a range</option>
-											{BUDGET_OPTIONS.map((b) => (
-												<option key={b} value={b}>{b}</option>
-											))}
-										</select>
+								<div className={gridRowClasses}>
+									<div className={fieldGroupClasses}>
+										<label htmlFor="budget" className={labelClasses}>
+											Budget Range{requiredMark}
+										</label>
+										<div className="relative">
+											<select
+												id="budget"
+												name="budget"
+												value={formData.budget}
+												onChange={handleChange}
+												required
+												className={selectClasses}
+											>
+												<option value="" disabled className={placeholderOptionClasses} style={placeholderOptionStyle}>Select a range</option>
+												{BUDGET_OPTIONS.map((b) => (
+													<option key={b} value={b} className={optionClasses} style={optionStyle}>{b}</option>
+												))}
+											</select>
+											<ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+										</div>
 									</div>
-									<div className="space-y-2">
-										<label htmlFor="timeline" className="text-sm font-medium text-muted-foreground">Timeline *</label>
-										<select
-											id="timeline"
-											name="timeline"
-											value={formData.timeline}
-											onChange={handleChange}
-											required
-											className={selectClasses}
-										>
-											<option value="" disabled>Select timeline</option>
-											{TIMELINE_OPTIONS.map((t) => (
-												<option key={t} value={t}>{t}</option>
-											))}
-										</select>
+									<div className={fieldGroupClasses}>
+										<label htmlFor="timeline" className={labelClasses}>
+											Timeline{requiredMark}
+										</label>
+										<div className="relative">
+											<select
+												id="timeline"
+												name="timeline"
+												value={formData.timeline}
+												onChange={handleChange}
+												required
+												className={selectClasses}
+											>
+												<option value="" disabled className={placeholderOptionClasses} style={placeholderOptionStyle}>Select timeline</option>
+												{TIMELINE_OPTIONS.map((t) => (
+													<option key={t} value={t} className={optionClasses} style={optionStyle}>{t}</option>
+												))}
+											</select>
+											<ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+										</div>
 									</div>
 								</div>
 
 								{/* Message */}
-								<div className="space-y-2">
-									<label htmlFor="message" className="text-sm font-medium text-muted-foreground">Project Description *</label>
+								<div className={fieldGroupClasses}>
+									<label htmlFor="message" className={labelClasses}>
+										Project Description{requiredMark}
+									</label>
 									<textarea
 										id="message"
 										name="message"
@@ -284,7 +315,7 @@ export default function ContactPage() {
 										onChange={handleChange}
 										required
 										rows={5}
-										className={`${inputClasses} resize-none`}
+										className={`${inputClasses} h-auto min-h-35 py-3 resize-none`}
 										placeholder="Tell us about your project — what you need, the problem it solves, and any important details."
 									/>
 								</div>
@@ -292,7 +323,7 @@ export default function ContactPage() {
 								<Button
 									type="submit"
 									disabled={status === "loading"}
-									className="w-full bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-6 py-6 h-auto text-base rounded-xl flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all"
+									className="w-full bg-[#DAA520] hover:enabled:bg-[#c9951d] text-black font-bold px-6 py-6 h-auto text-base rounded-xl flex items-center justify-center gap-2 transform active:enabled:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-[#DAA520]"
 								>
 									{status === "loading" ? (
 										<span className="animate-spin h-5 w-5 border-2 border-black border-t-transparent rounded-full" />
