@@ -1,6 +1,6 @@
 # JT Dev Studio
 
-**Just Technology Development Studio** — building tools, apps, and experiences that solve real problems.
+**Just Technology Development Studio.** Building tools, apps, and experiences that solve real problems.
 
 **Live:** [jt-devstudio.tech](https://jt-devstudio.tech)
 **Owner:** Jesus Torres (JT)
@@ -23,14 +23,39 @@ JT Dev Studio is not a personal blog or a resume site. It is a working studio pl
 
 | Route | Purpose |
 |---|---|
-| `/` | Studio front page — services snapshot, featured builds, CTA |
+| `/` | Studio front page: services snapshot, featured builds, CTA |
 | `/services` | Client-facing services and pricing |
-| `/profile` | Portfolio and hire-me page for job applications |
 | `/studio` | Original builds and products showcase |
+| `/profile` | Portfolio and hire-me page for job applications |
+| `/posts` | Post feed |
+| `/posts/blogs` | Long-form blog index |
+| `/posts/[id]` | Individual post |
 | `/contact` | Client intake form |
-| `/posts` | Blog and post feed |
-| `/support` | Support the studio (Stripe + crypto donations) |
-| `/ai-tools` | Experimental AI tools |
+| `/support/donations` | Support the studio (Stripe and crypto donations) |
+| `/settings` | Account settings (requires login) |
+| `/editor/new`, `/editor/[id]` | Content editor (requires login) |
+| `/login` | Authentication (GitHub, Google, email) |
+
+---
+
+## Layout and Navigation
+
+The app uses a single shared layout for every route except `/login`, composed in `src/components/layout/LayoutContent.tsx`:
+
+- A sticky top navbar (`Navigation.tsx`, height 56px) holds the brand, theme toggle, and user menu.
+- A collapsible sidebar (`SidebarNav.tsx`, built on shadcn/ui) holds the primary navigation, grouped into Browse, Content, Account (login only), and Reach Out.
+- Page content and the footer both render inside `SidebarInset`, so the footer reflows with the sidebar instead of sitting underneath it.
+
+### Responsive behavior
+
+The layout adapts at a single breakpoint of 768px (`useIsMobile`):
+
+| Width | Navigation |
+|---|---|
+| Desktop and tablet (768px and up) | Fixed collapsible sidebar. Collapses to a 48px icon rail and expands to 232px. State persists in a cookie. |
+| Phones (under 768px) | The sidebar is hidden and replaced by a left slide-in drawer over a dimmed overlay, opened by the navbar hamburger. |
+
+The mobile drawer is a Radix dialog, so it traps focus, closes on overlay tap, Escape, route change, and link selection, and exposes an accessible name to screen readers. Interactive controls keep a 44px minimum touch target.
 
 ---
 
@@ -87,7 +112,7 @@ SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 
-# GitHub (for /about and /profile)
+# GitHub (for /profile)
 NEXT_GITHUB_USERNAME=
 
 # Resend (contact form email)
@@ -102,7 +127,7 @@ STRIPE_WEBHOOK_SECRET=
 COINBASE_API_KEY=
 COINBASE_WEBHOOK_SECRET=
 
-# Upstash Redis (rate limiting — optional)
+# Upstash Redis (rate limiting, optional)
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 ```
@@ -147,8 +172,8 @@ See [SECURITY.md](SECURITY.md) for the security policy and how to report vulnera
 
 ## About the Name
 
-**JT** stands for **Just Technology**. It is intentional — humble, professional, and direct. When people ask what JT stands for, the answer is: Just Technology.
+**JT** stands for **Just Technology**. The name is intentional: humble, professional, and direct. When people ask what JT stands for, the answer is Just Technology.
 
 ---
 
-*Built and maintained by Jesus Torres — [jt-devstudio.tech](https://jt-devstudio.tech)*
+*Built and maintained by Jesus Torres. [jt-devstudio.tech](https://jt-devstudio.tech)*

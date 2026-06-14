@@ -19,9 +19,14 @@ export function generateMetadata({
 	const fullTitle = title ? `${title} | ${APP_CONFIG.name}` : APP_CONFIG.name;
 
 	return {
+		metadataBase: new URL(APP_CONFIG.url),
 		title: fullTitle,
 		description,
 		authors: [{ name: APP_CONFIG.author.name }],
+		robots: {
+			index: true,
+			follow: true,
+		},
 		keywords: [
 			"developer",
 			"portfolio",

@@ -259,12 +259,28 @@ CREATE POLICY "Users can delete own media"
 -- NOTE: You must first create the bucket in the Supabase Dashboard:
 --   Storage → New bucket → Name: "ugc-media" → Private: checked
 
--- Authenticated users can read files in the bucket
--- (We use signed URLs for actual access control)
-CREATE POLICY "Authenticated users can read ugc media"
+-- Anyone (anon/authenticated) can read media that is associated with a published post
+CREATE POLICY "Anyone can read media for published posts"
+  ON storage.objects FOR SELECT
+  TO anon, authenticated
+  USING (
+    bucket_id = 'ugc-media' AND
+    EXISTS (
+      SELECT 1 FROM public.post_media pm
+      JOIN public.posts p ON pm.post_id = p.id
+      WHERE pm.storage_path = name
+      AND p.status = 'published'
+    )
+  );
+
+-- Users can read files in their own folder (even drafts)
+CREATE POLICY "Owners can read own media"
   ON storage.objects FOR SELECT
   TO authenticated
-  USING (bucket_id = 'ugc-media');
+  USING (
+    bucket_id = 'ugc-media' AND
+    (storage.foldername(name))[1] = auth.uid()::text
+  );
 
 -- Users can upload to their own folder (folder name = user ID)
 CREATE POLICY "Users can upload to own folder"

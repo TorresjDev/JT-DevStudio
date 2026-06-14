@@ -6,7 +6,7 @@ import { cn } from "../../lib/utils";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Separator } from "./separator";
-import { Sheet, SheetContent } from "./sheet";
+import { Sheet, SheetContent, SheetTitle } from "./sheet";
 import { Skeleton } from "./skeleton";
 import {
 	Tooltip,
@@ -15,8 +15,9 @@ import {
 	TooltipTrigger,
 } from "./tooltip";
 import { useIsMobile } from "../../hooks/use-mobile";
+import { usePathname } from "next/navigation";
 import Icon from "./icon";
-import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { PanelLeftOpen, PanelLeftClose, Menu, X } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -111,6 +112,13 @@ const SidebarProvider = React.forwardRef<
 			return () => window.removeEventListener("keydown", handleKeyDown);
 		}, [toggleSidebar]);
 
+		// Close the mobile drawer whenever the route changes, so it never
+		// lingers open after navigating (covers links outside the nav list).
+		const pathname = usePathname();
+		React.useEffect(() => {
+			setOpenMobile(false);
+		}, [pathname]);
+
 		// We add a state so that we can do data-state="expanded" or "collapsed".
 		// This makes it easier to style the sidebar with Tailwind classes.
 		const state = open ? "expanded" : "collapsed";
@@ -198,11 +206,20 @@ const Sidebar = React.forwardRef<
 					<SheetContent
 						data-sidebar="sidebar"
 						data-mobile="true"
-						className="w-full! max-w-full! inset-x-0! top-14! h-auto! max-h-[70vh]! bg-sidebar/98 backdrop-blur-xl border-b border-sidebar-border p-0 text-sidebar-foreground [&>button]:hidden shadow-2xl rounded-b-2xl overflow-y-auto"
-						side="top"
+						className="inset-y-auto! top-14! left-0! h-[calc(100svh-3.5rem)]! w-[var(--sidebar-width-mobile)]! max-w-[85vw]! bg-sidebar/98 backdrop-blur-xl border-r border-sidebar-border p-0 text-sidebar-foreground shadow-2xl rounded-r-2xl overflow-y-auto [&>button]:top-3 [&>button]:right-3"
+						style={
+							{
+								"--sidebar-width-mobile": SIDEBAR_WIDTH_MOBILE,
+							} as React.CSSProperties
+						}
+						side="left"
 					>
-						{/* Mobile Menu Content */}
-						<div className="flex flex-col w-full py-4 px-2">{children}</div>
+						{/* Accessible name for the dialog (screen readers) */}
+						<SheetTitle className="sr-only">Navigation menu</SheetTitle>
+						{/* Mobile drawer content; pad the bottom for iOS home indicator */}
+						<div className="flex flex-col w-full h-full py-3 px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+							{children}
+						</div>
 					</SheetContent>
 				</Sheet>
 			);
@@ -211,7 +228,7 @@ const Sidebar = React.forwardRef<
 		return (
 			<div
 				ref={ref}
-				className="group peer hidden md:block text-sidebar-foreground backdrop-blur-sm bg-transparent md:h-full"
+				className="group peer hidden md:block text-sidebar-foreground bg-transparent md:h-full"
 				data-state={state}
 				data-collapsible={state === "collapsed" ? collapsible : ""}
 				data-variant={variant}
@@ -257,9 +274,19 @@ Sidebar.displayName = "Sidebar";
 
 const SidebarTrigger = React.forwardRef<
 	React.ElementRef<typeof Button>,
-	React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
-	const { toggleSidebar, state } = useSidebar();
+	React.ComponentProps<typeof Button> & { inline?: boolean }
+>(({ className, onClick, inline = false, ...props }, ref) => {
+	const { toggleSidebar, state, isMobile, openMobile } = useSidebar();
+
+	// On phones the trigger is a hamburger that flips to an X when the
+	// drawer is open. On desktop it mirrors the sidebar collapse state.
+	const TriggerIcon = isMobile
+		? openMobile
+			? X
+			: Menu
+		: state === "expanded"
+		? PanelLeftClose
+		: PanelLeftOpen;
 
 	return (
 		<Button
@@ -268,16 +295,22 @@ const SidebarTrigger = React.forwardRef<
 			variant="ghost"
 			size="icon"
 			className={cn(
-				// Mobile: in navbar, far right | Desktop: on sidebar border
-				"h-14 w-14 md:h-10 md:w-10 z-61 hover:text-[#DAA520]/90 shrink-0",
-				"absolute transition-all duration-300 ease-in-out",
-				// Mobile: top right of navbar
-				"top-1 right-4",
-				// Desktop: on sidebar border edge
-				"md:top-16 md:right-auto md:-translate-x-1/2",
-				state === "expanded" 
-					? "md:left-(--sidebar-width)" 
-					: "md:left-(--sidebar-width-icon)",
+				"hover:text-[#DAA520]/90 shrink-0 transition-all duration-300 ease-in-out",
+				inline
+					? // Inline: sits inside the sidebar header (Copilot/Edge style)
+					  "h-8 w-8"
+					: cn(
+							// Mobile: in navbar, far right | Desktop: on sidebar border
+							"h-14 w-14 md:h-10 md:w-10 z-61",
+							"absolute",
+							// Mobile: top right of navbar
+							"top-1 right-4",
+							// Desktop: on sidebar border edge
+							"md:top-16 md:right-auto md:-translate-x-1/2",
+							state === "expanded"
+								? "md:left-(--sidebar-width)"
+								: "md:left-(--sidebar-width-icon)"
+					  ),
 				className
 			)}
 			onClick={(event) => {
@@ -286,11 +319,7 @@ const SidebarTrigger = React.forwardRef<
 			}}
 			{...props}
 		>
-			{state === "expanded" ? (
-				<PanelLeftClose className="h-4 w-4" />
-			) : (
-				<PanelLeftOpen className="h-4 w-4" />
-			)}
+			<TriggerIcon className="h-5 w-5 md:h-4 md:w-4" />
 
 			<span className="sr-only">Toggle Sidebar</span>
 		</Button>
@@ -528,7 +557,7 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
 const sidebarMenuButtonVariants = cva(
-	"peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-white disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:border data-[active=true]:border-sidebar-border data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+	"peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-white disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:border data-[active=true]:border-sidebar-border data-[active=true]:font-medium data-[active=true]:text-[#DAA520] data-[active=true]:hover:text-[#DAA520]/90 data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-[#DAA520] group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
 	{
 		variants: {
 			variant: {
@@ -745,7 +774,7 @@ const SidebarMenuSubButton = React.forwardRef<
 			data-active={isActive}
 			className={cn(
 				"flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground ",
-				"data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground ",
+				"data-[active=true]:bg-sidebar-accent data-[active=true]:text-[#DAA520] data-[active=true]:hover:text-[#DAA520]/90 data-[active=true]:[&>svg]:text-[#DAA520] ",
 				size === "sm" && "text-xs",
 				size === "md" && "text-sm",
 				"group-data-[collapsible=icon]:hidden",
