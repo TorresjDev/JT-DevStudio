@@ -5,6 +5,7 @@
  * Import from '@/components/ugc' instead of individual files.
  */
 
+export { UserAvatar } from './UserAvatar'
 export { PostCard, PostCardSkeleton } from './PostCard'
 export { CommentThread, CommentsSection } from './CommentThread'
 export { CommentForm } from './CommentForm'

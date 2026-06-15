@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { CSP_IMG_SRC_HOSTS, IMAGE_REMOTE_PATTERNS } from "./src/lib/allowedImageHosts";
 
 const nextConfig: NextConfig = {
 	/* config options here */
@@ -16,20 +17,9 @@ const nextConfig: NextConfig = {
 		],
 	},
 
-	serverExternalPackages: ["canvas", "jsdom", "isomorphic-dompurify"],
-
 	// Enhanced image configuration
 	images: {
-		remotePatterns: [
-			{ protocol: "https", hostname: "torresjdev.github.io" },
-			{ protocol: "https", hostname: "fonts.googleapis.com" },
-			{ protocol: "https", hostname: "avatars.githubusercontent.com" },
-			{ protocol: "https", hostname: "github-readme-streak-stats.herokuapp.com" },
-			{ protocol: "https", hostname: "github-readme-stats.vercel.app" },
-			{ protocol: "https", hostname: "ghchart.rshah.org" },
-			// Supabase Storage for UGC media uploads
-			{ protocol: "https", hostname: "rtyyywzpdoroqouvskop.supabase.co" },
-		],
+		remotePatterns: IMAGE_REMOTE_PATTERNS,
 	},
 
 	// Security headers
@@ -68,7 +58,7 @@ const nextConfig: NextConfig = {
 							"default-src 'self'; " +
 							"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; " +
 							"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-							"img-src 'self' blob: data: https://torresjdev.github.io https://fonts.googleapis.com https://avatars.githubusercontent.com https://github-readme-streak-stats.herokuapp.com https://github-readme-stats.vercel.app https://ghchart.rshah.org https://rtyyywzpdoroqouvskop.supabase.co; " +
+							`img-src 'self' blob: data: ${CSP_IMG_SRC_HOSTS.join(" ")} https://*.googleusercontent.com; ` +
 							"font-src 'self' https://fonts.gstatic.com; " +
 							"connect-src 'self' https://rtyyywzpdoroqouvskop.supabase.co wss://rtyyywzpdoroqouvskop.supabase.co https://api.commerce.coinbase.com https://api.stripe.com https://api.github.com; " +
 							"frame-src 'self' https://js.stripe.com https://hooks.stripe.com; " +
