@@ -16,12 +16,7 @@ const nextConfig: NextConfig = {
 		],
 	},
 
-	webpack: (config, { isServer }) => {
-		if (isServer) {
-			config.externals = [...(config.externals || []), "canvas", "jsdom"];
-		}
-		return config;
-	},
+	serverExternalPackages: ["canvas", "jsdom", "isomorphic-dompurify"],
 
 	// Enhanced image configuration
 	images: {

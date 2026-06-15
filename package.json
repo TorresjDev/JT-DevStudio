@@ -7,7 +7,7 @@
 		"build": "next build",
 		"build:webpack": "next build --webpack",
 		"start": "next start",
-		"lint": "next lint",
+		"lint": "eslint .",
 		"test": "vitest",
 		"test:coverage": "vitest run --coverage"
 	},
