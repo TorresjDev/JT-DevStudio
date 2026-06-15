@@ -2,6 +2,26 @@ import { NextResponse } from 'next/server'
 // The client you created from the Server-Side Auth instructions
 import { createClient } from '@/utils/supabase/server'
 
+function isSafeHost(host: string | null): boolean {
+  if (!host) return false;
+  // Allow localhost
+  if (host === 'localhost' || host.startsWith('localhost:')) return true;
+  
+  // Allow configured site URL
+  const siteUrl = process.env.SITE_URL;
+  if (siteUrl) {
+    try {
+      const siteHost = new URL(siteUrl).host;
+      if (host === siteHost) return true;
+    } catch {}
+  }
+  
+  // Allow Vercel preview deploys (e.g. *.vercel.app)
+  if (host.endsWith('.vercel.app')) return true;
+  
+  return false;
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -19,7 +39,7 @@ export async function GET(request: Request) {
       if (isLocalEnv) {
         // we can be sure that there's no proxy involved, so origin is safe
         return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
+      } else if (forwardedHost && isSafeHost(forwardedHost)) {
         return NextResponse.redirect(`https://${forwardedHost}${next}`)
       } else {
         return NextResponse.redirect(`${origin}${next}`)

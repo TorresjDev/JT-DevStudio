@@ -58,6 +58,7 @@ const Footer = () => {
 							<a
 								href="https://nextjs.org"
 								target="_blank"
+					rel="noopener noreferrer"
 								className="hover:text-[#DAA520] transition-colors"
 							>
 								Next.js
@@ -67,6 +68,7 @@ const Footer = () => {
 							<a
 								href="https://tailwindcss.com"
 								target="_blank"
+					rel="noopener noreferrer"
 								className="hover:text-[#DAA520] transition-colors"
 							>
 								Tailwind CSS
@@ -76,6 +78,7 @@ const Footer = () => {
 							<a
 								href="https://supabase.com"
 								target="_blank"
+					rel="noopener noreferrer"
 								className="hover:text-[#DAA520] transition-colors"
 							>
 								Supabase
@@ -85,6 +88,7 @@ const Footer = () => {
 							<a
 								href="https://vercel.com"
 								target="_blank"
+					rel="noopener noreferrer"
 								className="hover:text-[#DAA520] transition-colors"
 							>
 								Vercel
@@ -119,6 +123,7 @@ const Footer = () => {
 						<a
 							href="https://github.com/TorresjDev"
 							target="_blank"
+					rel="noopener noreferrer"
 							aria-label="GitHub"
 						>
 							<Image
@@ -132,6 +137,7 @@ const Footer = () => {
 						<a
 							href="https://linkedin.com/in/torresjdev"
 							target="_blank"
+					rel="noopener noreferrer"
 							aria-label="LinkedIn"
 						>
 							<Image
@@ -147,7 +153,7 @@ const Footer = () => {
 			</div>
 
 			{/* Footer Bottom */}
-			<div className="text-center text-[#C0C0C0]-500 mt-3">
+			<div className="text-center text-[#C0C0C0]/60 mt-3">
 				<p>
 					&nbsp; &copy; {new Date().getFullYear()} JT Dev Studio. All rights
 					reserved.

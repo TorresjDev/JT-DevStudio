@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#DAA520"/>
+      <stop offset="1" stop-color="#F4C752"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0B0B0F"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="url(#g)" stroke-opacity="0.5" stroke-width="1.5"/>
+  <text x="32" y="33" text-anchor="middle" dominant-baseline="central"
+        font-family="Poppins, Inter, Segoe UI, Arial, sans-serif"
+        font-size="30" font-weight="800" fill="url(#g)" letter-spacing="-1">JT</text>
+</svg>

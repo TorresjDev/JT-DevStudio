@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { signout } from '@/app/login/actions'
-import { Button } from '@/components/ui/button'
 import {
   LogOut,
+  LogIn,
   User as UserIcon,
   ChevronDown,
   Github,
@@ -35,7 +35,6 @@ export default function UserMenu({
 
   const handleSignOut = async () => {
     setIsOpen(false)
-    console.log('[UserMenu] User clicked Log Out')
     // Clear client-side session
     await supabase.auth.signOut()
     // Trigger server-side logout and redirect
@@ -55,9 +54,14 @@ export default function UserMenu({
 
   if (!user) {
     return (
-      <Button asChild variant="ghost" className="text-[#DAA520] hover:text-[#DAA520]/80">
-        <Link href="/login">Login</Link>
-      </Button>
+      <Link
+        href="/login"
+        aria-label="Login"
+        className="flex items-center gap-2 rounded-md p-2 text-sm font-medium text-[#DAA520] transition-colors hover:bg-sidebar-accent hover:text-[#DAA520]/80 group-data-[collapsible=icon]:justify-center"
+      >
+        <LogIn className="h-4 w-4 shrink-0" />
+        <span className="group-data-[collapsible=icon]:hidden">Login</span>
+      </Link>
     )
   }
 

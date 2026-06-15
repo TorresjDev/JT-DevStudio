@@ -108,8 +108,6 @@ async function ensureProfileExists(userId: string): Promise<void> {
   if (error) {
     console.error('Error creating profile:', error)
     // Don't throw - we'll let the post creation handle the error
-  } else {
-    console.log('Auto-created profile for user:', userId)
   }
 }
 

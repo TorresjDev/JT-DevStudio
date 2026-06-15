@@ -7,9 +7,14 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function Navigation() {
 	return (
-		<Navbar className="w-full border-b h-14 bg-background/80 backdrop-blur-md relative z-50">
-			<NavbarContent justify="start" className="relative gap-3">
-				<SidebarTrigger className="-ml-1" />
+		<Navbar className="w-full border-b h-14 bg-background/80 backdrop-blur-md sticky top-0 z-50">
+			<NavbarContent justify="start" className="relative gap-2 sm:gap-3">
+				{/* Mobile only — desktop uses the toggle inside the sidebar header */}
+				<SidebarTrigger
+					inline
+					aria-label="Open navigation menu"
+					className="md:hidden h-11 w-11 -ml-1"
+				/>
 				<Link href="/">
 					<NavbarBrand className="gap-2">
 						<Image

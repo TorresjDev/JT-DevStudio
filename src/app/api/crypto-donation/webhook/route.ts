@@ -43,7 +43,14 @@ export async function POST(req: Request) {
 		.update(body)
 		.digest("hex");
 
-	if (sig !== expectedSig) {
+	// Constant-time comparison to avoid leaking the signature via timing.
+	const sigBuf = Buffer.from(sig);
+	const expectedBuf = Buffer.from(expectedSig);
+	const signatureValid =
+		sigBuf.length === expectedBuf.length &&
+		crypto.timingSafeEqual(sigBuf, expectedBuf);
+
+	if (!signatureValid) {
 		console.error("Coinbase webhook signature verification failed");
 		return NextResponse.json(
 			{ error: "Invalid webhook signature" },

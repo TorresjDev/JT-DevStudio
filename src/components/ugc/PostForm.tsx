@@ -40,9 +40,9 @@ export function PostForm({ mode, initialData, postId }: PostFormProps) {
 
   // Strip HTML tags for validation (content required check)
   const getPlainText = (html: string) => {
-    const tmp = document.createElement('div')
-    tmp.innerHTML = html
-    return tmp.textContent || tmp.innerText || ''
+    if (typeof window === 'undefined') return ''
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    return doc.body.textContent || doc.body.innerText || ''
   }
 
   const handleSubmit = async (status: 'draft' | 'published') => {

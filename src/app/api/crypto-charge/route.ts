@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { apiRateLimiter, checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const COINBASE_API_KEY = process.env.COINBASE_API_KEY;
 
@@ -32,6 +33,23 @@ interface CoinbaseChargeResponse {
 }
 
 export async function GET(request: Request) {
+	// Rate limiting check
+	const ip = getClientIp(request);
+	const { success, remaining } = await checkRateLimit(apiRateLimiter, ip);
+
+	if (!success) {
+		return NextResponse.json(
+			{ error: "Too many requests. Please try again later." },
+			{
+				status: 429,
+				headers: {
+					"Retry-After": "60",
+					"X-RateLimit-Remaining": String(remaining ?? 0),
+				},
+			}
+		);
+	}
+
 	const { searchParams } = new URL(request.url);
 	const chargeCode = searchParams.get("code");
 

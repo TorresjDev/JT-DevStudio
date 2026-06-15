@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { SidebarNav } from '@/components/layout/sidebar/SidebarNav'
 import { Suspense } from 'react'
 import { Navigation } from '@/components/layout/Navigation'
+import Footer from '@/components/layout/Footer'
 
 function PageFallback() {
   return (
@@ -47,6 +48,8 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
                 {children}
               </Suspense>
             </div>
+            {/* Footer lives inside the inset so it readjusts with the sidebar */}
+            <Footer />
           </SidebarInset>
         </div>
       </div>

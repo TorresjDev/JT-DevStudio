@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import { ThemeProvider } from "./provider";
-import Footer from "../components/layout/Footer";
 import { generateMetadata } from "../lib/metadata";
 import { LayoutContent } from "../components/layout/LayoutContent";
 import { AuthProvider } from "@/context/AuthContext";
@@ -18,7 +17,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className={inter.className}>
+			<body className={inter.className} suppressHydrationWarning>
 				<AuthProvider>
 					<ThemeProvider
 						enableSystem
@@ -26,7 +25,6 @@ export default function RootLayout({
 						defaultTheme="dark"
 					>
 						<LayoutContent>{children}</LayoutContent>
-						<Footer />
 					</ThemeProvider>
 				</AuthProvider>
 			</body>

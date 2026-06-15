@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
 			{ protocol: "https", hostname: "github-readme-stats.vercel.app" },
 			{ protocol: "https", hostname: "ghchart.rshah.org" },
 			// Supabase Storage for UGC media uploads
-			{ protocol: "https", hostname: "*.supabase.co" },
+			{ protocol: "https", hostname: "rtyyywzpdoroqouvskop.supabase.co" },
 		],
 	},
 
@@ -59,6 +59,20 @@ const nextConfig: NextConfig = {
 					{
 						key: "Permissions-Policy",
 						value: "camera=(), microphone=(), geolocation=()",
+					},
+					{
+						key: "Content-Security-Policy",
+						value:
+							"default-src 'self'; " +
+							"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; " +
+							"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+							"img-src 'self' blob: data: https://torresjdev.github.io https://fonts.googleapis.com https://avatars.githubusercontent.com https://github-readme-streak-stats.herokuapp.com https://github-readme-stats.vercel.app https://ghchart.rshah.org https://rtyyywzpdoroqouvskop.supabase.co; " +
+							"font-src 'self' https://fonts.gstatic.com; " +
+							"connect-src 'self' https://rtyyywzpdoroqouvskop.supabase.co wss://rtyyywzpdoroqouvskop.supabase.co https://api.commerce.coinbase.com https://api.stripe.com https://api.github.com; " +
+							"frame-src 'self' https://js.stripe.com https://hooks.stripe.com; " +
+							"object-src 'none'; " +
+							"base-uri 'self'; " +
+							"form-action 'self';",
 					},
 				],
 			},
