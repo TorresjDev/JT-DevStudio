@@ -5,7 +5,7 @@
 export default function SettingsLoading() {
 	return (
 		<div className="min-h-screen bg-[#0a0a0a] pt-16 animate-in fade-in duration-300">
-			<div className="max-w-5xl mx-auto px-4 py-8">
+			<div className="max-w-7xl mx-auto px-1 sm:px-4 lg:px-6 py-4">
 				{/* Header */}
 				<div className="mb-8 space-y-2">
 					<div className="h-8 w-28 bg-muted/20 rounded-lg animate-pulse" />

@@ -76,7 +76,15 @@ function NavItem({
 	const Icon = item.icon;
 	return (
 		<SidebarMenuItem>
-			<SidebarMenuButton asChild isActive={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))}>
+			<SidebarMenuButton
+				asChild
+				isActive={
+					pathname === item.href ||
+					(item.href !== "/" &&
+						pathname.startsWith(item.href) &&
+						!(item.href === "/posts" && pathname.startsWith("/posts/blogs")))
+				}
+			>
 				<Link
 					href={item.href}
 					onClick={() => isMobile && setOpenMobile(false)}
