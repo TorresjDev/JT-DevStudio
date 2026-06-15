@@ -17,11 +17,25 @@ interface PostCardProps {
   showAuthor?: boolean
 }
 
+function getPlainText(html: string): string {
+  if (!html) return ''
+  return html
+    .replace(/<[^>]*>/g, '') // strip HTML tags
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .trim()
+}
+
 export function PostCard({ post, showAuthor = true }: PostCardProps) {
+  const plainText = getPlainText(post.content)
   // Create an excerpt from the content (first 150 characters)
-  const excerpt = post.content.length > 150 
-    ? post.content.substring(0, 150) + '...' 
-    : post.content
+  const excerpt = plainText.length > 150 
+    ? plainText.substring(0, 150) + '...' 
+    : plainText
 
   return (
     <article className="group relative bg-card rounded-xl border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
