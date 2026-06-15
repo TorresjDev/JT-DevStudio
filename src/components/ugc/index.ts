@@ -6,6 +6,7 @@
  */
 
 export { UserAvatar } from './UserAvatar'
+export { PostOwnerActions } from './PostOwnerActions'
 export { PostCard, PostCardSkeleton } from './PostCard'
 export { CommentThread, CommentsSection } from './CommentThread'
 export { CommentForm } from './CommentForm'
@@ -13,6 +14,5 @@ export { PostForm } from './PostForm'
 export { MediaUploader } from './MediaUploader'
 export { RichTextEditor } from './RichTextEditor'
 export { PostReactions } from './PostReactions'
-export { DeletePostButton } from './DeletePostButton'
 export { formatDistanceToNow, formatDate, formatDateTime } from './utils'
 

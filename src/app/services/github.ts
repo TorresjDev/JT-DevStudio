@@ -23,8 +23,10 @@ export async function getGitHubProfile(username?: string) {
 
 export async function getGitHubRepos(username?: string) {
 	const githubUsername = username || env.NEXT_GITHUB_USERNAME;
+	// Pull up to 100 repos so we can rank them ourselves. The GitHub user-repos
+	// endpoint can't sort by stars, so we sort client-side below.
 	const response = await fetch(
-		`https://api.github.com/users/${githubUsername}/repos?sort=updated&per_page=6`,
+		`https://api.github.com/users/${githubUsername}/repos?sort=pushed&per_page=100`,
 		{
 			headers: {
 				Accept: "application/vnd.github+json",
@@ -40,6 +42,28 @@ export async function getGitHubRepos(username?: string) {
 	}
 
 	return response.json();
+}
+
+/**
+ * Returns the user's own (non-fork, non-archived) repositories ranked by star
+ * count, falling back to most-recently-pushed as a tiebreaker so the list still
+ * surfaces meaningful work even when star counts are low.
+ */
+export async function getTopReposByStars(username?: string, limit = 6) {
+	const repos = await getGitHubRepos(username);
+
+	if (!Array.isArray(repos)) return [];
+
+	return repos
+		.filter((r: any) => !r.fork && !r.archived)
+		.sort((a: any, b: any) => {
+			const stars = (b.stargazers_count || 0) - (a.stargazers_count || 0);
+			if (stars !== 0) return stars;
+			return (
+				new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime()
+			);
+		})
+		.slice(0, limit);
 }
 
 export async function getGitHubReadme(username?: string) {

@@ -11,6 +11,8 @@
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { getPost } from '@/lib/ugc'
+import { getPostListPath } from '@/lib/ugc/postPaths'
+import { isPostAuthor } from '@/lib/ugc/postOwnership'
 import { PostForm } from '@/components/ugc'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -46,17 +48,22 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
   }
   
   // Check ownership
-  if (post.author_id !== user.id) {
-    redirect('/posts')
+  if (!isPostAuthor(user.id, post.author_id)) {
+    redirect(getPostListPath(post.category))
   }
+
+  const isBlog = post.category === 'blog'
+  const contentLabel = isBlog ? 'blog post' : 'post'
 
   return (
     <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Edit Post</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+          Edit {isBlog ? 'Blog' : 'Post'}
+        </h1>
         <p className="text-muted-foreground text-lg">
-          Make changes to your post.
+          Make changes to your {contentLabel}.
         </p>
       </div>
 

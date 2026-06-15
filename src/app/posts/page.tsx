@@ -34,9 +34,9 @@ async function PostsFeed() {
         </div>
         <h2 className="text-xl font-semibold mb-2">No posts yet</h2>
         <p className="text-muted-foreground mb-6">Be the first to share something!</p>
-        <Link 
+        <Link
           href="/editor/new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          className="btn-gold inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -50,8 +50,8 @@ async function PostsFeed() {
   return (
     <>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+        {posts.map((post, index) => (
+          <PostCard key={post.id} post={post} index={index} />
         ))}
       </div>
 
@@ -86,18 +86,18 @@ function PostsFeedSkeleton() {
  */
 export default function PostsPage() {
   return (
-    <main className="max-w-7xl mx-auto px-1 py-2">
+    <main className="page-container py-3 sm:py-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Posts</h1>
-          <p className="text-muted-foreground">
+      <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="mb-1 text-2xl font-bold sm:mb-2 sm:text-3xl">Posts</h1>
+          <p className="text-sm text-muted-foreground sm:text-base">
             Discover posts, discussions, and content from the community.
           </p>
         </div>
         <Link
           href="/editor/new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          className="touch-target-inline btn-gold inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium sm:w-auto sm:text-base"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

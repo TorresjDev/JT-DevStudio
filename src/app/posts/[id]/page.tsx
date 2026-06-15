@@ -14,7 +14,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getPost, getThreadedComments, getPostMedia, getMediaUrl } from '@/lib/ugc'
 import { sanitizePostContent } from '@/lib/sanitizePostContent'
-import { CommentsSection, PostReactions, DeletePostButton, UserAvatar, formatDistanceToNow, formatDate } from '@/components/ugc'
+import { CommentsSection, PostReactions, PostOwnerActions, UserAvatar, formatDistanceToNow, formatDate } from '@/components/ugc'
 import { createClient } from '@/utils/supabase/server'
 
 // UUID validation regex
@@ -95,7 +95,7 @@ async function PostContent({ postId }: { postId: string }) {
     )
 
     return (
-      <article className="bg-card rounded-xl border border-border/50 p-5 sm:p-8 md:p-10">
+      <article className="overflow-hidden rounded-xl border border-border/50 bg-card p-4 sm:p-6 md:p-8 lg:p-10">
         {/* Category + Status */}
         <div className="flex items-center gap-2 mb-4">
           <span className="text-sm font-medium px-3 py-1 rounded-full bg-primary/10 text-primary capitalize">
@@ -109,10 +109,10 @@ async function PostContent({ postId }: { postId: string }) {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">{post.title}</h1>
+        <h1 className="mb-4 text-2xl font-extrabold leading-tight tracking-tight break-words sm:mb-6 sm:text-3xl md:text-4xl lg:text-5xl">{post.title}</h1>
 
         {/* Author + Metadata */}
-        <div className="flex items-center gap-4 mb-8 pb-8 border-b border-border">
+        <div className="mb-6 flex flex-wrap items-center gap-3 border-b border-border pb-6 sm:mb-8 sm:gap-4 sm:pb-8">
           {post.author && (
             <div className="flex items-center gap-3">
               <UserAvatar
@@ -234,11 +234,12 @@ async function PostContent({ postId }: { postId: string }) {
         {/* Reactions */}
         <PostReactions postId={postId} />
 
-        {/* Delete Button - Only shows for post owner */}
-        <DeletePostButton
+        {/* Owner actions: edit + delete */}
+        <PostOwnerActions
           postId={postId}
           authorId={post.author_id}
           currentUserId={currentUserId}
+          category={post.category}
         />
 
         {/* Comments Section */}
@@ -285,11 +286,11 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
   const { id } = await params
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-1 sm:px-4 lg:px-6 py-4">
+    <main className="page-container w-full py-3 sm:py-4">
       {/* Back Link */}
       <Link
         href="/posts"
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        className="touch-target-inline ui-press mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground sm:mb-6 sm:text-base"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

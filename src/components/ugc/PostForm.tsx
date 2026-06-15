@@ -125,7 +125,7 @@ export function PostForm({ mode, initialData, postId }: PostFormProps) {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter a compelling title..."
           disabled={isPending}
-          className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50 transition-colors text-lg"
+          className="ui-input w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50 text-lg"
           maxLength={200}
         />
         <p className="mt-1 text-xs text-muted-foreground text-right">{title.length}/200</p>
@@ -141,7 +141,7 @@ export function PostForm({ mode, initialData, postId }: PostFormProps) {
           value={category}
           onChange={(e) => setCategory(e.target.value as PostCategory)}
           disabled={isPending}
-          className="w-full sm:w-auto px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50 transition-colors"
+          className="ui-input ui-select w-full sm:w-auto min-w-[10rem] px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50 cursor-pointer"
         >
           {CATEGORIES.map((cat) => (
             <option key={cat.value} value={cat.value}>
@@ -191,7 +191,7 @@ export function PostForm({ mode, initialData, postId }: PostFormProps) {
           type="button"
           onClick={() => router.back()}
           disabled={isPending}
-          className="px-4 py-2.5 rounded-lg bg-muted text-muted-foreground hover:bg-muted/80 disabled:opacity-50 transition-colors order-3 sm:order-1"
+          className="touch-target-inline ui-press order-3 w-full rounded-lg bg-muted px-4 py-2.5 text-muted-foreground hover:bg-muted/80 disabled:opacity-50 sm:order-1 sm:w-auto"
         >
           Cancel
         </button>
@@ -199,7 +199,7 @@ export function PostForm({ mode, initialData, postId }: PostFormProps) {
           type="button"
           onClick={() => handleSubmit('draft')}
           disabled={isPending}
-          className="px-4 py-2.5 rounded-lg bg-muted text-muted-foreground hover:bg-muted/80 disabled:opacity-50 transition-colors order-2"
+          className="touch-target-inline ui-press order-2 w-full rounded-lg bg-muted px-4 py-2.5 text-muted-foreground hover:bg-muted/80 disabled:opacity-50 sm:w-auto"
         >
           {isPending ? 'Saving...' : 'Save as Draft'}
         </button>
@@ -207,7 +207,7 @@ export function PostForm({ mode, initialData, postId }: PostFormProps) {
           type="button"
           onClick={() => handleSubmit('published')}
           disabled={isPending}
-          className="px-6 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors font-medium order-1 sm:order-3"
+          className="touch-target-inline btn-gold order-1 w-full rounded-lg px-6 py-2.5 font-medium disabled:opacity-50 sm:order-3 sm:w-auto"
         >
           {isPending ? 'Publishing...' : 'Publish'}
         </button>

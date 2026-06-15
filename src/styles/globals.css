@@ -144,16 +144,39 @@
 @layer base {
   * {
     border-color: hsl(var(--border));
-    /* Global transition for theme changes - refined for smoothness */
-    transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body {
+    /* Theme transitions only — avoid slowing every interactive element */
+    transition:
+      background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -173,5 +196,210 @@
   
   .neon-glow {
     box-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary));
+  }
+
+  /* Micro-interaction primitives */
+  .ui-press {
+    transition:
+      transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .ui-press:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .ui-press:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .ui-surface {
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.25s ease;
+  }
+
+  .ui-surface:hover {
+    transform: translateY(-2px);
+  }
+
+  .ui-input {
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .ui-input:focus {
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+  }
+
+  .ui-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+
+  .ui-shimmer-line {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.12) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @keyframes fade-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-slide-up {
+    animation: fade-slide-up 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Responsive layout — safe areas + readable gutters on every device */
+  .page-container {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 640px) {
+    .page-container {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-container {
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
+    }
+  }
+
+  /* 44px minimum touch target (Apple HIG / WCAG) */
+  .touch-target {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+
+  .touch-target-inline {
+    min-height: 2.75rem;
+  }
+
+  /* Hover lift only on devices with fine pointer */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift {
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* ───────────────────────────────────────────────────────────────────
+     Brand gold hover convention  (#DAA520)
+     Single source of truth for "turns gold on hover" across the app.
+     Smooth, premium easing; honors prefers-reduced-motion globally.
+     ─────────────────────────────────────────────────────────────────── */
+
+  /* Text / icon links: smoothly shift to gold on hover. */
+  .hover-gold {
+    transition:
+      color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      fill 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hover-gold:hover:not(:disabled),
+  .hover-gold:focus-visible:not(:disabled) {
+    color: #daa520;
+  }
+
+  /* Icons nested in a gold-hover element follow the text colour. */
+  .hover-gold:hover:not(:disabled) svg,
+  .hover-gold:focus-visible:not(:disabled) svg {
+    color: #daa520;
+  }
+
+  /* Surface treatment for buttons / outlined controls:
+     gold text + gold border + soft gold wash + a gentle lift. */
+  .hover-gold-surface {
+    transition:
+      color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hover-gold-surface:hover:not(:disabled) {
+    color: #daa520;
+    border-color: hsl(43 74% 49% / 0.45);
+    background-color: hsl(43 74% 49% / 0.1);
+    box-shadow: 0 6px 18px -8px hsl(43 74% 49% / 0.45);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hover-gold-surface:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+  }
+
+  .hover-gold-surface:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+  }
+
+  /* Solid gold call-to-action (e.g. New Post / Publish):
+     already gold, gains a smooth glow + lift on hover. */
+  .btn-gold {
+    background-color: #daa520;
+    color: #0b0b0f;
+    transition:
+      background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-gold:hover:not(:disabled) {
+    background-color: #e8b833;
+    box-shadow: 0 8px 24px -8px hsl(43 74% 49% / 0.6);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-gold:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+  }
+
+  .btn-gold:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
   }
 }

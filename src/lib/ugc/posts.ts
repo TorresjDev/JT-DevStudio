@@ -15,6 +15,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/utils/supabase/server'
 import { createPostSchema, updatePostSchema, safeParse } from './schemas'
+import { isPostAuthor } from './postOwnership'
 import type {
   Post,
   PostWithAuthor,
@@ -60,6 +61,30 @@ async function requireAuth(): Promise<string> {
     throw new Error('You must be logged in to perform this action')
   }
   return userId
+}
+
+/**
+ * Ensure the authenticated user is the post author before mutating.
+ * Complements Supabase RLS — never rely on UI hiding controls alone.
+ */
+async function requirePostAuthor(postId: string, userId: string): Promise<ActionResult<null>> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('posts')
+    .select('author_id')
+    .eq('id', postId)
+    .single()
+
+  if (error || !data) {
+    return { success: false, error: 'Post not found' }
+  }
+
+  if (!isPostAuthor(userId, data.author_id)) {
+    return { success: false, error: 'You can only edit or delete your own posts.' }
+  }
+
+  return { success: true, data: null }
 }
 
 /**
@@ -153,8 +178,8 @@ export async function createPost(input: CreatePostInput): Promise<ActionResult<P
       return { success: false, error: 'Failed to create post' }
     }
 
-    // Revalidate the posts page to show the new post
     revalidatePath('/posts')
+    revalidatePath('/posts/blogs')
 
     return { success: true, data: data as Post }
   } catch (err) {
@@ -175,7 +200,12 @@ export async function updatePost(
   input: UpdatePostInput
 ): Promise<ActionResult<Post>> {
   try {
-    await requireAuth()
+    const userId = await requireAuth()
+
+    const ownership = await requirePostAuthor(postId, userId)
+    if (!ownership.success) {
+      return ownership
+    }
 
     // Validate input
     const validation = safeParse(updatePostSchema, input)
@@ -208,6 +238,7 @@ export async function updatePost(
     }
 
     revalidatePath('/posts')
+    revalidatePath('/posts/blogs')
     revalidatePath(`/posts/${postId}`)
 
     return { success: true, data: data as Post }
@@ -225,7 +256,12 @@ export async function updatePost(
  */
 export async function deletePost(postId: string): Promise<ActionResult<null>> {
   try {
-    await requireAuth()
+    const userId = await requireAuth()
+
+    const ownership = await requirePostAuthor(postId, userId)
+    if (!ownership.success) {
+      return ownership
+    }
 
     const supabase = await createClient()
 
@@ -240,6 +276,8 @@ export async function deletePost(postId: string): Promise<ActionResult<null>> {
     }
 
     revalidatePath('/posts')
+    revalidatePath('/posts/blogs')
+    revalidatePath(`/posts/${postId}`)
 
     return { success: true, data: null }
   } catch (err) {
