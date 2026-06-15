@@ -55,7 +55,7 @@ export function CommentThread({
   }
 
   return (
-    <div className={`${depth > 0 ? 'ml-6 pl-4 border-l-2 border-border/30' : ''}`}>
+    <div className={`${depth > 0 ? 'ml-3 border-l-2 border-border/30 pl-3 sm:ml-6 sm:pl-4' : ''}`}>
       <div className="py-4">
         {/* Comment Header: Author + Timestamp */}
         <div className="flex items-center gap-3 mb-2">
@@ -98,7 +98,7 @@ export function CommentThread({
                   // TODO: Implement edit functionality
                   setIsEditing(false)
                 }}
-                className="px-3 py-1.5 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+                className="px-3 py-1.5 text-sm rounded-md btn-gold"
               >
                 Save
               </button>
@@ -124,7 +124,7 @@ export function CommentThread({
           {canReply && (
             <button
               onClick={() => setIsReplying(!isReplying)}
-              className="text-muted-foreground hover:text-primary transition-colors"
+              className="text-muted-foreground hover-gold"
             >
               Reply
             </button>
@@ -133,7 +133,7 @@ export function CommentThread({
             <>
               <button
                 onClick={() => setIsEditing(true)}
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-muted-foreground hover-gold"
               >
                 Edit
               </button>

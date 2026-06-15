@@ -1,65 +1,63 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { getGitHubProfile, getGitHubRepos } from "../services/github";
+import { getGitHubProfile, getTopReposByStars } from "../services/github";
 import { env } from "@/lib/env";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, Globe, FileText, Star, GitFork, Mail, ExternalLink, Shield, Briefcase, GraduationCap, ArrowRight } from "lucide-react";
+import { Github, Globe, FileText, Star, GitFork, Mail, ExternalLink, Shield, Briefcase, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TechStackDisplay } from "@/components/tech-stack";
 
 const timeline = [
 	{
-		role: "U.S. Army — Airborne Infantry",
-		org: "82nd Airborne Division · 173rd Airborne Brigade (1-503 PIR, Vicenza, Italy)",
-		icon: Shield,
-		period: "Military Service",
-	},
-	{
-		role: "Coding Bootcamp Instructor",
-		org: "Teaching full-stack web development",
-		icon: GraduationCap,
-		period: "Education",
-	},
-	{
-		role: "CIS Tutor",
-		org: "West Texas A&M University",
-		icon: GraduationCap,
-		period: "Education",
+		role: "Founder — JT Dev Studio",
+		org: "Just Technology Development Studio · Freelance & SaaS",
+		detail:
+			"Building web apps, SaaS tools, and automation systems for clients and original products.",
+		icon: Briefcase,
+		period: "2025 – Present",
 	},
 	{
 		role: "President — BuffTeks",
-		org: "West Texas A&M University Computer Science Club",
+		org: "Computer Science Organization · West Texas A&M University",
+		detail:
+			"Lead the university's CS organization, running events, workshops, and team projects.",
 		icon: Briefcase,
-		period: "Leadership",
+		period: "2025 – Present",
 	},
 	{
-		role: "Founder — JT Dev Studio",
-		org: "Just Technology Development Studio · Freelance & SaaS",
+		role: "Computer Information Systems Tutor",
+		org: "West Texas A&M University · Canyon, TX",
+		detail:
+			"Mentor 20+ students per semester in Python, SQL, JavaScript, and database systems.",
+		icon: GraduationCap,
+		period: "2024 – Present",
+	},
+	{
+		role: "Software Engineer Instructor",
+		org: "Sabio Enterprises Inc. · Remote",
+		detail:
+			"Instructed 40+ junior developers in C#, JavaScript, React, SQL Server, and REST APIs.",
+		icon: GraduationCap,
+		period: "2022 – 2023",
+	},
+	{
+		role: "Software Engineer",
+		org: "The Institute to Advance Diversity · Irvine, CA",
+		detail:
+			"Shipped full-stack features with React, Redux, and ASP.NET Core on a 16+ member agile team.",
 		icon: Briefcase,
-		period: "Current",
+		period: "2022",
+	},
+	{
+		role: "Team Leader — Airborne Paratrooper",
+		org: "U.S. Army · 82nd Airborne Division & 173rd Airborne Brigade (Vicenza, Italy)",
+		detail:
+			"Led a 9-person airborne team across NATO operations in 4 countries. Earned 7 Army Achievement Medals.",
+		icon: Shield,
+		period: "2016 – 2018",
 	},
 ];
-
-const highlightProjects = [
-	{
-		name: "FintelliSense",
-		desc: "AI-powered personal finance and investment platform built with Next.js, Python, and Gemini.",
-		status: "In Progress",
-		href: "/studio",
-	},
-	{
-		name: "JT Dev Studio",
-		desc: "This platform — a working technology development studio with auth, UGC, payments, and more.",
-		status: "Live",
-		href: "/",
-	},
-];
-
-const statusColors: Record<string, string> = {
-	Live: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-	"In Progress": "bg-amber-500/20 text-amber-400 border-amber-500/30",
-};
 
 export default async function ProfilePage() {
 	const githubUsername = env.NEXT_GITHUB_USERNAME || "torresjdev";
@@ -70,16 +68,18 @@ export default async function ProfilePage() {
 	try {
 		profile = await getGitHubProfile(githubUsername);
 		if (profile) {
-			repos = await getGitHubRepos(githubUsername);
+			repos = await getTopReposByStars(githubUsername, 6);
 		}
 	} catch (e) {
 		console.error("Error fetching github profile:", e);
 	}
 
+	const featuredRepos = repos.slice(0, 4);
+
 	return (
 		<section
 			id="profile"
-			className="w-full mx-auto max-w-7xl px-4 py-8 md:py-12 md:px-8 space-y-16 min-h-screen overflow-y-auto"
+			className="w-full max-w-7xl mx-auto px-4 py-8 sm:px-6 md:py-12 md:px-8 space-y-12 sm:space-y-16 min-h-screen overflow-x-hidden"
 		>
 			{/* ═══════════════ PROFILE HEADER ═══════════════ */}
 			<div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 animate-in fade-in zoom-in duration-500">
@@ -109,7 +109,7 @@ export default async function ProfilePage() {
 
 					<p className="text-muted-foreground leading-relaxed max-w-xl">
 						I build web applications, SaaS tools, and automation systems for businesses and personal projects.
-						Former Airborne Infantry (82nd & 173rd), coding bootcamp instructor, and computer science club president.
+						Former Army paratrooper (82nd &amp; 173rd Airborne), software engineering instructor, and computer science club president.
 						I value discipline, clear communication, and shipping work that speaks for itself.
 					</p>
 
@@ -169,20 +169,25 @@ export default async function ProfilePage() {
 
 					<div className="space-y-6">
 						{timeline.map((item, i) => (
-							<div key={i} className="flex gap-4 relative group">
-								<div className="relative z-10 p-2 rounded-xl bg-card border border-border group-hover:border-[#DAA520]/30 transition-colors shrink-0">
+							<div key={i} className="flex gap-3 sm:gap-4 relative group">
+								<div className="relative z-10 p-2 rounded-xl bg-card border border-border group-hover:border-[#DAA520]/30 transition-colors shrink-0 h-fit">
 									<item.icon className="w-5 h-5 text-[#DAA520]" />
 								</div>
-								<div className="pb-6">
-									<div className="flex items-center gap-3 flex-wrap">
+								<div className="pb-6 min-w-0">
+									<div className="flex items-start sm:items-center gap-x-3 gap-y-1 flex-wrap">
 										<h3 className="font-bold text-foreground group-hover:text-[#DAA520] transition-colors">
 											{item.role}
 										</h3>
-										<span className="text-xs font-medium px-2 py-0.5 rounded-full bg-accent/20 text-muted-foreground">
+										<span className="text-xs font-medium px-2 py-0.5 rounded-full bg-accent/20 text-muted-foreground whitespace-nowrap">
 											{item.period}
 										</span>
 									</div>
-									<p className="text-sm text-muted-foreground mt-1">{item.org}</p>
+									<p className="text-sm font-medium text-foreground/80 mt-1 break-words">{item.org}</p>
+									{item.detail && (
+										<p className="text-sm text-muted-foreground mt-1.5 leading-relaxed break-words">
+											{item.detail}
+										</p>
+									)}
 								</div>
 							</div>
 						))}
@@ -190,88 +195,102 @@ export default async function ProfilePage() {
 				</div>
 			</section>
 
-			{/* ═══════════════ HIGHLIGHT PROJECTS ═══════════════ */}
-			<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-300">
-				<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Featured Projects</h2>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					{highlightProjects.map((project) => (
-						<Link
-							key={project.name}
-							href={project.href}
-							className="group p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-lg hover:shadow-[#DAA520]/5 transition-all duration-300"
-						>
-							<div className="flex items-center justify-between mb-3">
-								<h3 className="font-bold text-lg group-hover:text-[#DAA520] transition-colors">
-									{project.name}
-								</h3>
-								<span className={`text-xs font-semibold px-3 py-1 rounded-full border ${statusColors[project.status]}`}>
-									{project.status}
-								</span>
-							</div>
-							<p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
-						</Link>
-					))}
-				</div>
-			</section>
+			{/* ═══════════════ FEATURED PROJECTS (top repos by stars) ═══════════════ */}
+			{featuredRepos.length > 0 && (
+				<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-300">
+					<div className="flex items-center justify-between gap-4">
+						<div>
+							<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Featured Projects</h2>
+							<p className="text-sm text-muted-foreground mt-1">My most-starred repositories on GitHub.</p>
+						</div>
+						{profile && (
+							<Link
+								href={profile.html_url + "?tab=repositories"}
+								target="_blank"
+								className="text-sm font-medium text-muted-foreground hover:text-[#DAA520] transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
+							>
+								View All <ExternalLink className="w-3 h-3" />
+							</Link>
+						)}
+					</div>
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+						{featuredRepos.map((repo: any) => (
+							<Link
+								key={repo.id}
+								href={repo.html_url}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="group p-5 sm:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-lg hover:shadow-[#DAA520]/5 transition-all duration-300 flex flex-col justify-between gap-4 h-full"
+							>
+								<div className="space-y-2 min-w-0">
+									<div className="flex items-center justify-between gap-3">
+										<h3 className="font-bold text-lg group-hover:text-[#DAA520] transition-colors truncate">
+											{repo.name}
+										</h3>
+										<ExternalLink className="w-4 h-4 text-muted-foreground/60 group-hover:text-[#DAA520] transition-colors shrink-0" />
+									</div>
+									<p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+										{repo.description || "No description provided."}
+									</p>
+								</div>
+								<div className="flex items-center gap-4 text-xs text-muted-foreground">
+									<span className="flex items-center gap-1">
+										<Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> {repo.stargazers_count}
+									</span>
+									<span className="flex items-center gap-1">
+										<GitFork className="w-4 h-4 text-blue-500" /> {repo.forks_count}
+									</span>
+									{repo.language && (
+										<span className="ml-auto px-2 py-0.5 rounded-full bg-accent/20 text-accent-foreground truncate max-w-[45%]">
+											{repo.language}
+										</span>
+									)}
+								</div>
+							</Link>
+						))}
+					</div>
+				</section>
+			)}
 
 			{/* ═══════════════ GITHUB ACTIVITY ═══════════════ */}
 			{profile && (
 				<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-400">
-					<div className="flex justify-between items-center">
+					<div className="flex justify-between items-center gap-4">
 						<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">GitHub Activity</h2>
 						<Link
-							href={profile.html_url + "?tab=repositories"}
+							href={profile.html_url}
 							target="_blank"
-							className="text-sm font-medium text-muted-foreground hover:text-[#DAA520] transition-colors flex items-center gap-1"
+							className="text-sm font-medium text-muted-foreground hover:text-[#DAA520] transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
 						>
-							View All <ExternalLink className="w-3 h-3" />
+							View Profile <ExternalLink className="w-3 h-3" />
 						</Link>
 					</div>
 
-					{/* Contributions Chart */}
-					<div className="w-full overflow-hidden rounded-xl border border-border bg-card/40 p-4 shadow-inner hover:bg-accent/10 transition-colors">
+					{/* Profile stats */}
+					<div className="grid grid-cols-3 gap-3 sm:gap-4">
+						{[
+							{ label: "Repositories", value: profile.public_repos },
+							{ label: "Followers", value: profile.followers },
+							{ label: "Following", value: profile.following },
+						].map((stat) => (
+							<div
+								key={stat.label}
+								className="rounded-xl border border-border bg-card/40 p-4 text-center hover:border-[#DAA520]/30 transition-colors"
+							>
+								<p className="text-2xl sm:text-3xl font-extrabold text-[#DAA520]">{stat.value ?? 0}</p>
+								<p className="text-[11px] sm:text-xs text-muted-foreground mt-1 tracking-wide">{stat.label}</p>
+							</div>
+						))}
+					</div>
+
+					{/* Contributions Chart — scrolls within its own card on small screens */}
+					<div className="w-full overflow-x-auto custom-scrollbar rounded-xl border border-border bg-card/40 p-4 shadow-inner hover:bg-accent/10 transition-colors">
 						<img
 							src={`https://ghchart.rshah.org/DAA520/${profile.login}`}
 							alt="GitHub Contributions"
-							className="w-full h-auto min-w-[500px] mx-auto opacity-90 hover:opacity-100 transition-opacity"
+							className="h-auto min-w-[560px] w-full opacity-90 hover:opacity-100 transition-opacity"
 						/>
 					</div>
-
-					{/* Top Repos */}
-					{repos && repos.length > 0 && (
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-							{repos.filter((r: any) => !r.fork).slice(0, 6).map((repo: any) => (
-								<Link
-									href={repo.html_url}
-									target="_blank"
-									key={repo.id}
-									className="group p-5 rounded-xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-lg hover:shadow-[#DAA520]/5 transition-all duration-300 flex flex-col justify-between h-full"
-								>
-									<div className="space-y-2">
-										<h3 className="font-bold text-lg group-hover:text-[#DAA520] transition-colors truncate">
-											{repo.name}
-										</h3>
-										<p className="text-sm text-muted-foreground line-clamp-2 min-h-[40px] text-left">
-											{repo.description || "No description provided."}
-										</p>
-									</div>
-									<div className="flex items-center gap-4 mt-6 text-xs text-muted-foreground">
-										<span className="flex items-center gap-1">
-											<Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> {repo.stargazers_count}
-										</span>
-										<span className="flex items-center gap-1">
-											<GitFork className="w-4 h-4 text-blue-500" /> {repo.forks_count}
-										</span>
-										{repo.language && (
-											<span className="ml-auto px-2 py-0.5 rounded-full bg-accent/20 text-accent-foreground">
-												{repo.language}
-											</span>
-										)}
-									</div>
-								</Link>
-							))}
-						</div>
-					)}
 				</section>
 			)}
 

@@ -15,15 +15,16 @@ export function Navigation() {
 					aria-label="Open navigation menu"
 					className="md:hidden h-11 w-11 -ml-1"
 				/>
-				<Link href="/">
+				<Link href="/" className="group">
 					<NavbarBrand className="gap-2">
 						<Image
 							src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/dev/dev-xl.svg"
 							alt="jt dev logo"
 							width="40"
 							height="40"
+							className="transition-transform duration-300 ease-out group-hover:scale-105"
 						/>
-						<p className="font-extrabold text-2xl text-[#DAA520]/90 whitespace-nowrap hidden sm:block">
+						<p className="font-extrabold text-2xl text-[#DAA520]/90 whitespace-nowrap hidden sm:block transition-colors duration-200 group-hover:text-[#DAA520]">
 							JT Dev Studio
 						</p>
 

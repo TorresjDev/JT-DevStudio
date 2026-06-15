@@ -38,12 +38,12 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex flex-col min-h-screen w-full">
+      <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
         <Navigation />
-        <div className="flex flex-1 w-full relative">
+        <div className="flex flex-1 w-full min-w-0 relative">
           <SidebarNav />
           <SidebarInset>
-            <div className="flex-1 overflow-auto p-1 md:p-2 lg:p-4">
+            <div className="flex-1 min-w-0 w-full overflow-x-hidden overflow-y-auto p-1 md:p-2 lg:p-4">
               <Suspense fallback={<PageFallback />}>
                 {children}
               </Suspense>

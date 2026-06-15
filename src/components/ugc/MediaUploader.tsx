@@ -178,7 +178,7 @@ export function MediaUploader({ postId, onUpload, onRemove, uploadedMedia }: Med
           relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
           ${isDragging 
             ? 'border-primary bg-primary/5' 
-            : 'border-border hover:border-primary/50 hover:bg-muted/30'
+            : 'border-border hover:border-[#DAA520]/50 hover:bg-[#DAA520]/5'
           }
         `}
       >

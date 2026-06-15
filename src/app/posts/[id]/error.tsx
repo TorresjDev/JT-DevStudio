@@ -15,8 +15,8 @@ export default function PostError({
 	}, [error])
 
 	return (
-		<main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-			<div className="bg-card rounded-xl border border-border/50 p-6 sm:p-10 text-center max-w-lg mx-auto">
+		<main className="page-container w-full py-6 sm:py-12">
+			<div className="mx-auto max-w-lg rounded-xl border border-border/50 bg-card p-5 text-center sm:p-10">
 				<div className="mb-6">
 					<svg
 						className="w-14 h-14 text-destructive mx-auto"
@@ -43,13 +43,13 @@ export default function PostError({
 					<button
 						type="button"
 						onClick={reset}
-						className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+						className="touch-target-inline ui-press w-full rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground hover:bg-primary/90 sm:w-auto"
 					>
 						Try again
 					</button>
 					<Link
 						href="/posts"
-						className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium hover:bg-muted/80 transition-colors"
+						className="touch-target-inline ui-press w-full rounded-lg bg-muted px-6 py-3 font-medium text-foreground hover:bg-muted/80 sm:w-auto"
 					>
 						Back to posts
 					</Link>
