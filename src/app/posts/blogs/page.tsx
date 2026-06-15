@@ -82,7 +82,7 @@ function BlogsFeedSkeleton() {
  */
 export default function BlogsPage() {
     return (
-        <main className="max-w-5xl mx-auto px-4 py-8">
+        <main className="max-w-7xl mx-auto px-1 sm:px-4 lg:px-6 py-4">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div>

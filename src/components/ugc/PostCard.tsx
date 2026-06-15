@@ -17,11 +17,68 @@ interface PostCardProps {
   showAuthor?: boolean
 }
 
+const HTML_ENTITY_MAP: Record<string, string> = {
+  nbsp: ' ',
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  '#039': "'",
+  apos: "'"
+}
+
+function stripHtmlTags(html: string): string {
+  if (!html) return ''
+  let result = ''
+  let i = 0
+  while (i < html.length) {
+    if (html[i] === '<') {
+      if (html.slice(i, i + 7).toLowerCase() === '<script') {
+        const closeIndex = html.toLowerCase().indexOf('</script>', i + 7)
+        if (closeIndex !== -1) {
+          i = closeIndex + 9
+        } else {
+          i = html.length
+        }
+        continue
+      }
+      if (html.slice(i, i + 6).toLowerCase() === '<style') {
+        const closeIndex = html.toLowerCase().indexOf('</style>', i + 6)
+        if (closeIndex !== -1) {
+          i = closeIndex + 8
+        } else {
+          i = html.length
+        }
+        continue
+      }
+      const closingBracket = html.indexOf('>', i)
+      if (closingBracket !== -1) {
+        i = closingBracket + 1
+      } else {
+        i = html.length
+      }
+    } else {
+      result += html[i]
+      i++
+    }
+  }
+  return result
+}
+
+function getPlainText(html: string): string {
+  if (!html) return ''
+  const stripped = stripHtmlTags(html)
+  return stripped
+    .replace(/&(#?[a-zA-Z0-9]+);/g, (match, entity) => HTML_ENTITY_MAP[entity] || match)
+    .trim()
+}
+
 export function PostCard({ post, showAuthor = true }: PostCardProps) {
+  const plainText = getPlainText(post.content)
   // Create an excerpt from the content (first 150 characters)
-  const excerpt = post.content.length > 150 
-    ? post.content.substring(0, 150) + '...' 
-    : post.content
+  const excerpt = plainText.length > 150 
+    ? plainText.substring(0, 150) + '...' 
+    : plainText
 
   return (
     <article className="group relative bg-card rounded-xl border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">

@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
 		],
 	},
 
+	serverExternalPackages: ["canvas", "jsdom", "isomorphic-dompurify"],
+
 	// Enhanced image configuration
 	images: {
 		remotePatterns: [

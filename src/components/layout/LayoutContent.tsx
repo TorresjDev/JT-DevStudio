@@ -43,7 +43,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
         <div className="flex flex-1 w-full relative">
           <SidebarNav />
           <SidebarInset>
-            <div className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
+            <div className="flex-1 overflow-auto p-1 md:p-2 lg:p-4">
               <Suspense fallback={<PageFallback />}>
                 {children}
               </Suspense>

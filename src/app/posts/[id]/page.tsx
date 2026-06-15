@@ -95,7 +95,7 @@ async function PostContent({ postId }: { postId: string }) {
     )
 
     return (
-      <article className="bg-card rounded-xl border border-border/50 p-8">
+      <article className="bg-card rounded-xl border border-border/50 p-5 sm:p-8 md:p-10">
         {/* Category + Status */}
         <div className="flex items-center gap-2 mb-4">
           <span className="text-sm font-medium px-3 py-1 rounded-full bg-primary/10 text-primary capitalize">
@@ -109,7 +109,7 @@ async function PostContent({ postId }: { postId: string }) {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">{post.title}</h1>
 
         {/* Author + Metadata */}
         <div className="flex items-center gap-4 mb-8 pb-8 border-b border-border">
@@ -148,7 +148,11 @@ async function PostContent({ postId }: { postId: string }) {
 
         {/* Media Gallery */}
         {mediaWithUrls.length > 0 && (
-          <div className="mb-8 grid gap-4 grid-cols-1 md:grid-cols-2">
+          <div className={`mb-8 ${
+            mediaWithUrls.length === 1 
+              ? 'flex justify-center w-full' 
+              : 'grid gap-6 grid-cols-1 md:grid-cols-2'
+          }`}>
             {mediaWithUrls.map((m) => {
               if (!m.url) return null
 
@@ -157,14 +161,19 @@ async function PostContent({ postId }: { postId: string }) {
               const isAudio = m.mime_type.startsWith('audio/')
               const isPdf = m.mime_type === 'application/pdf'
 
+              const singleClass = mediaWithUrls.length === 1 
+                ? 'w-full max-w-4xl aspect-video rounded-xl shadow-lg border border-border/30 overflow-hidden relative'
+                : 'relative aspect-video rounded-lg overflow-hidden bg-muted border border-border/50'
+
               if (isImage) {
                 return (
-                  <div key={m.id} className="relative aspect-video rounded-lg overflow-hidden bg-muted">
+                  <div key={m.id} className={singleClass}>
                     <Image
                       src={m.url}
                       alt={m.file_name}
                       fill
                       className="object-cover"
+                      priority
                     />
                   </div>
                 )
@@ -176,7 +185,9 @@ async function PostContent({ postId }: { postId: string }) {
                     key={m.id}
                     src={m.url}
                     controls
-                    className="w-full rounded-lg"
+                    className={`rounded-xl border border-border/50 ${
+                      mediaWithUrls.length === 1 ? 'w-full max-w-4xl shadow-lg aspect-video' : 'w-full'
+                    }`}
                   >
                     Your browser does not support the video tag.
                   </video>
@@ -189,7 +200,7 @@ async function PostContent({ postId }: { postId: string }) {
                     key={m.id}
                     src={m.url}
                     controls
-                    className="w-full"
+                    className={`w-full ${mediaWithUrls.length === 1 ? 'max-w-xl' : ''}`}
                   >
                     Your browser does not support the audio tag.
                   </audio>
@@ -203,7 +214,9 @@ async function PostContent({ postId }: { postId: string }) {
                     href={m.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+                    className={`flex items-center gap-3 p-4 rounded-lg bg-muted hover:bg-muted/80 transition-colors ${
+                      mediaWithUrls.length === 1 ? 'w-full max-w-xl' : ''
+                    }`}
                   >
                     <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zm-3 9.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm3 3c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z" />
@@ -281,7 +294,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
   const { id } = await params
 
   return (
-    <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="w-full max-w-7xl mx-auto px-1 sm:px-4 lg:px-6 py-4">
       {/* Back Link */}
       <Link
         href="/posts"

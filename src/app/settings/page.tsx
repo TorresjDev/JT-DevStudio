@@ -210,7 +210,7 @@ export default function SettingsPage() {
                 <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-purple-500/5 blur-[120px] rounded-full" />
             </div>
 
-            <div className="max-w-5xl mx-auto px-4 py-8 relative z-10">
+            <div className="max-w-7xl mx-auto px-1 py-3 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
