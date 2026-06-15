@@ -8,8 +8,8 @@
  */
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { formatDistanceToNow } from './utils'
+import { UserAvatar } from './UserAvatar'
 import { useAuth } from '@/context/AuthContext'
 import { deleteComment } from '@/lib/ugc'
 import type { CommentThread as CommentThreadType } from '@/lib/ugc'
@@ -59,21 +59,11 @@ export function CommentThread({
       <div className="py-4">
         {/* Comment Header: Author + Timestamp */}
         <div className="flex items-center gap-3 mb-2">
-          {/* Avatar */}
-          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-muted shrink-0">
-            {comment.author.avatar_url ? (
-              <Image
-                src={comment.author.avatar_url}
-                alt={comment.author.display_name || comment.author.username || 'User'}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm font-medium">
-                {(comment.author.display_name || comment.author.username || 'U')[0].toUpperCase()}
-              </div>
-            )}
-          </div>
+          <UserAvatar
+            avatarUrl={comment.author.avatar_url}
+            displayName={comment.author.display_name}
+            username={comment.author.username}
+          />
 
           {/* Author Name + Timestamp */}
           <div className="flex items-center gap-2 flex-wrap">

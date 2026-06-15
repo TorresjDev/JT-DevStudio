@@ -12,9 +12,9 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import DOMPurify from 'isomorphic-dompurify'
 import { getPost, getThreadedComments, getPostMedia, getMediaUrl } from '@/lib/ugc'
-import { CommentsSection, PostReactions, DeletePostButton, formatDistanceToNow, formatDate } from '@/components/ugc'
+import { sanitizePostContent } from '@/lib/sanitizePostContent'
+import { CommentsSection, PostReactions, DeletePostButton, UserAvatar, formatDistanceToNow, formatDate } from '@/components/ugc'
 import { createClient } from '@/utils/supabase/server'
 
 // UUID validation regex
@@ -115,21 +115,12 @@ async function PostContent({ postId }: { postId: string }) {
         <div className="flex items-center gap-4 mb-8 pb-8 border-b border-border">
           {post.author && (
             <div className="flex items-center gap-3">
-              {/* Avatar */}
-              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-muted">
-                {post.author.avatar_url ? (
-                  <Image
-                    src={post.author.avatar_url}
-                    alt={post.author.display_name || post.author.username || 'Author'}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-muted-foreground text-lg font-medium">
-                    {(post.author.display_name || post.author.username || 'U')[0].toUpperCase()}
-                  </div>
-                )}
-              </div>
+              <UserAvatar
+                avatarUrl={post.author.avatar_url}
+                displayName={post.author.display_name}
+                username={post.author.username}
+                size="md"
+              />
               {/* Name + Date */}
               <div>
                 <p className="font-medium">
@@ -237,7 +228,7 @@ async function PostContent({ postId }: { postId: string }) {
         {/* Content - Render HTML from rich text editor */}
         <div
           className="prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-em:text-foreground/90 prose-li:text-foreground/90 prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-blockquote:border-primary prose-blockquote:text-muted-foreground"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+          dangerouslySetInnerHTML={{ __html: sanitizePostContent(post.content) }}
         />
 
         {/* Reactions */}
