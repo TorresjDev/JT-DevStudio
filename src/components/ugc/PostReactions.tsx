@@ -8,6 +8,7 @@
  */
 
 import { useState, useTransition, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { 
   toggleReaction, 
@@ -33,6 +34,7 @@ export function PostReactions({
   initialCounts = [],
   initialUserReactions = []
 }: PostReactionsProps) {
+  const router = useRouter()
   const { user } = useAuth()
   const [isPending, startTransition] = useTransition()
   
@@ -69,8 +71,7 @@ export function PostReactions({
 
   const handleReaction = (reactionType: ReactionType) => {
     if (!user) {
-      // Redirect to login or show message
-      window.location.href = '/login'
+      router.push('/login')
       return
     }
 

@@ -55,7 +55,7 @@ function ThankYouContent() {
 			<div className="container mx-auto px-4">
 				<div className="max-w-2xl mx-auto text-center">
 					{/* Success Icon */}
-					<div className="text-6xl mb-6">🎉</div>
+					<div className="animate-fade-slide-up text-6xl mb-6">🎉</div>
 
 					<h1 className="text-4xl font-bold text-foreground mb-4">
 						Thank You! 🙏
@@ -68,7 +68,7 @@ function ThankYouContent() {
 
 					{/* Donation Confirmation Details */}
 					{loading && (
-						<div className="bg-card border border-border rounded-lg p-6 mb-8">
+						<div className="animate-fade-slide-up ui-surface bg-card border border-border rounded-lg p-6 mb-8">
 							<p className="text-muted-foreground">
 								Loading your donation details...
 							</p>
@@ -76,14 +76,14 @@ function ThankYouContent() {
 					)}
 
 					{error && (
-						<div className="bg-card border border-border rounded-lg p-6 mb-8">
+						<div className="animate-fade-slide-up ui-surface bg-card border border-border rounded-lg p-6 mb-8">
 							<p className="text-muted-foreground">{error}</p>
 						</div>
 					)}
 
 					{/* Stripe Donation Details */}
 					{session && !isCrypto && (
-						<div className="bg-card border border-border rounded-lg p-6 mb-8 text-left">
+						<div className="animate-fade-slide-up ui-surface bg-card border border-border rounded-lg p-6 mb-8 text-left">
 							<h2 className="text-xl font-semibold text-foreground mb-4 text-center">
 								Donation Confirmation 🧾
 							</h2>
@@ -137,7 +137,7 @@ function ThankYouContent() {
 
 					{/* Crypto Donation Details */}
 					{isCrypto && (
-						<div className="bg-card border border-border rounded-lg p-6 mb-8 text-left">
+						<div className="animate-fade-slide-up ui-surface bg-card border border-border rounded-lg p-6 mb-8 text-left">
 							<h2 className="text-xl font-semibold text-foreground mb-4 text-center">
 								Donation Confirmation 🧾
 							</h2>
@@ -172,7 +172,7 @@ function ThankYouContent() {
 					)}
 
 					{/* What Happens Next */}
-					<div className="bg-card border border-border rounded-lg p-6 mb-8">
+					<div className="animate-fade-slide-up ui-surface bg-card border border-border rounded-lg p-6 mb-8">
 						<h2 className="text-xl font-semibold text-foreground mb-4">
 							What happens next?
 						</h2>

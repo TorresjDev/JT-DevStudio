@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { login, signup, signInWithGithub, signInWithGoogle, checkUsernameAvailability, type AuthResult } from './actions'
 import { Button } from '@/components/ui/button'
@@ -28,7 +28,7 @@ function useDebounce<T extends (...args: Parameters<T>) => void>(
   callback: T,
   delay: number
 ): T {
-  const timeoutRef = { current: null as NodeJS.Timeout | null }
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   return useCallback((...args: Parameters<T>) => {
     if (timeoutRef.current) {
@@ -36,6 +36,47 @@ function useDebounce<T extends (...args: Parameters<T>) => void>(
     }
     timeoutRef.current = setTimeout(() => callback(...args), delay)
   }, [callback, delay]) as T
+}
+
+function PasswordRequirements({
+  isLogin,
+  password,
+  passwordStrength,
+}: {
+  isLogin: boolean
+  password: string
+  passwordStrength: ReturnType<typeof validatePasswordStrength>
+}) {
+  if (isLogin || !password) return null
+
+  const { requirements } = passwordStrength
+  const items = [
+    { met: requirements.minLength, label: '8+ characters' },
+    { met: requirements.hasUppercase, label: 'Uppercase' },
+    { met: requirements.hasLowercase, label: 'Lowercase' },
+    { met: requirements.hasNumber, label: 'Number' },
+    { met: requirements.hasSpecial, label: 'Special (@$!%*?&)' },
+  ]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      className="mt-2 flex flex-wrap gap-2"
+    >
+      {items.map(({ met, label }) => (
+        <span
+          key={label}
+          className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${
+            met ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-white/30'
+          }`}
+        >
+          {met ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+          {label}
+        </span>
+      ))}
+    </motion.div>
+  )
 }
 
 export default function LoginPage() {
@@ -145,41 +186,6 @@ export default function LoginPage() {
     })
     setUsernameStatus('idle')
     setPasswordStrength(validatePasswordStrength(''))
-  }
-
-  // Password requirements indicator
-  const PasswordRequirements = () => {
-    if (isLogin || !formData.password) return null
-
-    const { requirements } = passwordStrength
-    const items = [
-      { met: requirements.minLength, label: '8+ characters' },
-      { met: requirements.hasUppercase, label: 'Uppercase' },
-      { met: requirements.hasLowercase, label: 'Lowercase' },
-      { met: requirements.hasNumber, label: 'Number' },
-      { met: requirements.hasSpecial, label: 'Special (@$!%*?&)' },
-    ]
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, height: 0 }}
-        animate={{ opacity: 1, height: 'auto' }}
-        className="mt-2 flex flex-wrap gap-2"
-      >
-        {items.map(({ met, label }) => (
-          <span
-            key={label}
-            className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${met
-              ? 'bg-green-500/10 text-green-400'
-              : 'bg-white/5 text-white/30'
-              }`}
-          >
-            {met ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
-            {label}
-          </span>
-        ))}
-      </motion.div>
-    )
   }
 
   return (
@@ -372,7 +378,11 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              <PasswordRequirements />
+              <PasswordRequirements
+                isLogin={isLogin}
+                password={formData.password}
+                passwordStrength={passwordStrength}
+              />
             </div>
 
             {/* Confirm Password (signup only) */}

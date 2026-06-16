@@ -20,6 +20,13 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 	const [isCustom, setIsCustom] = useState(false);
 
 	const currentAmount = isCustom ? Number(customAmount) || 0 : selectedAmount;
+	const amountKey = `${isCustom ? "custom" : "preset"}-${currentAmount.toFixed(2)}`;
+
+	const isPresetActive = (amount: number) => {
+		if (!isCustom) return selectedAmount === amount;
+		if (!customAmount) return false;
+		return Number(customAmount) === amount;
+	};
 
 	const handlePresetClick = (amount: number) => {
 		setSelectedAmount(amount);
@@ -66,15 +73,15 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 					<h3 className="text-lg font-medium text-muted-foreground mb-4">
 						Choose an amount
 					</h3>
-					<div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+					<div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-4">
 						{PRESET_AMOUNTS.map((amount) => (
 							<button
 								key={amount}
 								onClick={() => handlePresetClick(amount)}
-								className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all border ${
-									!isCustom && selectedAmount === amount
-										? "bg-primary text-primary-foreground border-primary shadow-md"
-										: "bg-card text-foreground border-border hover:border-primary/50 hover:bg-primary/5"
+								className={`ui-press touch-target-inline px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-semibold text-sm border ${
+									isPresetActive(amount)
+										? "bg-primary text-primary-foreground border-primary shadow-md hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20"
+										: "bg-card text-foreground border-border hover-gold-surface"
 								}`}
 							>
 								${amount}
@@ -91,16 +98,16 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 								value={customAmount}
 								onChange={handleCustomChange}
 								onFocus={() => setIsCustom(true)}
-								className={`w-24 pl-7 pr-3 py-2 rounded-lg text-sm font-semibold border transition-all bg-card text-foreground placeholder:text-muted-foreground/50 ${
+								className={`ui-press ui-input touch-target-inline w-28 sm:w-32 pl-7 pr-3 py-2 sm:py-2.5 rounded-lg text-sm font-semibold border bg-card text-foreground placeholder:text-muted-foreground/50 ${
 									isCustom
 										? "border-primary shadow-md ring-1 ring-primary/20"
-										: "border-border hover:border-primary/50"
+										: "border-border hover-gold-surface"
 								}`}
 							/>
 						</div>
 					</div>
 					{currentAmount > 0 && (
-						<p className="text-sm text-muted-foreground">
+						<p key={amountKey} className="animate-fade-slide-up text-sm text-muted-foreground">
 							Donating{" "}
 							<span className="font-bold text-primary">
 								${currentAmount.toFixed(2)}
@@ -113,9 +120,9 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 				<h3 className="text-xl font-bold text-primary mt-3 mb-5">
 					Select a payment option 💸
 				</h3>
-				<div className="flex items-center justify-center gap-4 mb-6">
-					<StripeDonation amount={currentAmount} />
-					<CryptoDonation amount={currentAmount} />
+				<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-6 w-full max-w-md mx-auto">
+					<StripeDonation amount={currentAmount} className="w-full" />
+					<CryptoDonation amount={currentAmount} className="w-full" />
 				</div>
 
 				{/* Accepted Payment Icons */}

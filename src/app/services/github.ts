@@ -1,5 +1,12 @@
 import { env } from '@/lib/env';
 
+type GithubRepo = {
+	fork?: boolean;
+	archived?: boolean;
+	stargazers_count?: number;
+	pushed_at?: string;
+};
+
 export async function getGitHubProfile(username?: string) {
 	const githubUsername = username || env.NEXT_GITHUB_USERNAME;
 	const response = await fetch(
@@ -55,12 +62,12 @@ export async function getTopReposByStars(username?: string, limit = 6) {
 	if (!Array.isArray(repos)) return [];
 
 	return repos
-		.filter((r: any) => !r.fork && !r.archived)
-		.sort((a: any, b: any) => {
+		.filter((r: GithubRepo) => !r.fork && !r.archived)
+		.sort((a: GithubRepo, b: GithubRepo) => {
 			const stars = (b.stargazers_count || 0) - (a.stargazers_count || 0);
 			if (stars !== 0) return stars;
 			return (
-				new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime()
+				new Date(b.pushed_at ?? 0).getTime() - new Date(a.pushed_at ?? 0).getTime()
 			);
 		})
 		.slice(0, limit);

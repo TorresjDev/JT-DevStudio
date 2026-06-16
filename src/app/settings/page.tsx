@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -39,7 +39,7 @@ function useDebounce<T extends (...args: Parameters<T>) => void>(
     callback: T,
     delay: number
 ): T {
-    const timeoutRef = { current: null as NodeJS.Timeout | null }
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     return useCallback((...args: Parameters<T>) => {
         if (timeoutRef.current) {
@@ -47,6 +47,45 @@ function useDebounce<T extends (...args: Parameters<T>) => void>(
         }
         timeoutRef.current = setTimeout(() => callback(...args), delay)
     }, [callback, delay]) as T
+}
+
+function PasswordRequirements({
+    newPassword,
+    passwordStrength,
+}: {
+    newPassword: string
+    passwordStrength: ReturnType<typeof validatePasswordStrength>
+}) {
+    if (!newPassword) return null
+
+    const { requirements } = passwordStrength
+    const items = [
+        { met: requirements.minLength, label: '8+ chars' },
+        { met: requirements.hasUppercase, label: 'Uppercase' },
+        { met: requirements.hasLowercase, label: 'Lowercase' },
+        { met: requirements.hasNumber, label: 'Number' },
+        { met: requirements.hasSpecial, label: 'Special' },
+    ]
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="mt-2 flex flex-wrap gap-1.5"
+        >
+            {items.map(({ met, label }) => (
+                <span
+                    key={label}
+                    className={`text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                        met ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-white/30'
+                    }`}
+                >
+                    {met ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
+                    {label}
+                </span>
+            ))}
+        </motion.div>
+    )
 }
 
 type Section = 'profile' | 'account' | 'security' | 'notifications' | 'danger'
@@ -158,41 +197,6 @@ export default function SettingsPage() {
         { id: 'notifications' as Section, label: 'Notifications', icon: Bell },
         { id: 'danger' as Section, label: 'Danger Zone', icon: Trash2, danger: true },
     ]
-
-    // Password requirements indicator
-    const PasswordRequirements = () => {
-        if (!passwordForm.newPassword) return null
-
-        const { requirements } = passwordStrength
-        const items = [
-            { met: requirements.minLength, label: '8+ chars' },
-            { met: requirements.hasUppercase, label: 'Uppercase' },
-            { met: requirements.hasLowercase, label: 'Lowercase' },
-            { met: requirements.hasNumber, label: 'Number' },
-            { met: requirements.hasSpecial, label: 'Special' },
-        ]
-
-        return (
-            <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="mt-2 flex flex-wrap gap-1.5"
-            >
-                {items.map(({ met, label }) => (
-                    <span
-                        key={label}
-                        className={`text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 ${met
-                            ? 'bg-green-500/10 text-green-400'
-                            : 'bg-white/5 text-white/30'
-                            }`}
-                    >
-                        {met ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
-                        {label}
-                    </span>
-                ))}
-            </motion.div>
-        )
-    }
 
     if (isLoading) {
         return (
@@ -497,7 +501,10 @@ export default function SettingsPage() {
                                                         {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                                     </button>
                                                 </div>
-                                                <PasswordRequirements />
+                                                <PasswordRequirements
+                                                    newPassword={passwordForm.newPassword}
+                                                    passwordStrength={passwordStrength}
+                                                />
                                             </div>
 
                                             <div className="space-y-1">
