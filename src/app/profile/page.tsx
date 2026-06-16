@@ -8,6 +8,26 @@ import { Github, Globe, FileText, Star, GitFork, Mail, ExternalLink, Shield, Bri
 import { Button } from "@/components/ui/button";
 import { TechStackDisplay } from "@/components/tech-stack";
 
+type GithubProfile = {
+	avatar_url: string;
+	html_url: string;
+	login?: string;
+	blog?: string | null;
+	public_repos?: number;
+	followers?: number;
+	following?: number;
+};
+
+type GithubRepo = {
+	id: number;
+	html_url: string;
+	name: string;
+	description?: string | null;
+	stargazers_count?: number;
+	forks_count?: number;
+	language?: string | null;
+};
+
 const timeline = [
 	{
 		role: "Founder — JT Dev Studio",
@@ -63,12 +83,12 @@ export default async function ProfilePage() {
 	const githubUsername = env.NEXT_GITHUB_USERNAME || "torresjdev";
 
 	let profile = null;
-	let repos: any[] = [];
+	let repos: GithubRepo[] = [];
 
 	try {
-		profile = await getGitHubProfile(githubUsername);
+		profile = (await getGitHubProfile(githubUsername)) as GithubProfile;
 		if (profile) {
-			repos = await getTopReposByStars(githubUsername, 6);
+			repos = (await getTopReposByStars(githubUsername, 6)) as GithubRepo[];
 		}
 	} catch (e) {
 		console.error("Error fetching github profile:", e);
@@ -214,7 +234,7 @@ export default async function ProfilePage() {
 						)}
 					</div>
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-						{featuredRepos.map((repo: any) => (
+						{featuredRepos.map((repo) => (
 							<Link
 								key={repo.id}
 								href={repo.html_url}

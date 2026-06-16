@@ -74,28 +74,27 @@ async function PostContent({ postId }: { postId: string }) {
     notFound()
   }
 
-  try {
-    const [post, comments, media, currentUserId] = await Promise.all([
-      getPost(postId),
-      getThreadedComments(postId),
-      getPostMedia(postId),
-      getCurrentUserId(),
-    ])
+  const [post, comments, media, currentUserId] = await Promise.all([
+    getPost(postId),
+    getThreadedComments(postId),
+    getPostMedia(postId),
+    getCurrentUserId(),
+  ]).catch(() => notFound())
 
-    if (!post) {
-      notFound()
-    }
+  if (!post) {
+    notFound()
+  }
 
-    // Get signed URLs for media
-    const mediaWithUrls = await Promise.all(
-      media.map(async (m) => ({
-        ...m,
-        url: await getMediaUrl(m.storage_path),
-      }))
-    )
+  // Get signed URLs for media
+  const mediaWithUrls = await Promise.all(
+    media.map(async (m) => ({
+      ...m,
+      url: await getMediaUrl(m.storage_path),
+    }))
+  ).catch(() => [])
 
-    return (
-      <article className="overflow-hidden rounded-xl border border-border/50 bg-card p-4 sm:p-6 md:p-8 lg:p-10">
+  return (
+    <article className="overflow-hidden rounded-xl border border-border/50 bg-card p-4 sm:p-6 md:p-8 lg:p-10">
         {/* Category + Status */}
         <div className="flex items-center gap-2 mb-4">
           <span className="text-sm font-medium px-3 py-1 rounded-full bg-primary/10 text-primary capitalize">
@@ -246,11 +245,6 @@ async function PostContent({ postId }: { postId: string }) {
         <CommentsSection postId={postId} comments={comments} />
       </article>
     )
-  } catch (error) {
-    // Log error for debugging but don't expose to user
-    console.error('Error loading post:', error)
-    notFound()
-  }
 }
 
 /**

@@ -33,8 +33,12 @@ function ConfirmEmailContent() {
             if (error) throw error
 
             setMessage({ type: 'success', text: 'Confirmation email resent successfully!' })
-        } catch (error: any) {
-            setMessage({ type: 'error', text: error.message || 'Failed to resend confirmation email.' })
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to resend confirmation email.'
+            setMessage({ type: 'error', text: message })
         } finally {
             setIsLoading(false)
         }
