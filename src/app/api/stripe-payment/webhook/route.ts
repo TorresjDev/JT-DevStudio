@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "../../../../lib/stripe";
-import { recordDonation } from "@/lib/donations";
+import { recordDonation, DatabaseError } from "@/lib/donations";
 import { requireWebhookSecret } from "@/lib/webhook-secrets";
 import Stripe from "stripe";
 
@@ -64,6 +64,10 @@ export async function POST(req: Request) {
 				? session.amount_total / 100
 				: null;
 
+			console.log(
+				`[Stripe Webhook] Received checkout.session.completed: eventId=${event.id}, sessionId=${session.id}, amount=${amountTotal ?? "unknown"}`
+			);
+
 			try {
 				const { duplicate } = await recordDonation({
 					provider: "stripe",
@@ -74,15 +78,32 @@ export async function POST(req: Request) {
 					email: session.customer_details?.email ?? null,
 				});
 
-				if (!duplicate) {
+				if (duplicate) {
 					console.log(
-						`Donation recorded: $${amountTotal ?? "unknown"} ${session.currency ?? "USD"} (Session: ${session.id})`
+						`[Stripe Webhook] Idempotent duplicate event received. eventId=${event.id}, sessionId=${session.id}. Skipping.`
+					);
+				} else {
+					console.log(
+						`[Stripe Webhook] Donation successfully recorded: eventId=${event.id}, sessionId=${session.id}, amount=${amountTotal ?? "unknown"} ${session.currency ?? "USD"}`
 					);
 				}
-			} catch (err) {
-				console.error("Failed to persist Stripe donation:", err);
+			} catch (err: unknown) {
+				const dbError = err instanceof DatabaseError ? err.supabaseError : null;
+				const errorMsg = err instanceof Error ? err.message : "Unknown error";
+				const supabaseErr = dbError && typeof dbError === "object"
+					? (dbError as { code?: string; message?: string })
+					: null;
+
+				console.error(
+					`[Stripe Webhook] Failed to persist Stripe donation: eventId=${event.id}, sessionId=${session.id}, amount=${amountTotal ?? "unknown"}. Supabase Error:`,
+					supabaseErr ? { code: supabaseErr.code, message: supabaseErr.message } : errorMsg
+				);
 				return NextResponse.json(
-					{ error: "Failed to persist donation" },
+					{
+						error: "Failed to persist donation",
+						code: supabaseErr?.code ?? "UNKNOWN",
+						message: supabaseErr?.message ?? errorMsg,
+					},
 					{ status: 500 }
 				);
 			}

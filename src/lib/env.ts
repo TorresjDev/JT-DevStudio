@@ -19,7 +19,6 @@ const serverEnvSchema = z.object({
 
 	// Stripe (optional - for payments)
 	STRIPE_SECRET_KEY: z.string().startsWith("sk_").optional(),
-	STRIPE_PRICE_ID: z.string().startsWith("price_").optional(),
 	STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
 
 	// Coinbase (optional - for crypto payments)

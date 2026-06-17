@@ -11,6 +11,15 @@ export type DonationRecord = {
   email?: string | null
 }
 
+export class DatabaseError extends Error {
+  supabaseError: unknown
+  constructor(message: string, supabaseError: unknown) {
+    super(message)
+    this.name = 'DatabaseError'
+    this.supabaseError = supabaseError
+  }
+}
+
 export async function recordDonation(
   donation: DonationRecord
 ): Promise<{ duplicate: boolean }> {
@@ -24,8 +33,9 @@ export async function recordDonation(
 
   if (error) {
     console.error('Failed to record donation:', error)
-    throw new Error('Failed to persist donation')
+    throw new DatabaseError('Failed to persist donation', error)
   }
 
   return { duplicate: false }
 }
+
