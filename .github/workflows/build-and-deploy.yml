@@ -19,7 +19,6 @@ jobs:
       # Stripe Configuration
       STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
-      STRIPE_PRICE_ID: ${{ secrets.STRIPE_PRICE_ID }}
 
       # Coinbase Configuration
       COINBASE_API_KEY: ${{ secrets.COINBASE_API_KEY }}

@@ -14,17 +14,6 @@ function maskEmail(email: string | null): string | null {
 	return `${local[0]}${"*".repeat(local.length - 2)}${local[local.length - 1]}@${domain}`;
 }
 
-function maskName(name: string | null): string | null {
-	if (!name) return null;
-	const parts = name.split(" ");
-	return parts
-		.map((part) => {
-			if (part.length <= 2) return `${part[0]}*`;
-			return `${part[0]}${"*".repeat(part.length - 2)}${part[part.length - 1]}`;
-		})
-		.join(" ");
-}
-
 /**
  * GET /api/stripe-payment/session-details?session_id=cs_xxx
  *
@@ -74,7 +63,7 @@ export async function GET(request: Request) {
 				: null,
 			currency: session.currency?.toUpperCase() ?? "USD",
 			customer_email: maskEmail(session.customer_details?.email ?? null),
-			customer_name: maskName(session.customer_details?.name ?? null),
+			customer_name: session.customer_details?.name ?? null,
 			payment_status: session.payment_status,
 			created: session.created,
 		});
