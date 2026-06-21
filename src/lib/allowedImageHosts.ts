@@ -12,6 +12,9 @@ export const ALLOWED_IMAGE_HOSTS = [
 	"rtyyywzpdoroqouvskop.supabase.co",
 	"lh3.googleusercontent.com",
 	"*.googleusercontent.com",
+	// Tech stack icon CDNs
+	"cdn.jsdelivr.net",
+	"cdn.simpleicons.org",
 ] as const
 
 export const IMAGE_REMOTE_PATTERNS = [
@@ -24,6 +27,9 @@ export const IMAGE_REMOTE_PATTERNS = [
 	{ protocol: "https" as const, hostname: "rtyyywzpdoroqouvskop.supabase.co" },
 	{ protocol: "https" as const, hostname: "lh3.googleusercontent.com" },
 	{ protocol: "https" as const, hostname: "*.googleusercontent.com" },
+	// Tech stack icon CDNs
+	{ protocol: "https" as const, hostname: "cdn.jsdelivr.net" },
+	{ protocol: "https" as const, hostname: "cdn.simpleicons.org" },
 ]
 
 /** CSP img-src host entries derived from ALLOWED_IMAGE_HOSTS (excludes wildcards). */
