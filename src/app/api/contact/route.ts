@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 
 		// 1. Email to YOU (j.torres3.dev@gmail.com)
 		const { error: adminError } = await resend.emails.send({
-			from: "Contact Form <onboarding@resend.dev>",
+			from: "Contact Form <contact@jt-devstudio.tech>",
 			to: "j.torres3.dev@gmail.com",
 			replyTo: email,
 			subject: `New Contact Message from ${name}`,
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
 		// NOTE: Sending to arbitrary emails requires a verified Domain on Resend.
 		// If using 'onboarding@resend.dev', this might only send to you or fails for others until verified.
 		const { error: autoError } = await resend.emails.send({
-			from: "Jesus Torres <onboarding@resend.dev>", // Or update once domain is verified
+			from: "Jesus Torres <contact@jt-devstudio.tech>",
 			to: email,
 			subject: "Thanks for reaching out!",
 			html: `
