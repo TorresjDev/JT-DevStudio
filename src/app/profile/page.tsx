@@ -4,9 +4,10 @@ import { getGitHubProfile, getTopReposByStars } from "../services/github";
 import { env } from "@/lib/env";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, Globe, FileText, Star, GitFork, Mail, ExternalLink, Shield, Briefcase, GraduationCap } from "lucide-react";
+import { Github, Globe, Star, GitFork, Mail, ExternalLink, Shield, Briefcase, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TechStackDisplay } from "@/components/tech-stack";
+import { ResumeDownloadButton } from "@/components/profile/ResumeDownloadButton";
 
 type GithubProfile = {
 	avatar_url: string;
@@ -155,12 +156,7 @@ export default async function ProfilePage() {
 							</Link>
 						)}
 
-						<Button asChild size="sm" className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold h-10 px-4 rounded-xl">
-							<Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-								<FileText className="w-4 h-4 mr-2" />
-								Resume
-							</Link>
-						</Button>
+						<ResumeDownloadButton />
 
 						<Button asChild size="sm" variant="outline" className="h-10 px-4 rounded-xl border-[#DAA520]/30 text-[#DAA520] hover:bg-[#DAA520]/10">
 							<Link href="/contact">
