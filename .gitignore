@@ -54,3 +54,6 @@ next-env.d.ts
 # mynotes folder
 /mynotes
 .claude
+
+# dev-projects (local strategy, prompts, notes — never push to GitHub)
+/dev-projects
