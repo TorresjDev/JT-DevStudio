@@ -153,11 +153,18 @@ const Footer = () => {
 			</div>
 
 			{/* Footer Bottom */}
-			<div className="text-center text-[#C0C0C0]/60 mt-3">
+			<div className="text-center text-[#C0C0C0]/60 mt-3 space-y-1">
 				<p>
-					&nbsp; &copy; {new Date().getFullYear()} JT Dev Studio. All rights
-					reserved.
+					&nbsp; &copy; {new Date().getFullYear()} JT Dev Studio. All rights reserved.
 				</p>
+				<div className="flex justify-center gap-4 text-xs">
+					<Link href="/privacy-policy" className="hover:text-[#DAA520] transition-colors">
+						Privacy Policy
+					</Link>
+					<Link href="/terms" className="hover:text-[#DAA520] transition-colors">
+						Terms of Service
+					</Link>
+				</div>
 			</div>
 		</footer>
 	);
