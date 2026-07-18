@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect, Suspense } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { login, signup, signInWithGithub, signInWithGoogle, checkUsernameAvailability, type AuthResult } from './actions'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,7 @@ import {
   EyeOff
 } from 'lucide-react'
 import { validatePasswordStrength } from '@/lib/validations/auth-schemas'
+import { getOAuthErrorMessage } from '@/lib/auth/oauth-errors'
 
 // Debounce helper
 function useDebounce<T extends (...args: Parameters<T>) => void>(
@@ -80,12 +82,19 @@ function PasswordRequirements({
   )
 }
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams()
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  // Surface friendly OAuth / callback failures instead of raw provider screens
+  useEffect(() => {
+    const message = getOAuthErrorMessage(searchParams.get('error'))
+    if (message) setError(message)
+  }, [searchParams])
 
   // Form field states for validation
   const [formData, setFormData] = useState({
@@ -528,5 +537,19 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="w-8 h-8 border-2 border-white/20 border-t-blue-500 rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   )
 }

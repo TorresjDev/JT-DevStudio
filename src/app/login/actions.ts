@@ -229,6 +229,9 @@ export async function updatePasswordFromRecovery(formData: FormData): Promise<Au
 
 /**
  * Sign in with GitHub OAuth
+ *
+ * Redirect URI used here must match Supabase Auth → URL Configuration
+ * and the provider's allowed callbacks. See docs/auth-setup.md.
  */
 export async function signInWithGithub() {
   const siteUrl = process.env.SITE_URL
@@ -236,7 +239,7 @@ export async function signInWithGithub() {
     if (process.env.NODE_ENV === 'development') {
       console.error('SITE_URL environment variable is not configured')
     }
-    redirect('/error')
+    redirect('/login?error=oauth_config')
   }
 
   const supabase = await createClient()
@@ -251,16 +254,23 @@ export async function signInWithGithub() {
     if (process.env.NODE_ENV === 'development') {
       console.error('GitHub sign in error:', error)
     }
-    redirect('/error')
+    redirect('/login?error=oauth_provider')
   }
 
   if (data.url) {
     redirect(data.url)
   }
+
+  redirect('/login?error=oauth_unknown')
 }
 
 /**
  * Sign in with Google OAuth
+ *
+ * App redirect: `${SITE_URL}/auth/callback`
+ * Supabase provider callback (paste into Google Cloud): 
+ *   https://<project-ref>.supabase.co/auth/v1/callback
+ * See docs/auth-setup.md for rotating a deleted Google client.
  */
 export async function signInWithGoogle() {
   const siteUrl = process.env.SITE_URL
@@ -268,7 +278,7 @@ export async function signInWithGoogle() {
     if (process.env.NODE_ENV === 'development') {
       console.error('SITE_URL environment variable is not configured')
     }
-    redirect('/error')
+    redirect('/login?error=oauth_config')
   }
 
   const supabase = await createClient()
@@ -287,10 +297,12 @@ export async function signInWithGoogle() {
     if (process.env.NODE_ENV === 'development') {
       console.error('Google sign in error:', error)
     }
-    redirect('/error')
+    redirect('/login?error=oauth_provider')
   }
 
   if (data.url) {
     redirect(data.url)
   }
+
+  redirect('/login?error=oauth_unknown')
 }
