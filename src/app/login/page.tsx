@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { login, signup, signInWithGithub, signInWithGoogle, checkUsernameAvailability, type AuthResult } from './actions'
 import { Button } from '@/components/ui/button'
@@ -383,6 +384,16 @@ export default function LoginPage() {
                 password={formData.password}
                 passwordStrength={passwordStrength}
               />
+              {isLogin && (
+                <div className="flex justify-end pt-1">
+                  <Link
+                    href="/forgot-password"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Confirm Password (signup only) */}

@@ -47,6 +47,12 @@ export async function GET(request: Request) {
     }
   }
 
+  // Password-recovery links that fail (expired/invalid code) should land on the
+  // reset page, which already has a clear "request a new link" state.
+  if (next === '/reset-password') {
+    return NextResponse.redirect(`${origin}/reset-password`)
+  }
+
   // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }

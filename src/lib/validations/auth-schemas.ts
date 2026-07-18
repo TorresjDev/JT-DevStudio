@@ -53,8 +53,27 @@ export const loginSchema = z.object({
     password: z.string().min(1, 'Password is required'),
 });
 
+export const resetRequestSchema = z.object({
+    email: z.string()
+        .email('Please enter a valid email address')
+        .max(254, 'Email must be less than 254 characters')
+        .toLowerCase(),
+});
+
+export const resetPasswordSchema = z.object({
+    password: z.string()
+        .min(8, 'Password must be at least 8 characters')
+        .regex(passwordRegex, 'Password must include uppercase, lowercase, number, and special character (@$!%*?&)'),
+    confirmPassword: z.string().min(1, 'Please confirm your new password'),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+});
+
 export type SignupInput = z.infer<typeof signupSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type ResetRequestInput = z.infer<typeof resetRequestSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 
 /**
  * Validate password strength for UI feedback
