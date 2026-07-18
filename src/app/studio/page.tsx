@@ -218,13 +218,13 @@ export default function StudioPage() {
 			</AnimatePresence>
 
 			{/* ── Page ─────────────────────────────────────────────────────── */}
-			<section className="w-full mx-auto max-w-7xl px-4 py-8 md:py-12 md:px-8 space-y-12 min-h-screen">
+			<section className="w-full mx-auto max-w-7xl px-4 py-6 md:py-8 md:px-8 space-y-8 md:space-y-10">
 
 				{/* Header */}
 				<motion.div
 					initial="hidden"
 					animate="visible"
-					className="text-center max-w-3xl mx-auto space-y-4"
+					className="text-center max-w-3xl mx-auto space-y-3"
 				>
 					<motion.p
 						variants={fadeUp}
@@ -252,7 +252,7 @@ export default function StudioPage() {
 					<motion.div
 						variants={fadeUp}
 						custom={3}
-						className="flex items-center justify-center gap-8 pt-2"
+						className="flex items-center justify-center gap-6 pt-1"
 					>
 						{[
 							{ value: liveCount,          label: "Live" },
@@ -308,7 +308,7 @@ export default function StudioPage() {
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -4 }}
 						transition={{ duration: 0.22 }}
-						className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+						className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
 					>
 						{filtered.map((project, i) => {
 							const status  = statusConfig[project.status];
@@ -426,7 +426,7 @@ export default function StudioPage() {
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, margin: "-80px" }}
 					transition={{ duration: 0.5 }}
-					className="text-center p-8 md:p-12 rounded-3xl border border-border bg-card/30 backdrop-blur-sm max-w-3xl mx-auto"
+					className="text-center p-6 md:p-8 rounded-3xl border border-border bg-card/30 backdrop-blur-sm max-w-3xl mx-auto"
 				>
 					<h2 className="text-2xl md:text-3xl font-bold mb-3">Want something built?</h2>
 					<p className="text-muted-foreground leading-relaxed mb-6 max-w-lg mx-auto text-sm">

@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect, Suspense } from 'react'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { login, signup, signInWithGithub, signInWithGoogle, checkUsernameAvailability, type AuthResult } from './actions'
 import { Button } from '@/components/ui/button'
@@ -22,6 +24,7 @@ import {
   EyeOff
 } from 'lucide-react'
 import { validatePasswordStrength } from '@/lib/validations/auth-schemas'
+import { getOAuthErrorMessage } from '@/lib/auth/oauth-errors'
 
 // Debounce helper
 function useDebounce<T extends (...args: Parameters<T>) => void>(
@@ -79,12 +82,24 @@ function PasswordRequirements({
   )
 }
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams()
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const [info, setInfo] = useState<string | null>(null)
+
+  // Surface friendly OAuth / callback failures instead of raw provider screens
+  useEffect(() => {
+    const message = getOAuthErrorMessage(searchParams.get('error'))
+    if (message) setError(message)
+    if (searchParams.get('deleted') === 'true') {
+      setInfo('Your account has been permanently deleted. You can create a new account anytime with the same email.')
+    }
+  }, [searchParams])
 
   // Form field states for validation
   const [formData, setFormData] = useState({
@@ -221,6 +236,17 @@ export default function LoginPage() {
           </div>
 
           <AnimatePresence mode="wait">
+            {info && !error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center gap-2 text-green-400 text-sm"
+              >
+                <Check className="w-4 h-4 shrink-0" />
+                <span>{info}</span>
+              </motion.div>
+            )}
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -383,6 +409,16 @@ export default function LoginPage() {
                 password={formData.password}
                 passwordStrength={passwordStrength}
               />
+              {isLogin && (
+                <div className="flex justify-end pt-1">
+                  <Link
+                    href="/forgot-password"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Confirm Password (signup only) */}
@@ -517,5 +553,19 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="w-8 h-8 border-2 border-white/20 border-t-blue-500 rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   )
 }

@@ -9,6 +9,17 @@ export type DonationRecord = {
   currency?: string | null
   status?: string | null
   email?: string | null
+  /** Set when the donor was logged in at checkout; null for anonymous gifts */
+  user_id?: string | null
+}
+
+export type UserDonation = {
+  id: string
+  provider: string
+  amount: number | null
+  currency: string | null
+  status: string | null
+  created_at: string
 }
 
 export class DatabaseError extends Error {

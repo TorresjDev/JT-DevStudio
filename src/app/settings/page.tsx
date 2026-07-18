@@ -21,6 +21,7 @@ import {
     Shield,
     AlertTriangle,
     Loader2,
+    Receipt,
 } from 'lucide-react'
 import {
     changePassword,
@@ -30,6 +31,7 @@ import {
     updateNotificationPreferences,
     getCurrentProfile,
     checkUsernameAvailable,
+    getUserDonations,
     type SettingsResult,
 } from './actions'
 import { validatePasswordStrength } from '@/lib/validations/auth-schemas'
@@ -88,7 +90,16 @@ function PasswordRequirements({
     )
 }
 
-type Section = 'profile' | 'account' | 'security' | 'notifications' | 'danger'
+type Section = 'profile' | 'account' | 'security' | 'notifications' | 'billing' | 'danger'
+
+type DonationRow = {
+    id: string
+    provider: string
+    amount: number | null
+    currency: string | null
+    status: string | null
+    created_at: string
+}
 
 interface ProfileData {
     id: string
@@ -122,12 +133,15 @@ export default function SettingsPage() {
     const [usernameForm, setUsernameForm] = useState({ username: '' })
     const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmNewPassword: '' })
     const [notificationForm, setNotificationForm] = useState({ securityAlerts: true, emailUpdates: true })
-    const [deleteForm, setDeleteForm] = useState({ password: '', confirmText: '' })
+    const [deleteForm, setDeleteForm] = useState({ password: '', confirmText: '', acknowledged: false })
+    const [donations, setDonations] = useState<DonationRow[]>([])
+    const [donationsLoading, setDonationsLoading] = useState(false)
 
     // UI states
     const [showCurrentPassword, setShowCurrentPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showDeletePassword, setShowDeletePassword] = useState(false)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
     const [passwordStrength, setPasswordStrength] = useState(validatePasswordStrength(''))
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -157,6 +171,23 @@ export default function SettingsPage() {
         }
         loadProfile()
     }, [router])
+
+    // Load payment history when Billing is opened
+    useEffect(() => {
+        if (activeSection !== 'billing') return
+        let cancelled = false
+        setDonationsLoading(true)
+        getUserDonations().then((result) => {
+            if (cancelled) return
+            if (result.error) {
+                setError(result.error)
+            } else {
+                setDonations(result.donations)
+            }
+            setDonationsLoading(false)
+        })
+        return () => { cancelled = true }
+    }, [activeSection])
 
     // Debounced username check
     const checkUsername = useDebounce(async (username: string) => {
@@ -195,8 +226,22 @@ export default function SettingsPage() {
         { id: 'account' as Section, label: 'Account', icon: AtSign },
         { id: 'security' as Section, label: 'Security', icon: Lock },
         { id: 'notifications' as Section, label: 'Notifications', icon: Bell },
+        { id: 'billing' as Section, label: 'Payment History', icon: Receipt },
         { id: 'danger' as Section, label: 'Danger Zone', icon: Trash2, danger: true },
     ]
+
+    const formatDonationAmount = (amount: number | null, currency: string | null) => {
+        if (amount == null) return '—'
+        const code = (currency || 'usd').toUpperCase()
+        try {
+            return new Intl.NumberFormat(undefined, {
+                style: 'currency',
+                currency: code,
+            }).format(amount)
+        } catch {
+            return `${amount} ${code}`
+        }
+    }
 
     if (isLoading) {
         return (
@@ -207,7 +252,7 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] overflow-hidden relative pt-16">
+        <div className="min-h-[calc(100vh-3.5rem)] bg-[#0a0a0a] overflow-hidden relative pt-4">
             {/* Dynamic Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-blue-500/5 blur-[120px] rounded-full" />
@@ -219,7 +264,7 @@ export default function SettingsPage() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-8"
+                    className="mb-4 md:mb-5"
                 >
                     <h1 className="text-3xl font-bold bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent">
                         Settings
@@ -284,7 +329,7 @@ export default function SettingsPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white/3 backdrop-blur-xl border border-white/8 rounded-2xl p-6"
+                        className="bg-white/3 backdrop-blur-xl border border-white/8 rounded-2xl p-5 md:p-6"
                     >
                         <AnimatePresence mode="wait">
                             {/* Profile Section */}
@@ -296,7 +341,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Profile</h2>
-                                    <p className="text-white/40 text-sm mb-6">Update your personal information</p>
+                                    <p className="text-white/40 text-sm mb-4">Update your personal information</p>
 
                                     <form
                                         onSubmit={async (e) => {
@@ -309,7 +354,7 @@ export default function SettingsPage() {
                                             const result = await updateProfile(formData)
                                             handleResult(result)
                                         }}
-                                        className="space-y-5"
+                                        className="space-y-4"
                                     >
                                         <div className="space-y-1">
                                             <label className="text-xs font-medium text-white/50">Display Name</label>
@@ -355,7 +400,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Account</h2>
-                                    <p className="text-white/40 text-sm mb-6">Manage your username and account details</p>
+                                    <p className="text-white/40 text-sm mb-4">Manage your username and account details</p>
 
                                     {/* Email (read-only) */}
                                     <div className="mb-6 p-4 bg-white/2 border border-white/10 rounded-xl">
@@ -379,7 +424,7 @@ export default function SettingsPage() {
                                             const result = await changeUsername(formData)
                                             handleResult(result)
                                         }}
-                                        className="space-y-5"
+                                        className="space-y-4"
                                     >
                                         <div className="space-y-1">
                                             <label className="text-xs font-medium text-white/50">Username</label>
@@ -430,7 +475,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Security</h2>
-                                    <p className="text-white/40 text-sm mb-6">Update your password and security settings</p>
+                                    <p className="text-white/40 text-sm mb-4">Update your password and security settings</p>
 
                                     {user?.isOAuthOnly ? (
                                         <div className="p-6 bg-white/2 border border-white/10 rounded-xl text-center">
@@ -456,7 +501,7 @@ export default function SettingsPage() {
                                                 }
                                                 handleResult(result)
                                             }}
-                                            className="space-y-5"
+                                            className="space-y-4"
                                         >
                                             <div className="space-y-1">
                                                 <label className="text-xs font-medium text-white/50">Current Password</label>
@@ -555,7 +600,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Notifications</h2>
-                                    <p className="text-white/40 text-sm mb-6">Control your email notification preferences</p>
+                                    <p className="text-white/40 text-sm mb-4">Control your email notification preferences</p>
 
                                     <form
                                         onSubmit={async (e) => {
@@ -608,6 +653,65 @@ export default function SettingsPage() {
                                 </motion.div>
                             )}
 
+                            {/* Payment History Section */}
+                            {activeSection === 'billing' && (
+                                <motion.div
+                                    key="billing"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                >
+                                    <h2 className="text-xl font-semibold text-white mb-1">Payment History</h2>
+                                    <p className="text-white/40 text-sm mb-4">
+                                        Donations you made while signed in. Anonymous gifts are not listed here.
+                                    </p>
+
+                                    {donationsLoading ? (
+                                        <div className="py-12 flex justify-center">
+                                            <Loader2 className="w-6 h-6 text-white/30 animate-spin" />
+                                        </div>
+                                    ) : donations.length === 0 ? (
+                                        <div className="rounded-xl border border-white/10 bg-white/2 p-8 text-center">
+                                            <Receipt className="w-8 h-8 text-white/25 mx-auto mb-3" />
+                                            <p className="text-white/70 text-sm font-medium mb-1">No payments yet</p>
+                                            <p className="text-white/40 text-xs max-w-sm mx-auto">
+                                                When you donate while logged in, those payments will show up here.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="rounded-xl border border-white/10 overflow-hidden">
+                                            <div className="hidden sm:grid grid-cols-[1.2fr_1fr_1fr_1fr] gap-3 px-4 py-2.5 text-[11px] uppercase tracking-wide text-white/35 border-b border-white/8 bg-white/2">
+                                                <span>Date</span>
+                                                <span>Amount</span>
+                                                <span>Status</span>
+                                                <span>Method</span>
+                                            </div>
+                                            <ul className="divide-y divide-white/8">
+                                                {donations.map((d) => (
+                                                    <li
+                                                        key={d.id}
+                                                        className="grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr_1fr] gap-1 sm:gap-3 px-4 py-3 text-sm"
+                                                    >
+                                                        <span className="text-white/70">
+                                                            {new Date(d.created_at).toLocaleDateString(undefined, {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric',
+                                                            })}
+                                                        </span>
+                                                        <span className="text-white font-medium">
+                                                            {formatDonationAmount(d.amount, d.currency)}
+                                                        </span>
+                                                        <span className="text-white/60 capitalize">{d.status || '—'}</span>
+                                                        <span className="text-white/50 capitalize">{d.provider}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            )}
+
                             {/* Danger Zone Section */}
                             {activeSection === 'danger' && (
                                 <motion.div
@@ -617,7 +721,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-red-400 mb-1">Danger Zone</h2>
-                                    <p className="text-white/40 text-sm mb-6">Irreversible actions that affect your account</p>
+                                    <p className="text-white/40 text-sm mb-4">Irreversible actions that affect your account</p>
 
                                     <div className="p-6 bg-red-500/5 border border-red-500/20 rounded-xl">
                                         <div className="flex items-start gap-4 mb-6">
@@ -627,11 +731,23 @@ export default function SettingsPage() {
                                             <div>
                                                 <h3 className="text-white font-medium mb-1">Delete Account</h3>
                                                 <p className="text-white/40 text-sm">
-                                                    Permanently delete your account and all associated data. This action cannot be undone.
+                                                    Permanently delete your account, posts, comments, and uploaded media.
+                                                    This cannot be undone. You can sign up again later with the same email.
                                                 </p>
                                             </div>
                                         </div>
 
+                                        {!showDeleteConfirm ? (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => setShowDeleteConfirm(true)}
+                                                className="h-11 border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-xl flex items-center gap-2"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                I want to delete my account
+                                            </Button>
+                                        ) : (
                                         <form
                                             onSubmit={async (e) => {
                                                 e.preventDefault()
@@ -642,11 +758,18 @@ export default function SettingsPage() {
                                                     formData.set('password', deleteForm.password)
                                                 }
                                                 formData.set('confirmText', deleteForm.confirmText)
+                                                formData.set('acknowledged', deleteForm.acknowledged ? 'true' : 'false')
                                                 const result = await deleteAccount(formData)
-                                                handleResult(result)
+                                                setIsSubmitting(false)
+                                                if (result) handleResult(result)
                                             }}
                                             className="space-y-4"
                                         >
+                                            <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-xs text-red-300/90 space-y-1">
+                                                <p className="font-medium text-red-300">This is permanent.</p>
+                                                <p>Your profile, posts, comments, reactions, and media files will be removed.</p>
+                                            </div>
+
                                             {!user?.isOAuthOnly && (
                                                 <div className="space-y-1">
                                                     <label className="text-xs font-medium text-white/50">Confirm Password</label>
@@ -683,15 +806,46 @@ export default function SettingsPage() {
                                                 />
                                             </div>
 
-                                            <Button
-                                                type="submit"
-                                                disabled={isSubmitting || deleteForm.confirmText !== 'DELETE' || (!user?.isOAuthOnly && !deleteForm.password)}
-                                                className="h-11 bg-red-600 hover:bg-red-500 text-white rounded-xl flex items-center gap-2"
-                                            >
-                                                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                                                Delete My Account
-                                            </Button>
+                                            <label className="flex items-start gap-3 cursor-pointer select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={deleteForm.acknowledged}
+                                                    onChange={(e) => setDeleteForm(d => ({ ...d, acknowledged: e.target.checked }))}
+                                                    className="mt-0.5 h-4 w-4 rounded border-red-500/40 bg-transparent text-red-500 focus:ring-red-500/30"
+                                                />
+                                                <span className="text-xs text-white/50">
+                                                    I understand this is irreversible and all my data will be permanently deleted.
+                                                </span>
+                                            </label>
+
+                                            <div className="flex flex-col sm:flex-row gap-3">
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={() => {
+                                                        setShowDeleteConfirm(false)
+                                                        setDeleteForm({ password: '', confirmText: '', acknowledged: false })
+                                                    }}
+                                                    className="h-11 border-white/10 text-white/70 hover:bg-white/5 rounded-xl"
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    type="submit"
+                                                    disabled={
+                                                        isSubmitting ||
+                                                        deleteForm.confirmText !== 'DELETE' ||
+                                                        !deleteForm.acknowledged ||
+                                                        (!user?.isOAuthOnly && !deleteForm.password)
+                                                    }
+                                                    className="h-11 bg-red-600 hover:bg-red-500 text-white rounded-xl flex items-center gap-2 disabled:opacity-40"
+                                                >
+                                                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                                                    Permanently Delete Account
+                                                </Button>
+                                            </div>
                                         </form>
+                                        )}
                                     </div>
                                 </motion.div>
                             )}

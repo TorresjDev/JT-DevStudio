@@ -8,8 +8,8 @@
 		"build:webpack": "next build --webpack",
 		"start": "next start",
 		"lint": "eslint .",
-		"test": "vitest",
-		"test:coverage": "vitest run --coverage"
+		"test": "node scripts/run-vitest.mjs",
+		"test:coverage": "node scripts/run-vitest.mjs run --coverage"
 	},
 	"dependencies": {
 		"@heroui/navbar": "^2.2.30",

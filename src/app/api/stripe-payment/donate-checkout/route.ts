@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "../../../../lib/stripe";
 import { paymentRateLimiter, checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";
 
 // Validation schema for donation amount
@@ -48,6 +49,13 @@ export async function POST(req: Request) {
 		const { amount } = validation.data;
 		const stripe = getStripe();
 
+		// Link logged-in donors so Settings can show their payment history.
+		// Anonymous donations omit client_reference_id on purpose.
+		const supabase = await createClient();
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
+
 		const session = await stripe.checkout.sessions.create({
 			submit_type: "donate",
 			payment_method_types: ["card"],
@@ -66,6 +74,7 @@ export async function POST(req: Request) {
 				},
 			],
 			mode: "payment",
+			...(user?.id ? { client_reference_id: user.id } : {}),
 			success_url: `${process.env.SITE_URL}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${process.env.SITE_URL}/support/donations`,
 		});

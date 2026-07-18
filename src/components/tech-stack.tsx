@@ -48,7 +48,7 @@ const TECH_STACK = [
 
 export function TechStackDisplay() {
 	return (
-		<div className="space-y-8 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+		<div className="space-y-5 max-h-[360px] md:max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
 			{TECH_STACK.map((category) => (
 				<div key={category.category} className="space-y-4">
 					<div className="flex items-center gap-2 sticky top-0 bg-background/80 backdrop-blur-md py-1 z-10">
@@ -57,7 +57,7 @@ export function TechStackDisplay() {
 							{category.category.toUpperCase()}
 						</h3>
 					</div>
-					<div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 gap-3">
+					<div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
 						{category.items.map((item) => (
 							<div
 								key={item.name}

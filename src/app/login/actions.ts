@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 
 import { createClient } from '@/utils/supabase/server'
-import { signupSchema, loginSchema } from '@/lib/validations/auth-schemas'
+import { signupSchema, loginSchema, resetRequestSchema, resetPasswordSchema } from '@/lib/validations/auth-schemas'
 import { authRateLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 export type AuthResult = {
@@ -145,7 +145,93 @@ export async function signout() {
 }
 
 /**
+ * Request a password reset email
+ *
+ * Always returns success for valid input (whether or not an account exists)
+ * to avoid leaking which emails are registered.
+ */
+export async function requestPasswordReset(formData: FormData): Promise<AuthResult> {
+  const clientIp = await getClientIp()
+  const rateLimitResult = await checkRateLimit(authRateLimiter, `reset-request:${clientIp}`)
+  if (!rateLimitResult.success) {
+    return { success: false, error: 'Too many reset requests. Please try again later.' }
+  }
+
+  const validation = resetRequestSchema.safeParse({
+    email: formData.get('email'),
+  })
+
+  if (!validation.success) {
+    return { success: false, error: validation.error.issues[0].message }
+  }
+
+  const siteUrl = process.env.SITE_URL
+  if (!siteUrl) {
+    return { success: false, error: 'Password reset is not available right now. Please try again later.' }
+  }
+
+  const supabase = await createClient()
+  const { error } = await supabase.auth.resetPasswordForEmail(validation.data.email, {
+    redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
+  })
+
+  if (error && process.env.NODE_ENV === 'development') {
+    console.error('Password reset request error:', error)
+  }
+
+  // Deliberately generic: do not reveal whether the email exists
+  return { success: true }
+}
+
+/**
+ * Set a new password after following a recovery link
+ *
+ * Requires the recovery session created by /auth/callback exchanging the
+ * recovery code. Fails clearly if the link was invalid or expired.
+ */
+export async function updatePasswordFromRecovery(formData: FormData): Promise<AuthResult> {
+  const clientIp = await getClientIp()
+  const rateLimitResult = await checkRateLimit(authRateLimiter, `reset-update:${clientIp}`)
+  if (!rateLimitResult.success) {
+    return { success: false, error: 'Too many attempts. Please try again later.' }
+  }
+
+  const validation = resetPasswordSchema.safeParse({
+    password: formData.get('password'),
+    confirmPassword: formData.get('confirmPassword'),
+  })
+
+  if (!validation.success) {
+    return { success: false, error: validation.error.issues[0].message }
+  }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return {
+      success: false,
+      error: 'Your reset link is invalid or has expired. Please request a new one.',
+    }
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password: validation.data.password,
+  })
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath('/', 'layout')
+  return { success: true, redirectTo: '/' }
+}
+
+/**
  * Sign in with GitHub OAuth
+ *
+ * Redirect URI used here must match Supabase Auth → URL Configuration
+ * and the provider's allowed callbacks. See docs/auth-setup.md.
  */
 export async function signInWithGithub() {
   const siteUrl = process.env.SITE_URL
@@ -153,7 +239,7 @@ export async function signInWithGithub() {
     if (process.env.NODE_ENV === 'development') {
       console.error('SITE_URL environment variable is not configured')
     }
-    redirect('/error')
+    redirect('/login?error=oauth_config')
   }
 
   const supabase = await createClient()
@@ -168,16 +254,23 @@ export async function signInWithGithub() {
     if (process.env.NODE_ENV === 'development') {
       console.error('GitHub sign in error:', error)
     }
-    redirect('/error')
+    redirect('/login?error=oauth_provider')
   }
 
   if (data.url) {
     redirect(data.url)
   }
+
+  redirect('/login?error=oauth_unknown')
 }
 
 /**
  * Sign in with Google OAuth
+ *
+ * App redirect: `${SITE_URL}/auth/callback`
+ * Supabase provider callback (paste into Google Cloud): 
+ *   https://<project-ref>.supabase.co/auth/v1/callback
+ * See docs/auth-setup.md for rotating a deleted Google client.
  */
 export async function signInWithGoogle() {
   const siteUrl = process.env.SITE_URL
@@ -185,7 +278,7 @@ export async function signInWithGoogle() {
     if (process.env.NODE_ENV === 'development') {
       console.error('SITE_URL environment variable is not configured')
     }
-    redirect('/error')
+    redirect('/login?error=oauth_config')
   }
 
   const supabase = await createClient()
@@ -204,10 +297,12 @@ export async function signInWithGoogle() {
     if (process.env.NODE_ENV === 'development') {
       console.error('Google sign in error:', error)
     }
-    redirect('/error')
+    redirect('/login?error=oauth_provider')
   }
 
   if (data.url) {
     redirect(data.url)
   }
+
+  redirect('/login?error=oauth_unknown')
 }

@@ -67,9 +67,9 @@ const fadeUp = {
 
 export default function LandingPage() {
 	return (
-		<main className="space-y-32 px-4 md:px-10 py-16 text-foreground max-w-7xl mx-auto">
+		<main className="space-y-16 md:space-y-20 px-4 md:px-10 py-8 md:py-10 text-foreground max-w-7xl mx-auto">
 			{/* ═══════════════ HERO ═══════════════ */}
-			<section className="text-center pt-8 md:pt-16">
+			<section className="text-center pt-2 md:pt-6">
 				<motion.div
 					initial={{ opacity: 0, scale: 0.95 }}
 					animate={{ opacity: 1, scale: 1 }}
@@ -114,7 +114,7 @@ export default function LandingPage() {
 					initial="hidden"
 					whileInView="visible"
 					viewport={{ once: true, margin: "-80px" }}
-					className="text-center mb-12"
+					className="text-center mb-6 md:mb-8"
 				>
 					<motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold">
 						What We Do
@@ -136,7 +136,7 @@ export default function LandingPage() {
 						>
 							<Link
 								href="/services"
-								className="group block p-8 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-xl hover:shadow-[#DAA520]/5 transition-all duration-300"
+								className="group block p-5 md:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-xl hover:shadow-[#DAA520]/5 transition-all duration-300"
 							>
 								<div className="p-3 rounded-xl bg-[#DAA520]/10 w-fit mb-5 group-hover:bg-[#DAA520]/20 transition-colors">
 									<service.icon className="w-7 h-7 text-[#DAA520]" />
@@ -167,7 +167,7 @@ export default function LandingPage() {
 					initial="hidden"
 					whileInView="visible"
 					viewport={{ once: true, margin: "-80px" }}
-					className="text-center mb-12"
+					className="text-center mb-6 md:mb-8"
 				>
 					<motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold">
 						Featured Builds
@@ -189,7 +189,7 @@ export default function LandingPage() {
 						>
 							<Link
 								href={project.href}
-								className="group block p-8 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-xl hover:shadow-[#DAA520]/5 transition-all duration-300 h-full flex flex-col"
+								className="group block p-5 md:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-xl hover:shadow-[#DAA520]/5 transition-all duration-300 h-full flex flex-col"
 							>
 								<div className="flex items-center justify-between mb-4">
 									<h3 className="text-xl font-bold group-hover:text-[#DAA520] transition-colors">
@@ -217,7 +217,7 @@ export default function LandingPage() {
 					initial="hidden"
 					whileInView="visible"
 					viewport={{ once: true, margin: "-80px" }}
-					className="relative p-8 md:p-12 rounded-3xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden"
+					className="relative p-6 md:p-8 rounded-3xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden"
 				>
 					<div className="absolute -inset-1 bg-linear-to-r from-[#DAA520]/5 to-amber-500/5 rounded-3xl blur-xl"></div>
 					<div className="relative max-w-3xl mx-auto text-center">
@@ -247,7 +247,7 @@ export default function LandingPage() {
 			</section>
 
 			{/* ═══════════════ CTA ═══════════════ */}
-			<section className="text-center pb-8">
+			<section className="text-center pb-2">
 				<motion.div
 					initial="hidden"
 					whileInView="visible"

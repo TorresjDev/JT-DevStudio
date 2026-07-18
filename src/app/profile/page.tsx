@@ -100,10 +100,10 @@ export default async function ProfilePage() {
 	return (
 		<section
 			id="profile"
-			className="w-full max-w-7xl mx-auto px-4 py-8 sm:px-6 md:py-12 md:px-8 space-y-12 sm:space-y-16 min-h-screen overflow-x-hidden"
+			className="w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 md:py-8 md:px-8 space-y-8 md:space-y-10 overflow-x-hidden"
 		>
 			{/* ═══════════════ PROFILE HEADER ═══════════════ */}
-			<div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 animate-in fade-in zoom-in duration-500">
+			<div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 animate-in fade-in zoom-in duration-500">
 				{profile && (
 					<div className="relative group shrink-0">
 						<div className="absolute -inset-1.5 bg-linear-to-r from-[#DAA520] to-amber-600 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
@@ -169,27 +169,27 @@ export default async function ProfilePage() {
 			</div>
 
 			{/* ═══════════════ TECH STACK ═══════════════ */}
-			<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-100">
+			<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-100">
 				<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Tech Stack</h2>
-				<div className="p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm shadow-xl">
+				<div className="p-4 md:p-5 rounded-2xl border border-border bg-card/40 backdrop-blur-sm shadow-xl">
 					<TechStackDisplay />
 				</div>
 			</section>
 
 			{/* ═══════════════ EXPERIENCE TIMELINE ═══════════════ */}
-			<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-200">
+			<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-200">
 				<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Experience</h2>
 				<div className="relative">
 					{/* Timeline line */}
 					<div className="absolute left-[19px] top-0 bottom-0 w-px bg-border"></div>
 
-					<div className="space-y-6">
+					<div className="space-y-3">
 						{timeline.map((item, i) => (
 							<div key={i} className="flex gap-3 sm:gap-4 relative group">
 								<div className="relative z-10 p-2 rounded-xl bg-card border border-border group-hover:border-[#DAA520]/30 transition-colors shrink-0 h-fit">
 									<item.icon className="w-5 h-5 text-[#DAA520]" />
 								</div>
-								<div className="pb-6 min-w-0">
+								<div className="pb-3 min-w-0">
 									<div className="flex items-start sm:items-center gap-x-3 gap-y-1 flex-wrap">
 										<h3 className="font-bold text-foreground group-hover:text-[#DAA520] transition-colors">
 											{item.role}
@@ -213,7 +213,7 @@ export default async function ProfilePage() {
 
 			{/* ═══════════════ FEATURED PROJECTS (top repos by stars) ═══════════════ */}
 			{featuredRepos.length > 0 && (
-				<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-300">
+				<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-300">
 					<div className="flex items-center justify-between gap-4">
 						<div>
 							<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Featured Projects</h2>
@@ -229,7 +229,7 @@ export default async function ProfilePage() {
 							</Link>
 						)}
 					</div>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 						{featuredRepos.map((repo) => (
 							<Link
 								key={repo.id}
@@ -270,7 +270,7 @@ export default async function ProfilePage() {
 
 			{/* ═══════════════ GITHUB ACTIVITY ═══════════════ */}
 			{profile && (
-				<section className="space-y-6 animate-in slide-in-from-bottom-5 duration-700 delay-400">
+				<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-400">
 					<div className="flex justify-between items-center gap-4">
 						<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">GitHub Activity</h2>
 						<Link
@@ -311,7 +311,7 @@ export default async function ProfilePage() {
 			)}
 
 			{/* ═══════════════ CTA ═══════════════ */}
-			<section className="flex flex-col items-center justify-center p-8 rounded-2xl bg-linear-to-b from-accent/10 to-transparent border border-border backdrop-blur-sm text-center space-y-4">
+			<section className="flex flex-col items-center justify-center p-6 rounded-2xl bg-linear-to-b from-accent/10 to-transparent border border-border backdrop-blur-sm text-center space-y-4">
 				<h2 className="text-2xl font-bold text-[#DAA520]">Let&apos;s Work Together</h2>
 				<p className="text-muted-foreground max-w-md">
 					Have a project in mind or want to discuss an opportunity? I&apos;m always open to new collaborations.
