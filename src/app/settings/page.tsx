@@ -208,7 +208,7 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] overflow-hidden relative pt-16">
+        <div className="min-h-[calc(100vh-3.5rem)] bg-[#0a0a0a] overflow-hidden relative pt-4">
             {/* Dynamic Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-blue-500/5 blur-[120px] rounded-full" />
@@ -220,7 +220,7 @@ export default function SettingsPage() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-8"
+                    className="mb-4 md:mb-5"
                 >
                     <h1 className="text-3xl font-bold bg-linear-to-r from-white to-white/60 bg-clip-text text-transparent">
                         Settings
@@ -285,7 +285,7 @@ export default function SettingsPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white/3 backdrop-blur-xl border border-white/8 rounded-2xl p-6"
+                        className="bg-white/3 backdrop-blur-xl border border-white/8 rounded-2xl p-5 md:p-6"
                     >
                         <AnimatePresence mode="wait">
                             {/* Profile Section */}
@@ -297,7 +297,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Profile</h2>
-                                    <p className="text-white/40 text-sm mb-6">Update your personal information</p>
+                                    <p className="text-white/40 text-sm mb-4">Update your personal information</p>
 
                                     <form
                                         onSubmit={async (e) => {
@@ -310,7 +310,7 @@ export default function SettingsPage() {
                                             const result = await updateProfile(formData)
                                             handleResult(result)
                                         }}
-                                        className="space-y-5"
+                                        className="space-y-4"
                                     >
                                         <div className="space-y-1">
                                             <label className="text-xs font-medium text-white/50">Display Name</label>
@@ -356,7 +356,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Account</h2>
-                                    <p className="text-white/40 text-sm mb-6">Manage your username and account details</p>
+                                    <p className="text-white/40 text-sm mb-4">Manage your username and account details</p>
 
                                     {/* Email (read-only) */}
                                     <div className="mb-6 p-4 bg-white/2 border border-white/10 rounded-xl">
@@ -380,7 +380,7 @@ export default function SettingsPage() {
                                             const result = await changeUsername(formData)
                                             handleResult(result)
                                         }}
-                                        className="space-y-5"
+                                        className="space-y-4"
                                     >
                                         <div className="space-y-1">
                                             <label className="text-xs font-medium text-white/50">Username</label>
@@ -431,7 +431,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Security</h2>
-                                    <p className="text-white/40 text-sm mb-6">Update your password and security settings</p>
+                                    <p className="text-white/40 text-sm mb-4">Update your password and security settings</p>
 
                                     {user?.isOAuthOnly ? (
                                         <div className="p-6 bg-white/2 border border-white/10 rounded-xl text-center">
@@ -457,7 +457,7 @@ export default function SettingsPage() {
                                                 }
                                                 handleResult(result)
                                             }}
-                                            className="space-y-5"
+                                            className="space-y-4"
                                         >
                                             <div className="space-y-1">
                                                 <label className="text-xs font-medium text-white/50">Current Password</label>
@@ -556,7 +556,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-white mb-1">Notifications</h2>
-                                    <p className="text-white/40 text-sm mb-6">Control your email notification preferences</p>
+                                    <p className="text-white/40 text-sm mb-4">Control your email notification preferences</p>
 
                                     <form
                                         onSubmit={async (e) => {
@@ -618,7 +618,7 @@ export default function SettingsPage() {
                                     exit={{ opacity: 0, x: -20 }}
                                 >
                                     <h2 className="text-xl font-semibold text-red-400 mb-1">Danger Zone</h2>
-                                    <p className="text-white/40 text-sm mb-6">Irreversible actions that affect your account</p>
+                                    <p className="text-white/40 text-sm mb-4">Irreversible actions that affect your account</p>
 
                                     <div className="p-6 bg-red-500/5 border border-red-500/20 rounded-xl">
                                         <div className="flex items-start gap-4 mb-6">

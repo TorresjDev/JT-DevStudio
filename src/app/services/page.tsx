@@ -103,13 +103,13 @@ export default function ServicesPage() {
 	return (
 		<section
 			id="services"
-			className="w-full mx-auto max-w-7xl px-4 py-8 md:py-12 md:px-8 space-y-16 min-h-screen overflow-y-auto"
+			className="w-full mx-auto max-w-7xl px-4 py-6 md:py-8 md:px-8 space-y-10 md:space-y-12 overflow-y-auto"
 		>
 			{/* Header */}
 			<motion.div
 				initial="hidden"
 				animate="visible"
-				className="text-center max-w-3xl mx-auto space-y-4"
+				className="text-center max-w-3xl mx-auto space-y-3"
 			>
 				<motion.p variants={fadeUp} custom={0} className="text-sm font-semibold tracking-[0.25em] uppercase text-[#DAA520]/80">
 					Services
@@ -123,7 +123,7 @@ export default function ServicesPage() {
 			</motion.div>
 
 			{/* Service Cards — 2×4 on md, 4×2 on xl so 8 cards never leave a lopsided row */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
+			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
 				{services.map((service, i) => (
 					<motion.div
 						key={service.title}
@@ -135,8 +135,8 @@ export default function ServicesPage() {
 						className="group relative"
 					>
 						<div className="absolute -inset-0.5 bg-linear-to-r from-[#DAA520]/10 to-amber-500/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-						<div className="relative p-6 md:p-8 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-[#DAA520]/30 transition-all duration-300 h-full flex flex-col">
-							<div className="p-3 rounded-xl bg-[#DAA520]/10 w-fit mb-5 group-hover:bg-[#DAA520]/20 transition-colors">
+						<div className="relative p-5 md:p-6 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-[#DAA520]/30 transition-all duration-300 h-full flex flex-col">
+							<div className="p-3 rounded-xl bg-[#DAA520]/10 w-fit mb-3 group-hover:bg-[#DAA520]/20 transition-colors">
 								<service.icon className="w-7 h-7 text-[#DAA520]" />
 							</div>
 
@@ -148,7 +148,7 @@ export default function ServicesPage() {
 								{service.desc}
 							</p>
 
-							<div className="space-y-2 mb-6">
+							<div className="space-y-2 mb-4">
 								{service.features.map((feature) => (
 									<div key={feature} className="flex items-start gap-2 text-sm text-muted-foreground">
 										<CheckCircle className="w-4 h-4 text-[#DAA520]/60 shrink-0 mt-0.5" />
@@ -170,7 +170,7 @@ export default function ServicesPage() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, margin: "-80px" }}
-				className="relative p-8 md:p-12 rounded-3xl border border-border bg-card/30 backdrop-blur-sm text-center max-w-3xl mx-auto"
+				className="relative p-6 md:p-8 rounded-3xl border border-border bg-card/30 backdrop-blur-sm text-center max-w-3xl mx-auto"
 			>
 				<motion.h2 variants={fadeUp} custom={0} className="text-2xl md:text-3xl font-bold mb-4">
 					Not sure what you need?
