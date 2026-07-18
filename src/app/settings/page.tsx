@@ -21,6 +21,7 @@ import {
     Shield,
     AlertTriangle,
     Loader2,
+    Receipt,
 } from 'lucide-react'
 import {
     changePassword,
@@ -30,6 +31,7 @@ import {
     updateNotificationPreferences,
     getCurrentProfile,
     checkUsernameAvailable,
+    getUserDonations,
     type SettingsResult,
 } from './actions'
 import { validatePasswordStrength } from '@/lib/validations/auth-schemas'
@@ -88,7 +90,16 @@ function PasswordRequirements({
     )
 }
 
-type Section = 'profile' | 'account' | 'security' | 'notifications' | 'danger'
+type Section = 'profile' | 'account' | 'security' | 'notifications' | 'billing' | 'danger'
+
+type DonationRow = {
+    id: string
+    provider: string
+    amount: number | null
+    currency: string | null
+    status: string | null
+    created_at: string
+}
 
 interface ProfileData {
     id: string
@@ -123,6 +134,8 @@ export default function SettingsPage() {
     const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmNewPassword: '' })
     const [notificationForm, setNotificationForm] = useState({ securityAlerts: true, emailUpdates: true })
     const [deleteForm, setDeleteForm] = useState({ password: '', confirmText: '', acknowledged: false })
+    const [donations, setDonations] = useState<DonationRow[]>([])
+    const [donationsLoading, setDonationsLoading] = useState(false)
 
     // UI states
     const [showCurrentPassword, setShowCurrentPassword] = useState(false)
@@ -158,6 +171,23 @@ export default function SettingsPage() {
         }
         loadProfile()
     }, [router])
+
+    // Load payment history when Billing is opened
+    useEffect(() => {
+        if (activeSection !== 'billing') return
+        let cancelled = false
+        setDonationsLoading(true)
+        getUserDonations().then((result) => {
+            if (cancelled) return
+            if (result.error) {
+                setError(result.error)
+            } else {
+                setDonations(result.donations)
+            }
+            setDonationsLoading(false)
+        })
+        return () => { cancelled = true }
+    }, [activeSection])
 
     // Debounced username check
     const checkUsername = useDebounce(async (username: string) => {
@@ -196,8 +226,22 @@ export default function SettingsPage() {
         { id: 'account' as Section, label: 'Account', icon: AtSign },
         { id: 'security' as Section, label: 'Security', icon: Lock },
         { id: 'notifications' as Section, label: 'Notifications', icon: Bell },
+        { id: 'billing' as Section, label: 'Payment History', icon: Receipt },
         { id: 'danger' as Section, label: 'Danger Zone', icon: Trash2, danger: true },
     ]
+
+    const formatDonationAmount = (amount: number | null, currency: string | null) => {
+        if (amount == null) return '—'
+        const code = (currency || 'usd').toUpperCase()
+        try {
+            return new Intl.NumberFormat(undefined, {
+                style: 'currency',
+                currency: code,
+            }).format(amount)
+        } catch {
+            return `${amount} ${code}`
+        }
+    }
 
     if (isLoading) {
         return (
@@ -606,6 +650,65 @@ export default function SettingsPage() {
                                             Save Preferences
                                         </Button>
                                     </form>
+                                </motion.div>
+                            )}
+
+                            {/* Payment History Section */}
+                            {activeSection === 'billing' && (
+                                <motion.div
+                                    key="billing"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                >
+                                    <h2 className="text-xl font-semibold text-white mb-1">Payment History</h2>
+                                    <p className="text-white/40 text-sm mb-4">
+                                        Donations you made while signed in. Anonymous gifts are not listed here.
+                                    </p>
+
+                                    {donationsLoading ? (
+                                        <div className="py-12 flex justify-center">
+                                            <Loader2 className="w-6 h-6 text-white/30 animate-spin" />
+                                        </div>
+                                    ) : donations.length === 0 ? (
+                                        <div className="rounded-xl border border-white/10 bg-white/2 p-8 text-center">
+                                            <Receipt className="w-8 h-8 text-white/25 mx-auto mb-3" />
+                                            <p className="text-white/70 text-sm font-medium mb-1">No payments yet</p>
+                                            <p className="text-white/40 text-xs max-w-sm mx-auto">
+                                                When you donate while logged in, those payments will show up here.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="rounded-xl border border-white/10 overflow-hidden">
+                                            <div className="hidden sm:grid grid-cols-[1.2fr_1fr_1fr_1fr] gap-3 px-4 py-2.5 text-[11px] uppercase tracking-wide text-white/35 border-b border-white/8 bg-white/2">
+                                                <span>Date</span>
+                                                <span>Amount</span>
+                                                <span>Status</span>
+                                                <span>Method</span>
+                                            </div>
+                                            <ul className="divide-y divide-white/8">
+                                                {donations.map((d) => (
+                                                    <li
+                                                        key={d.id}
+                                                        className="grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr_1fr] gap-1 sm:gap-3 px-4 py-3 text-sm"
+                                                    >
+                                                        <span className="text-white/70">
+                                                            {new Date(d.created_at).toLocaleDateString(undefined, {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric',
+                                                            })}
+                                                        </span>
+                                                        <span className="text-white font-medium">
+                                                            {formatDonationAmount(d.amount, d.currency)}
+                                                        </span>
+                                                        <span className="text-white/60 capitalize">{d.status || '—'}</span>
+                                                        <span className="text-white/50 capitalize">{d.provider}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
                                 </motion.div>
                             )}
 

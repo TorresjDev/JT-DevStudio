@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { paymentRateLimiter, checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { createClient } from "@/utils/supabase/server";
 
 // Validate environment variable exists
 const COINBASE_API_KEY = process.env.COINBASE_API_KEY;
@@ -70,6 +71,11 @@ export async function POST(request: Request) {
 		const { amount } = validation.data;
 		const siteUrl = process.env.SITE_URL || "http://localhost:3000";
 
+		const supabase = await createClient();
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
+
 		// Create the charge using Coinbase Commerce API
 		const response = await fetch(
 			"https://api.commerce.coinbase.com/charges",
@@ -89,6 +95,10 @@ export async function POST(request: Request) {
 						amount: amount,
 						currency: "USD",
 					},
+					// Coinbase has no client_reference_id; use metadata for the same linkage
+					metadata: user?.id
+						? { user_id: user.id }
+						: {},
 					redirect_url: `${siteUrl}/thank-you?method=crypto&amount=${amount}`,
 					cancel_url: `${siteUrl}/support/donations`,
 				}),

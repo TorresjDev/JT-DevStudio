@@ -76,6 +76,7 @@ export async function POST(req: Request) {
 					currency: session.currency ?? null,
 					status: session.payment_status ?? "completed",
 					email: session.customer_details?.email ?? null,
+					user_id: session.client_reference_id ?? null,
 				});
 
 				if (duplicate) {

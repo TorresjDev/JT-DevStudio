@@ -77,6 +77,11 @@ export async function POST(req: Request) {
 				}
 
 				try {
+					const metaUserId =
+						typeof charge?.metadata?.user_id === "string"
+							? charge.metadata.user_id
+							: null;
+
 					const { duplicate } = await recordDonation({
 						provider: "coinbase",
 						provider_event_id: eventId,
@@ -84,6 +89,7 @@ export async function POST(req: Request) {
 						currency,
 						status: "confirmed",
 						email: charge?.metadata?.email ?? null,
+						user_id: metaUserId,
 					});
 
 					if (!duplicate) {

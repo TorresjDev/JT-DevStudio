@@ -463,6 +463,44 @@ export async function deleteAccount(formData: FormData): Promise<SettingsResult>
 }
 
 /**
+ * Fetch the current user's linked donation / payment history.
+ * Anonymous donations (null user_id) never appear here.
+ */
+export async function getUserDonations(): Promise<{
+    donations: Array<{
+        id: string
+        provider: string
+        amount: number | null
+        currency: string | null
+        status: string | null
+        created_at: string
+    }>
+    error: string | null
+}> {
+    try {
+        const { supabase, user } = await requireAuth()
+
+        const { data, error } = await supabase
+            .from('donations')
+            .select('id, provider, amount, currency, status, created_at')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(50)
+
+        if (error) {
+            return { donations: [], error: error.message }
+        }
+
+        return { donations: data ?? [], error: null }
+    } catch (error) {
+        return {
+            donations: [],
+            error: error instanceof Error ? error.message : 'An error occurred',
+        }
+    }
+}
+
+/**
  * Request account deletion via email (for OAuth users who can't re-auth)
  */
 export async function requestAccountDeletion(): Promise<SettingsResult> {
