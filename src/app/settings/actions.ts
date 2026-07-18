@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
+import { createServiceClient } from '@/utils/supabase/service'
 import {
     changePasswordSchema,
     changeUsernameSchema,
@@ -12,6 +13,62 @@ import {
     notificationPreferencesSchema,
 } from '@/lib/validations/auth-schemas'
 import { authRateLimiter, checkRateLimit } from '@/lib/rate-limit'
+
+const UGC_MEDIA_BUCKET = 'ugc-media'
+
+/**
+ * Recursively list object paths under a storage prefix (service role).
+ */
+async function listStoragePaths(
+    admin: ReturnType<typeof createServiceClient>,
+    bucket: string,
+    prefix: string
+): Promise<string[]> {
+    const { data, error } = await admin.storage.from(bucket).list(prefix, {
+        limit: 1000,
+        sortBy: { column: 'name', order: 'asc' },
+    })
+
+    if (error || !data?.length) {
+        if (error && process.env.NODE_ENV === 'development') {
+            console.error('Storage list error:', error)
+        }
+        return []
+    }
+
+    const paths: string[] = []
+    for (const item of data) {
+        const path = prefix ? `${prefix}/${item.name}` : item.name
+        // Folders have null metadata in Supabase Storage listings
+        if (item.metadata === null) {
+            paths.push(...(await listStoragePaths(admin, bucket, path)))
+        } else {
+            paths.push(path)
+        }
+    }
+    return paths
+}
+
+/**
+ * Delete all ugc-media objects for a user folder: `{userId}/...`
+ */
+async function deleteUserMediaObjects(
+    admin: ReturnType<typeof createServiceClient>,
+    userId: string
+): Promise<void> {
+    const paths = await listStoragePaths(admin, UGC_MEDIA_BUCKET, userId)
+    if (!paths.length) return
+
+    // remove() accepts batches; chunk to stay under API limits
+    const chunkSize = 100
+    for (let i = 0; i < paths.length; i += chunkSize) {
+        const chunk = paths.slice(i, i + chunkSize)
+        const { error } = await admin.storage.from(UGC_MEDIA_BUCKET).remove(chunk)
+        if (error && process.env.NODE_ENV === 'development') {
+            console.error('Storage remove error:', error)
+        }
+    }
+}
 
 export type SettingsResult = {
     success: boolean
@@ -320,6 +377,16 @@ export async function updateNotificationPreferences(formData: FormData): Promise
 // ACCOUNT DELETION
 // =============================================================================
 
+/**
+ * Permanently delete the current user's account.
+ *
+ * Order of operations (service role for privileged steps):
+ * 1. Re-auth / confirm irreversible intent
+ * 2. Remove ugc-media storage objects under `{userId}/`
+ * 3. Delete auth.users via admin API (cascades profiles → posts, comments,
+ *    post_media, post_reactions, messaging FKs)
+ * 4. Sign out and send the user to a success state on /login
+ */
 export async function deleteAccount(formData: FormData): Promise<SettingsResult> {
     // Rate limiting - strict for deletion
     const clientIp = await getClientIp()
@@ -331,23 +398,26 @@ export async function deleteAccount(formData: FormData): Promise<SettingsResult>
     try {
         const { supabase, user } = await requireAuth()
 
-        // Validate confirmation text
+        const validation = deleteAccountSchema.safeParse({
+            password: formData.get('password') || 'oauth-skip',
+            confirmText: formData.get('confirmText'),
+        })
+
+        // OAuth-only: password field is not collected; only confirmText matters
+        const identities = user.identities || []
+        const isOAuthOnly = !identities.some(id => id.provider === 'email')
+
         const confirmText = formData.get('confirmText') as string
         if (confirmText !== 'DELETE') {
             return { success: false, error: 'Please type DELETE to confirm' }
         }
 
-        // Check if user has password or is OAuth-only
-        const identities = user.identities || []
-        const isOAuthOnly = !identities.some(id => id.provider === 'email')
-
         if (!isOAuthOnly) {
-            // Password user - verify password
-            const password = formData.get('password') as string
-            if (!password) {
-                return { success: false, error: 'Password is required to delete your account' }
+            if (!validation.success) {
+                return { success: false, error: validation.error.issues[0].message }
             }
 
+            const password = formData.get('password') as string
             const { error: signInError } = await supabase.auth.signInWithPassword({
                 email: user.email!,
                 password,
@@ -357,32 +427,38 @@ export async function deleteAccount(formData: FormData): Promise<SettingsResult>
                 return { success: false, error: 'Incorrect password' }
             }
         }
-        // OAuth-only users: confirmText is sufficient since they re-authenticated via OAuth
 
-        // Delete user - this will cascade to profiles and all related data
-        const { error: deleteError } = await supabase.auth.admin.deleteUser(user.id)
-
-        if (deleteError) {
-            // If admin API not available, sign out and show message
-            if (deleteError.message.includes('not authorized')) {
-                // Fallback: just sign out (account will need manual deletion)
-                await supabase.auth.signOut()
-                return {
-                    success: false,
-                    error: 'Account deletion requires admin access. Please contact support.'
-                }
+        const acknowledged = formData.get('acknowledged') === 'true'
+        if (!acknowledged) {
+            return {
+                success: false,
+                error: 'Please confirm that you understand this cannot be undone.',
             }
-            return { success: false, error: deleteError.message }
         }
 
-        // Sign out and redirect
-        await supabase.auth.signOut()
+        const admin = createServiceClient()
+        const userId = user.id
 
+        // Storage first — auth delete does not remove Storage objects
+        await deleteUserMediaObjects(admin, userId)
+
+        const { error: deleteError } = await admin.auth.admin.deleteUser(userId)
+
+        if (deleteError) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Account deletion failed:', deleteError)
+            }
+            return {
+                success: false,
+                error: 'Could not delete your account. Please try again or contact support.',
+            }
+        }
+
+        await supabase.auth.signOut()
     } catch (error) {
         return { success: false, error: error instanceof Error ? error.message : 'An error occurred' }
     }
 
-    // Redirect after successful deletion
     redirect('/login?deleted=true')
 }
 

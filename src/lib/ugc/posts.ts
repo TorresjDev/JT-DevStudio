@@ -88,51 +88,65 @@ async function requirePostAuthor(postId: string, userId: string): Promise<Action
 }
 
 /**
- * Ensure a profile exists for the user
- * Creates one automatically if it doesn't exist (for users who signed up before the trigger was added)
- * 
- * This pulls data from Supabase auth user metadata (which includes GitHub profile info for OAuth users)
+ * Ensure a profile exists for the user.
+ * Uses on-conflict upsert so races with the auth trigger / re-signup never throw.
+ * Never overwrites an existing profile row.
  */
 async function ensureProfileExists(userId: string): Promise<void> {
   const supabase = await createClient()
 
-  // Check if profile already exists
   const { data: existingProfile } = await supabase
     .from('profiles')
     .select('id')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
 
-  if (existingProfile) {
-    return // Profile already exists
-  }
+  if (existingProfile) return
 
-  // Get user metadata from auth
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return
+  if (!user || user.id !== userId) return
 
-  // Extract profile info from user metadata
-  // GitHub OAuth provides: user_name, avatar_url, full_name, etc.
   const metadata = user.user_metadata || {}
-  const username = metadata.user_name || metadata.preferred_username || user.email?.split('@')[0] || null
+  const rawUsername =
+    metadata.user_name ||
+    metadata.preferred_username ||
+    user.email?.split('@')[0] ||
+    `user_${userId.slice(0, 8)}`
+  const username = String(rawUsername)
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '')
+    .slice(0, 20) || `user_${userId.slice(0, 8)}`
   const displayName = metadata.full_name || metadata.name || null
-  const avatarUrl = metadata.avatar_url || null
+  const avatarUrl = metadata.avatar_url || metadata.picture || null
   const bio = metadata.bio || null
 
-  // Create the profile
-  const { error } = await supabase
-    .from('profiles')
-    .insert({
+  const { error } = await supabase.from('profiles').upsert(
+    {
       id: userId,
       username,
       display_name: displayName,
       avatar_url: avatarUrl,
       bio,
-    })
+    },
+    { onConflict: 'id', ignoreDuplicates: true }
+  )
 
   if (error) {
-    console.error('Error creating profile:', error)
-    // Don't throw - we'll let the post creation handle the error
+    // Likely username unique conflict with a different user id
+    const { error: retryError } = await supabase.from('profiles').upsert(
+      {
+        id: userId,
+        username: `${username.slice(0, 13)}_${userId.replace(/-/g, '').slice(0, 6)}`,
+        display_name: displayName,
+        avatar_url: avatarUrl,
+        bio,
+      },
+      { onConflict: 'id', ignoreDuplicates: true }
+    )
+
+    if (retryError) {
+      console.error('Error upserting profile:', retryError)
+    }
   }
 }
 

@@ -90,10 +90,15 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  const [info, setInfo] = useState<string | null>(null)
+
   // Surface friendly OAuth / callback failures instead of raw provider screens
   useEffect(() => {
     const message = getOAuthErrorMessage(searchParams.get('error'))
     if (message) setError(message)
+    if (searchParams.get('deleted') === 'true') {
+      setInfo('Your account has been permanently deleted. You can create a new account anytime with the same email.')
+    }
   }, [searchParams])
 
   // Form field states for validation
@@ -231,6 +236,17 @@ function LoginForm() {
           </div>
 
           <AnimatePresence mode="wait">
+            {info && !error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center gap-2 text-green-400 text-sm"
+              >
+                <Check className="w-4 h-4 shrink-0" />
+                <span>{info}</span>
+              </motion.div>
+            )}
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}

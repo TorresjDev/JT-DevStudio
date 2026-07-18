@@ -122,12 +122,13 @@ export default function SettingsPage() {
     const [usernameForm, setUsernameForm] = useState({ username: '' })
     const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmNewPassword: '' })
     const [notificationForm, setNotificationForm] = useState({ securityAlerts: true, emailUpdates: true })
-    const [deleteForm, setDeleteForm] = useState({ password: '', confirmText: '' })
+    const [deleteForm, setDeleteForm] = useState({ password: '', confirmText: '', acknowledged: false })
 
     // UI states
     const [showCurrentPassword, setShowCurrentPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showDeletePassword, setShowDeletePassword] = useState(false)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
     const [passwordStrength, setPasswordStrength] = useState(validatePasswordStrength(''))
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -627,11 +628,23 @@ export default function SettingsPage() {
                                             <div>
                                                 <h3 className="text-white font-medium mb-1">Delete Account</h3>
                                                 <p className="text-white/40 text-sm">
-                                                    Permanently delete your account and all associated data. This action cannot be undone.
+                                                    Permanently delete your account, posts, comments, and uploaded media.
+                                                    This cannot be undone. You can sign up again later with the same email.
                                                 </p>
                                             </div>
                                         </div>
 
+                                        {!showDeleteConfirm ? (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => setShowDeleteConfirm(true)}
+                                                className="h-11 border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-xl flex items-center gap-2"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                I want to delete my account
+                                            </Button>
+                                        ) : (
                                         <form
                                             onSubmit={async (e) => {
                                                 e.preventDefault()
@@ -642,11 +655,18 @@ export default function SettingsPage() {
                                                     formData.set('password', deleteForm.password)
                                                 }
                                                 formData.set('confirmText', deleteForm.confirmText)
+                                                formData.set('acknowledged', deleteForm.acknowledged ? 'true' : 'false')
                                                 const result = await deleteAccount(formData)
-                                                handleResult(result)
+                                                setIsSubmitting(false)
+                                                if (result) handleResult(result)
                                             }}
                                             className="space-y-4"
                                         >
+                                            <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-xs text-red-300/90 space-y-1">
+                                                <p className="font-medium text-red-300">This is permanent.</p>
+                                                <p>Your profile, posts, comments, reactions, and media files will be removed.</p>
+                                            </div>
+
                                             {!user?.isOAuthOnly && (
                                                 <div className="space-y-1">
                                                     <label className="text-xs font-medium text-white/50">Confirm Password</label>
@@ -683,15 +703,46 @@ export default function SettingsPage() {
                                                 />
                                             </div>
 
-                                            <Button
-                                                type="submit"
-                                                disabled={isSubmitting || deleteForm.confirmText !== 'DELETE' || (!user?.isOAuthOnly && !deleteForm.password)}
-                                                className="h-11 bg-red-600 hover:bg-red-500 text-white rounded-xl flex items-center gap-2"
-                                            >
-                                                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                                                Delete My Account
-                                            </Button>
+                                            <label className="flex items-start gap-3 cursor-pointer select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={deleteForm.acknowledged}
+                                                    onChange={(e) => setDeleteForm(d => ({ ...d, acknowledged: e.target.checked }))}
+                                                    className="mt-0.5 h-4 w-4 rounded border-red-500/40 bg-transparent text-red-500 focus:ring-red-500/30"
+                                                />
+                                                <span className="text-xs text-white/50">
+                                                    I understand this is irreversible and all my data will be permanently deleted.
+                                                </span>
+                                            </label>
+
+                                            <div className="flex flex-col sm:flex-row gap-3">
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={() => {
+                                                        setShowDeleteConfirm(false)
+                                                        setDeleteForm({ password: '', confirmText: '', acknowledged: false })
+                                                    }}
+                                                    className="h-11 border-white/10 text-white/70 hover:bg-white/5 rounded-xl"
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    type="submit"
+                                                    disabled={
+                                                        isSubmitting ||
+                                                        deleteForm.confirmText !== 'DELETE' ||
+                                                        !deleteForm.acknowledged ||
+                                                        (!user?.isOAuthOnly && !deleteForm.password)
+                                                    }
+                                                    className="h-11 bg-red-600 hover:bg-red-500 text-white rounded-xl flex items-center gap-2 disabled:opacity-40"
+                                                >
+                                                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                                                    Permanently Delete Account
+                                                </Button>
+                                            </div>
                                         </form>
+                                        )}
                                     </div>
                                 </motion.div>
                             )}
