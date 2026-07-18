@@ -36,10 +36,20 @@ export default function ResetPasswordPage() {
   // The recovery link lands on /auth/callback which exchanges the code for a
   // session, then redirects here. No session means the link was bad/expired.
   useEffect(() => {
+    let cancelled = false
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setPageState(user ? 'ready' : 'invalid')
-    })
+
+    async function verifySession() {
+      const { data } = await supabase.auth.getUser()
+      if (!cancelled) {
+        setPageState(data.user ? 'ready' : 'invalid')
+      }
+    }
+
+    void verifySession()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
