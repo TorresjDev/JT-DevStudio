@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import { ThemeProvider } from "./provider";
 import { generateMetadata } from "../lib/metadata";
 import { LayoutContent } from "../components/layout/LayoutContent";
 import { AuthProvider } from "@/context/AuthContext";
+import { CookieConsent } from "@/components/CookieConsent";
+import { ConsentAwareAnalytics } from "@/components/ConsentAwareAnalytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,9 +27,10 @@ export default function RootLayout({
 						defaultTheme="dark"
 					>
 						<LayoutContent>{children}</LayoutContent>
+						<CookieConsent />
 					</ThemeProvider>
 				</AuthProvider>
-				<Analytics />
+				<ConsentAwareAnalytics />
 			</body>
 		</html>
 	);
