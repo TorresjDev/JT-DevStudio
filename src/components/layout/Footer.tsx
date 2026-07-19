@@ -16,6 +16,9 @@ const Footer = () => {
 						Studio — building tools, apps, and experiences that solve real
 						problems.
 					</p>
+					<p className="mt-2 text-sm text-[#C0C0C0]/70">
+						Founded and built by Jesus Torres.
+					</p>
 				</div>
 
 				{/* Navigation */}

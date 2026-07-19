@@ -7,6 +7,7 @@ import { LayoutContent } from "../components/layout/LayoutContent";
 import { AuthProvider } from "@/context/AuthContext";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ConsentAwareAnalytics } from "@/components/ConsentAwareAnalytics";
+import { JsonLd } from "@/components/JsonLd";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={inter.className} suppressHydrationWarning>
+				<JsonLd />
 				<AuthProvider>
 					<ThemeProvider
 						enableSystem
