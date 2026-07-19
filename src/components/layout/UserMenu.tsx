@@ -109,6 +109,7 @@ export default function UserMenu({
 				aria-haspopup="menu"
 				className={cn(
 					'ui-press group flex items-center gap-2 rounded-full p-1 transition-colors',
+					'group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0.5',
 					isOpen ? 'bg-white/8 ring-1 ring-[#DAA520]/25' : 'hover:bg-white/5',
 				)}
 			>
@@ -134,14 +135,14 @@ export default function UserMenu({
 				</div>
 
 				{showName && (
-					<div className="hidden flex-col items-start text-left md:flex">
+					<div className="hidden flex-col items-start text-left md:flex md:group-data-[collapsible=icon]:hidden">
 						<span className="text-xs font-bold leading-none text-white/90">{displayName}</span>
 						<span className="mt-1 text-[10px] leading-none text-white/40">Logged in</span>
 					</div>
 				)}
 				<ChevronDown
 					className={cn(
-						'h-4 w-4 text-white/40 transition-transform duration-300 ease-out',
+						'h-4 w-4 text-white/40 transition-transform duration-300 ease-out group-data-[collapsible=icon]:hidden',
 						isOpen && 'rotate-180 text-[#DAA520]/70',
 					)}
 				/>
