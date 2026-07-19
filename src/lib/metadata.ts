@@ -27,6 +27,9 @@ export function generateMetadata({
 			index: true,
 			follow: true,
 		},
+		verification: {
+			google: "b197pTl16Eoljk4cTSB1utJyxAzwcvHfeS0Jsj4L6s4", 
+		},
 		keywords: [
 			"developer",
 			"portfolio",
