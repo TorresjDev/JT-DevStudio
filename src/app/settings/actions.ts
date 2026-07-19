@@ -8,6 +8,7 @@ import { createServiceClient } from '@/utils/supabase/service'
 import {
     changePasswordSchema,
     changeUsernameSchema,
+    changeEmailSchema,
     updateProfileSchema,
     deleteAccountSchema,
     notificationPreferencesSchema,
@@ -288,6 +289,65 @@ export async function updateProfile(formData: FormData): Promise<SettingsResult>
 
         revalidatePath('/settings')
         return { success: true, message: 'Profile updated successfully' }
+    } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'An error occurred' }
+    }
+}
+
+// =============================================================================
+// EMAIL CHANGE
+// =============================================================================
+
+export async function changeEmail(formData: FormData): Promise<SettingsResult> {
+    // Rate limiting
+    const clientIp = await getClientIp()
+    const rateLimitResult = await checkRateLimit(authRateLimiter, `change-email:${clientIp}`)
+    if (!rateLimitResult.success) {
+        return { success: false, error: 'Too many attempts. Please try again later.' }
+    }
+
+    try {
+        const { supabase, user } = await requireAuth()
+
+        // Validate input
+        const validation = changeEmailSchema.safeParse({
+            email: formData.get('email'),
+        })
+
+        if (!validation.success) {
+            return { success: false, error: validation.error.issues[0].message }
+        }
+
+        const { email } = validation.data
+
+        // OAuth-only accounts manage their email through the provider
+        const identities = user.identities || []
+        const isOAuthOnly = !identities.some(id => id.provider === 'email')
+        if (isOAuthOnly) {
+            return { success: false, error: 'Your email is managed by your sign-in provider.' }
+        }
+
+        if (email === user.email?.toLowerCase()) {
+            return { success: false, error: 'This is already your email address' }
+        }
+
+        // Secure email change: Supabase sends confirmation links to both the
+        // current and new address, and the email only updates after they are
+        // confirmed — so no revalidatePath here.
+        const siteUrl = process.env.SITE_URL
+        const { error: updateError } = await supabase.auth.updateUser(
+            { email },
+            siteUrl ? { emailRedirectTo: `${siteUrl}/auth/callback?next=/settings` } : undefined,
+        )
+
+        if (updateError) {
+            return { success: false, error: updateError.message }
+        }
+
+        return {
+            success: true,
+            message: 'Confirmation links sent. Check both your current and new inboxes to complete the change.',
+        }
     } catch (error) {
         return { success: false, error: error instanceof Error ? error.message : 'An error occurred' }
     }

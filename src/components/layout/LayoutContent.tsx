@@ -24,13 +24,15 @@ function PageFallback() {
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full flex-col overflow-x-hidden">
+      {/* Keep the outer layout out of the scroll-container chain; the window
+          owns vertical scrolling while body clips horizontal overflow. */}
+      <div className="flex flex-col min-h-screen w-full">
         <Navigation />
         {/* Offset for fixed h-14 navbar so content / sidebar sit below it */}
         <div className="relative flex min-h-0 w-full min-w-0 flex-1 pt-14">
           <SidebarNav />
           <SidebarInset className="min-h-0 overflow-x-hidden">
-            <div className="min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto p-1 md:p-2 lg:p-4">
+            <div className="min-h-0 min-w-0 w-full flex-1 overflow-x-hidden p-1 md:p-2 lg:p-4">
               <Suspense fallback={<PageFallback />}>
                 {children}
               </Suspense>

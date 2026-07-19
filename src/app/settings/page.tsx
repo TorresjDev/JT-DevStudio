@@ -22,10 +22,12 @@ import {
     AlertTriangle,
     Loader2,
     Receipt,
+    Mail,
 } from 'lucide-react'
 import {
     changePassword,
     changeUsername,
+    changeEmail,
     updateProfile,
     deleteAccount,
     updateNotificationPreferences,
@@ -131,6 +133,7 @@ export default function SettingsPage() {
     // Form states
     const [profileForm, setProfileForm] = useState({ displayName: '', bio: '' })
     const [usernameForm, setUsernameForm] = useState({ username: '' })
+    const [emailForm, setEmailForm] = useState({ email: '' })
     const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmNewPassword: '' })
     const [notificationForm, setNotificationForm] = useState({ securityAlerts: true, emailUpdates: true })
     const [deleteForm, setDeleteForm] = useState({ password: '', confirmText: '', acknowledged: false })
@@ -408,10 +411,53 @@ export default function SettingsPage() {
                                         <p className="text-foreground mt-1">{user?.email}</p>
                                         {user?.isOAuthOnly && (
                                             <p className="text-xs text-muted-foreground/70 mt-1">
-                                                Authenticated via {user.oauthProvider}
+                                                Authenticated via {user.oauthProvider} — your email is managed by your provider
                                             </p>
                                         )}
                                     </div>
+
+                                    {/* Change email — hidden for OAuth-only accounts */}
+                                    {user && !user.isOAuthOnly && (
+                                        <form
+                                            onSubmit={async (e) => {
+                                                e.preventDefault()
+                                                setIsSubmitting(true)
+                                                clearMessages()
+                                                const formData = new FormData()
+                                                formData.set('email', emailForm.email)
+                                                const result = await changeEmail(formData)
+                                                handleResult(result)
+                                                if (result.success) setEmailForm({ email: '' })
+                                            }}
+                                            className="mb-6 space-y-4"
+                                        >
+                                            <div className="space-y-1">
+                                                <label className="text-xs font-medium text-muted-foreground">New Email</label>
+                                                <div className="relative">
+                                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
+                                                    <Input
+                                                        type="email"
+                                                        value={emailForm.email}
+                                                        onChange={(e) => setEmailForm({ email: e.target.value })}
+                                                        placeholder="you@example.com"
+                                                        className="bg-secondary/50 border-input pl-10 h-11 focus:border-primary focus:ring-primary/20"
+                                                    />
+                                                </div>
+                                                <p className="text-xs text-muted-foreground/70">
+                                                    You&apos;ll need to confirm from both your current and new address before the change takes effect.
+                                                </p>
+                                            </div>
+
+                                            <Button
+                                                type="submit"
+                                                disabled={isSubmitting || !emailForm.email || emailForm.email.trim().toLowerCase() === user.email?.toLowerCase()}
+                                                className="h-11 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl flex items-center gap-2"
+                                            >
+                                                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                                                Update Email
+                                            </Button>
+                                        </form>
+                                    )}
 
                                     <form
                                         onSubmit={async (e) => {

@@ -117,7 +117,7 @@ export default function UserMenu({
 				aria-haspopup="menu"
 				aria-label={displayName}
 				className={cn(
-					'ui-press flex items-center overflow-hidden rounded-full p-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+					'ui-press group flex items-center overflow-hidden rounded-full p-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
 					showName ? 'gap-2' : 'gap-1',
 					'group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0',
 					isOpen ? 'bg-accent ring-1 ring-goldenrod/25' : 'hover:bg-accent/60',
