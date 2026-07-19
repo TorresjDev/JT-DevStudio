@@ -49,7 +49,7 @@ export function SidebarNav() {
 			<SidebarContent className="flex flex-col mt-0">
 				<StudioSidebarGroup />
 			</SidebarContent>
-			<SidebarFooter className="border-t border-white/5 pb-4">
+			<SidebarFooter className="border-t border-white/5 pb-4 group-data-[collapsible=icon]:px-1">
 				<UserMenu dropdownAlign="left" />
 			</SidebarFooter>
 		</Sidebar>

@@ -130,6 +130,16 @@ export const changeUsernameSchema = z.object({
 });
 
 /**
+ * Change email schema - reuses signup email validation
+ */
+export const changeEmailSchema = z.object({
+    email: z.string()
+        .email('Please enter a valid email address')
+        .max(254, 'Email must be less than 254 characters')
+        .toLowerCase(),
+});
+
+/**
  * Update profile schema - display name and bio
  */
 export const updateProfileSchema = z.object({
