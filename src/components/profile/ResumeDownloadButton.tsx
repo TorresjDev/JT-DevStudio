@@ -46,7 +46,7 @@ export function ResumeDownloadButton() {
       <Button
         disabled
         size="sm"
-        className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold h-10 px-4 rounded-xl opacity-60"
+        className="btn-gold font-bold h-10 px-4 rounded-xl opacity-60"
       >
         <FileText className="w-4 h-4 mr-2" />
         Resume
@@ -64,7 +64,7 @@ export function ResumeDownloadButton() {
               <Button
                 disabled
                 size="sm"
-                className="bg-[#DAA520]/40 text-black/60 font-bold h-10 px-4 rounded-xl pointer-events-none"
+                className="bg-goldenrod/40 text-black/60 font-bold h-10 px-4 rounded-xl pointer-events-none"
               >
                 <Lock className="w-4 h-4 mr-2" />
                 Resume
@@ -86,7 +86,7 @@ export function ResumeDownloadButton() {
         onClick={handleDownload}
         disabled={downloading}
         size="sm"
-        className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold h-10 px-4 rounded-xl"
+        className="btn-gold font-bold h-10 px-4 rounded-xl"
       >
         {downloading ? (
           <>

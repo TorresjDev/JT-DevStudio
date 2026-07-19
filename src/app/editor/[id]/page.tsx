@@ -75,7 +75,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
             Draft
           </span>
         ) : (
-          <span className="text-sm font-medium px-3 py-1 rounded-full bg-green-500/10 text-green-500">
+          <span className="text-sm font-medium px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             Published
           </span>
         )}

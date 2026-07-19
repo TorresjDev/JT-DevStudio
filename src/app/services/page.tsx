@@ -111,7 +111,7 @@ export default function ServicesPage() {
 				animate="visible"
 				className="text-center max-w-3xl mx-auto space-y-3"
 			>
-				<motion.p variants={fadeUp} custom={0} className="text-sm font-semibold tracking-[0.25em] uppercase text-[#DAA520]/80">
+				<motion.p variants={fadeUp} custom={0} className="text-sm font-semibold tracking-[0.25em] uppercase text-goldenrod-dark/80 dark:text-goldenrod/80">
 					Services
 				</motion.p>
 				<motion.h1 variants={fadeUp} custom={1} className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-[#DAA520] via-yellow-400 to-[#DAA520]">
@@ -135,12 +135,12 @@ export default function ServicesPage() {
 						className="group relative"
 					>
 						<div className="absolute -inset-0.5 bg-linear-to-r from-[#DAA520]/10 to-amber-500/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-						<div className="relative p-5 md:p-6 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-[#DAA520]/30 transition-all duration-300 h-full flex flex-col">
-							<div className="p-3 rounded-xl bg-[#DAA520]/10 w-fit mb-3 group-hover:bg-[#DAA520]/20 transition-colors">
-								<service.icon className="w-7 h-7 text-[#DAA520]" />
+						<div className="relative p-5 md:p-6 rounded-2xl border border-border bg-card/60 backdrop-blur-sm hover:border-goldenrod/30 transition-all duration-300 h-full flex flex-col">
+							<div className="p-3 rounded-xl bg-goldenrod/10 w-fit mb-3 group-hover:bg-goldenrod/20 transition-colors">
+								<service.icon className="w-7 h-7 text-goldenrod-dark dark:text-goldenrod" />
 							</div>
 
-							<h3 className="text-xl font-bold mb-2 group-hover:text-[#DAA520] transition-colors">
+							<h3 className="text-xl font-bold mb-2 group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors">
 								{service.title}
 							</h3>
 
@@ -151,14 +151,14 @@ export default function ServicesPage() {
 							<div className="space-y-2 mb-4">
 								{service.features.map((feature) => (
 									<div key={feature} className="flex items-start gap-2 text-sm text-muted-foreground">
-										<CheckCircle className="w-4 h-4 text-[#DAA520]/60 shrink-0 mt-0.5" />
+										<CheckCircle className="w-4 h-4 text-goldenrod-dark/70 dark:text-goldenrod/60 shrink-0 mt-0.5" />
 										<span>{feature}</span>
 									</div>
 								))}
 							</div>
 
 							<div className="mt-auto pt-4 border-t border-border">
-								<p className="text-xl md:text-2xl font-bold text-[#DAA520]">{service.price}</p>
+								<p className="text-xl md:text-2xl font-bold text-goldenrod-dark dark:text-goldenrod">{service.price}</p>
 							</div>
 						</div>
 					</motion.div>
@@ -180,7 +180,7 @@ export default function ServicesPage() {
 					get back to you with a recommendation and a quote — no obligation.
 				</motion.p>
 				<motion.div variants={fadeUp} custom={2}>
-					<Button asChild size="lg" className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-8 py-6 text-base rounded-xl">
+					<Button asChild size="lg" className="btn-gold font-bold px-8 py-6 text-base rounded-xl">
 						<Link href="/contact">
 							Let&apos;s Talk <ArrowRight className="w-4 h-4 ml-2" />
 						</Link>

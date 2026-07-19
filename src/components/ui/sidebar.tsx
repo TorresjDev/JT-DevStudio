@@ -237,7 +237,7 @@ const Sidebar = React.forwardRef<
 				{/* This is what handles the sidebar gap on desktop */}
 				<div
 					className={cn(
-						"duration-200 relative h-svh w-[var(--sidebar-width)] bg-transparent transition-[width] ease-linear",
+						"relative h-[calc(100svh-3.5rem)] w-[var(--sidebar-width)] bg-transparent transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
 						"group-data-[collapsible=offcanvas]:w-0",
 						"group-data-[side=right]:rotate-180",
 						variant === "floating" || variant === "inset"
@@ -247,7 +247,7 @@ const Sidebar = React.forwardRef<
 				/>
 				<div
 					className={cn(
-						"duration-200 fixed inset-y-0 z-50 hidden h-svh w-[var(--sidebar-width)] transition-[left,right,width] ease-linear md:flex top-14",
+						"fixed top-14 bottom-0 z-40 hidden w-[var(--sidebar-width)] transition-[left,right,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:flex",
 						side === "left"
 							? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
 							: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -261,7 +261,7 @@ const Sidebar = React.forwardRef<
 				>
 					<div
 						data-sidebar="sidebar"
-						className="flex h-full w-full flex-col bg-sidebar/95 backdrop-blur-xl group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+						className="flex h-full w-full flex-col overflow-hidden bg-sidebar/95 backdrop-blur-xl transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
 					>
 						{children}
 					</div>
@@ -295,7 +295,7 @@ const SidebarTrigger = React.forwardRef<
 			variant="ghost"
 			size="icon"
 			className={cn(
-				"hover:text-[#DAA520]/90 shrink-0 transition-all duration-300 ease-in-out",
+				"hover:text-goldenrod-dark/90 dark:hover:text-goldenrod/90 shrink-0 transition-all duration-300 ease-in-out",
 				inline
 					? // Inline: sits inside the sidebar header (Copilot/Edge style)
 					  "h-8 w-8"
@@ -365,7 +365,7 @@ const SidebarInset = React.forwardRef<
 			className={cn(
 				// min-w-0 is critical: without it a flex-1 item refuses to shrink
 				// below its content's intrinsic width, forcing horizontal page scroll.
-				"relative flex min-h-svh min-w-0 w-full flex-1 flex-col bg-background",
+				"relative flex min-h-svh min-w-0 w-full flex-1 flex-col bg-background transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
 				"peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
 				className
 			)}
@@ -416,7 +416,11 @@ const SidebarFooter = React.forwardRef<
 		<div
 			ref={ref}
 			data-sidebar="footer"
-			className={cn("flex flex-col gap-2 p-2", className)}
+			className={cn(
+				"flex flex-col gap-2 p-2 overflow-hidden transition-[padding] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+				"group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-1",
+				className
+			)}
 			{...props}
 		/>
 	);
@@ -486,8 +490,8 @@ const SidebarGroupLabel = React.forwardRef<
 			ref={ref}
 			data-sidebar="group-label"
 			className={cn(
-				"duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-bold text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-				"group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+				"flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-bold text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+				"group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:pointer-events-none",
 				className
 			)}
 			{...props}
@@ -559,11 +563,11 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
 const sidebarMenuButtonVariants = cva(
-	"peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-[#DAA520] focus-visible:ring-2 active:bg-sidebar-accent active:text-white disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:border data-[active=true]:border-sidebar-border data-[active=true]:font-medium data-[active=true]:text-[#DAA520] data-[active=true]:hover:text-[#DAA520]/90 data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-[#DAA520] group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+	"peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding,color,background-color,border-color,gap] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none hover:bg-sidebar-accent hover:text-goldenrod-dark dark:hover:text-goldenrod focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:border data-[active=true]:border-sidebar-border data-[active=true]:font-medium data-[active=true]:text-goldenrod-dark dark:data-[active=true]:text-goldenrod data-[active=true]:hover:text-goldenrod-dark/90 dark:data-[active=true]:hover:text-goldenrod/90 data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-goldenrod-dark dark:hover:text-goldenrod group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 group-data-[collapsible=icon]:gap-0 [&>span:last-child]:truncate [&>span:last-child]:transition-opacity [&>span:last-child]:duration-200 group-data-[collapsible=icon]:[&>span:last-child]:opacity-0 [&>svg]:size-4 [&>svg]:shrink-0",
 	{
 		variants: {
 			variant: {
-				default: "hover:bg-sidebar-accent hover:text-[#DAA520]",
+				default: "hover:bg-sidebar-accent hover:text-goldenrod-dark dark:hover:text-goldenrod",
 				outline:
 					"bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
 			},
@@ -757,7 +761,7 @@ const SidebarMenuSubItem = React.forwardRef<
 	React.ComponentProps<"li">
 >(({ ...props }, ref) => (
 	<li
-		className=" rounded-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:text-[#C0C0C0] "
+		className=" rounded-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground "
 		ref={ref}
 		{...props}
 	/>
@@ -782,7 +786,7 @@ const SidebarMenuSubButton = React.forwardRef<
 			data-active={isActive}
 			className={cn(
 				"flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground ",
-				"data-[active=true]:bg-sidebar-accent data-[active=true]:text-[#DAA520] data-[active=true]:hover:text-[#DAA520]/90 data-[active=true]:[&>svg]:text-[#DAA520] ",
+				"data-[active=true]:bg-sidebar-accent data-[active=true]:text-goldenrod-dark dark:data-[active=true]:text-goldenrod data-[active=true]:hover:text-goldenrod-dark/90 dark:data-[active=true]:hover:text-goldenrod/90 data-[active=true]:[&>svg]:text-goldenrod-dark dark:data-[active=true]:[&>svg]:text-goldenrod ",
 				size === "sm" && "text-xs",
 				size === "md" && "text-sm",
 				"group-data-[collapsible=icon]:hidden",

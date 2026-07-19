@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
   ]
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background overflow-hidden relative">
+    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-background overflow-hidden relative">
       {/* Dynamic Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/10 blur-[120px] rounded-full" />
@@ -108,15 +108,15 @@ export default function ResetPasswordPage() {
 
           {pageState === 'checking' && (
             <div className="py-12 flex flex-col items-center gap-4">
-              <div className="w-8 h-8 border-2 border-white/20 border-t-blue-500 rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-border border-t-primary rounded-full animate-spin" />
               <p className="text-muted-foreground text-sm">Verifying your reset link...</p>
             </div>
           )}
 
           {pageState === 'invalid' && (
             <div className="text-center">
-              <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center">
-                <AlertCircle className="w-10 h-10 text-red-400" />
+              <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-destructive/10 flex items-center justify-center">
+                <AlertCircle className="w-10 h-10 text-destructive" />
               </div>
               <h1 className="text-3xl font-bold text-foreground mb-3">Link Invalid or Expired</h1>
               <p className="text-muted-foreground text-sm mb-6">
@@ -124,7 +124,7 @@ export default function ResetPasswordPage() {
                 time for security. Request a new one below.
               </p>
               <Link href="/forgot-password">
-                <Button className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2">
+                <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg shadow-primary/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2">
                   <KeyRound className="w-4 h-4" />
                   Request New Reset Link
                 </Button>
@@ -146,16 +146,16 @@ export default function ResetPasswordPage() {
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
-                className="mx-auto mb-6 w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center"
+                className="mx-auto mb-6 w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center"
               >
-                <CheckCircle2 className="w-10 h-10 text-green-400" />
+                <CheckCircle2 className="w-10 h-10 text-emerald-500 dark:text-emerald-400" />
               </motion.div>
               <h1 className="text-3xl font-bold text-foreground mb-3">Password Updated</h1>
               <p className="text-muted-foreground text-sm mb-6">
                 Your password has been changed successfully. You&apos;re signed in and ready to go.
               </p>
               <Link href="/">
-                <Button className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group">
+                <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg shadow-primary/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group">
                   Continue to Dev Studio
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -166,8 +166,8 @@ export default function ResetPasswordPage() {
           {pageState === 'ready' && (
             <>
               <div className="text-center mb-8">
-                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center">
-                  <KeyRound className="w-7 h-7 text-blue-400" />
+                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                  <KeyRound className="w-7 h-7 text-primary" />
                 </div>
                 <h1 className="text-3xl font-bold text-foreground mb-2">Set New Password</h1>
                 <p className="text-muted-foreground text-sm">
@@ -181,7 +181,7 @@ export default function ResetPasswordPage() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-red-400 text-sm"
+                    className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-2 text-destructive text-sm"
                   >
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{error}</span>
@@ -206,12 +206,12 @@ export default function ResetPasswordPage() {
                       }}
                       required
                       autoFocus
-                      className="bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300"
+                      className="bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground transition-colors"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -222,7 +222,7 @@ export default function ResetPasswordPage() {
                         <span
                           key={label}
                           className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                            met ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-white/30'
+                            met ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-muted text-muted-foreground/70'
                           }`}
                         >
                           {met ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
@@ -245,26 +245,26 @@ export default function ResetPasswordPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
-                      className={`bg-white/2 border-white/10 pl-10 pr-16 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300 ${
+                      className={`bg-secondary/50 border-input pl-10 pr-16 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${
                         confirmPassword && password !== confirmPassword
-                          ? 'border-red-500/50'
+                          ? 'border-destructive/60'
                           : confirmPassword && password === confirmPassword
-                            ? 'border-green-500/50'
+                            ? 'border-emerald-500/60'
                             : ''
                       }`}
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                       {confirmPassword && (
                         password === confirmPassword ? (
-                          <Check className="w-4 h-4 text-green-400" />
+                          <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                         ) : (
-                          <X className="w-4 h-4 text-red-400" />
+                          <X className="w-4 h-4 text-destructive" />
                         )
                       )}
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="text-white/30 hover:text-white/60 transition-colors"
+                        className="text-muted-foreground/70 hover:text-foreground transition-colors"
                       >
                         {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -275,10 +275,10 @@ export default function ResetPasswordPage() {
                 <Button
                   type="submit"
                   disabled={isLoading || !passwordStrength.isValid || password !== confirmPassword}
-                  className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                  className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg shadow-primary/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
                   ) : (
                     <>
                       <KeyRound className="w-4 h-4" />

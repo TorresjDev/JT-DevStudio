@@ -89,10 +89,10 @@ export function PostCard({ post, showAuthor = true, index = 0 }: PostCardProps) 
 				className="pointer-events-none absolute -inset-px rounded-xl bg-linear-to-br from-primary/0 via-primary/0 to-primary/0 opacity-0 transition-opacity duration-300 group-hover:from-[#DAA520]/20 group-hover:via-[#DAA520]/5 group-hover:to-transparent group-hover:opacity-100"
 			/>
 
-			<div className="relative overflow-hidden rounded-xl border border-border/50 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-[border-color,box-shadow] duration-300 sm:p-5 md:p-6 group-hover:border-[#DAA520]/30 group-hover:shadow-lg group-hover:shadow-[#DAA520]/10">
+			<div className="relative overflow-hidden rounded-xl border border-border/50 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-[border-color,box-shadow] duration-300 sm:p-5 md:p-6 group-hover:border-goldenrod/30 group-hover:shadow-lg group-hover:shadow-goldenrod/10">
 				{/* Category + status */}
 				<div className="mb-3 flex items-center gap-2">
-					<span className="rounded-full bg-[#DAA520]/10 px-2.5 py-1 text-xs font-medium capitalize text-[#DAA520] transition-colors duration-200 group-hover:bg-[#DAA520]/15">
+					<span className="rounded-full bg-goldenrod/10 px-2.5 py-1 text-xs font-medium capitalize text-goldenrod-dark dark:text-goldenrod transition-colors duration-200 group-hover:bg-goldenrod/15">
 						{post.category}
 					</span>
 					{post.status === 'draft' && (
@@ -103,7 +103,7 @@ export function PostCard({ post, showAuthor = true, index = 0 }: PostCardProps) 
 				</div>
 
 				<Link href={`/posts/${post.id}`} className="relative z-[1] block min-w-0">
-					<h2 className="mb-2 line-clamp-2 text-lg font-bold leading-snug text-foreground transition-colors duration-200 sm:text-xl group-hover:text-[#DAA520]">
+					<h2 className="mb-2 line-clamp-2 text-lg font-bold leading-snug text-foreground transition-colors duration-200 sm:text-xl group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod">
 						{post.title}
 					</h2>
 				</Link>
@@ -113,7 +113,7 @@ export function PostCard({ post, showAuthor = true, index = 0 }: PostCardProps) 
 				</p>
 
 				{/* Read hint — fades in on hover (desktop) */}
-				<p className="pointer-events-none absolute right-6 top-6 z-[1] hidden text-[10px] font-semibold uppercase tracking-wider text-primary/0 transition-all duration-300 group-hover:text-[#DAA520]/80 md:block">
+				<p className="pointer-events-none absolute right-6 top-6 z-[1] hidden text-[10px] font-semibold uppercase tracking-wider text-primary/0 transition-all duration-300 group-hover:text-goldenrod-dark/80 dark:group-hover:text-goldenrod/80 md:block">
 					Read →
 				</p>
 

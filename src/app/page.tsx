@@ -51,9 +51,9 @@ const featuredProjects = [
 ];
 
 const statusColors: Record<string, string> = {
-	Live: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+	Live: "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
 	"In Progress": "bg-amber-500/20 text-amber-400 border-amber-500/30",
-	Planned: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+	Planned: "bg-primary/20 text-primary border-primary/30",
 };
 
 const fadeUp = {
@@ -75,7 +75,7 @@ export default function LandingPage() {
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{ duration: 0.7, ease: "easeOut" }}
 				>
-					<p className="text-sm font-semibold tracking-[0.25em] uppercase text-[#DAA520]/80 mb-4">
+					<p className="text-sm font-semibold tracking-[0.25em] uppercase text-goldenrod-dark/80 dark:text-goldenrod/80 mb-4">
 						Just Technology Development Studio
 					</p>
 					<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
@@ -94,12 +94,12 @@ export default function LandingPage() {
 						— built with discipline, shipped with care.
 					</p>
 					<div className="mt-8 flex justify-center gap-4 flex-wrap">
-						<Button asChild size="lg" className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-8 py-6 text-base rounded-xl">
+						<Button asChild size="lg" className="btn-gold font-bold px-8 py-6 text-base rounded-xl">
 							<Link href="/contact">
 								Let&apos;s Work Together <ArrowRight className="w-4 h-4 ml-2" />
 							</Link>
 						</Button>
-						<Button asChild variant="outline" size="lg" className="px-8 py-6 text-base rounded-xl border-border hover:border-[#DAA520]/50 hover:text-[#DAA520]">
+						<Button asChild variant="outline" size="lg" className="px-8 py-6 text-base rounded-xl border-border hover:border-goldenrod/50 hover:text-goldenrod-dark dark:hover:text-goldenrod">
 							<Link href="/studio">
 								View Our Work
 							</Link>
@@ -136,12 +136,12 @@ export default function LandingPage() {
 						>
 							<Link
 								href="/services"
-								className="group block p-5 md:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-xl hover:shadow-[#DAA520]/5 transition-all duration-300"
+								className="group block p-5 md:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-goldenrod/30 hover:shadow-xl hover:shadow-goldenrod/5 transition-all duration-300"
 							>
-								<div className="p-3 rounded-xl bg-[#DAA520]/10 w-fit mb-5 group-hover:bg-[#DAA520]/20 transition-colors">
-									<service.icon className="w-7 h-7 text-[#DAA520]" />
+								<div className="p-3 rounded-xl bg-goldenrod/10 w-fit mb-5 group-hover:bg-goldenrod/20 transition-colors">
+									<service.icon className="w-7 h-7 text-goldenrod-dark dark:text-goldenrod" />
 								</div>
-								<h3 className="text-xl font-bold mb-2 group-hover:text-[#DAA520] transition-colors">
+								<h3 className="text-xl font-bold mb-2 group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors">
 									{service.title}
 								</h3>
 								<p className="text-muted-foreground text-sm leading-relaxed">
@@ -153,7 +153,7 @@ export default function LandingPage() {
 				</div>
 
 				<div className="text-center mt-8">
-					<Button asChild variant="ghost" className="text-[#DAA520] hover:text-[#DAA520]/80 hover:bg-[#DAA520]/5">
+					<Button asChild variant="ghost" className="text-goldenrod-dark dark:text-goldenrod hover:bg-goldenrod/5">
 						<Link href="/services">
 							View All Services & Pricing <ArrowRight className="w-4 h-4 ml-2" />
 						</Link>
@@ -189,10 +189,10 @@ export default function LandingPage() {
 						>
 							<Link
 								href={project.href}
-								className="group block p-5 md:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-xl hover:shadow-[#DAA520]/5 transition-all duration-300 h-full flex flex-col"
+								className="group block p-5 md:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-goldenrod/30 hover:shadow-xl hover:shadow-goldenrod/5 transition-all duration-300 h-full flex flex-col"
 							>
 								<div className="flex items-center justify-between mb-4">
-									<h3 className="text-xl font-bold group-hover:text-[#DAA520] transition-colors">
+									<h3 className="text-xl font-bold group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors">
 										{project.name}
 									</h3>
 									<span className={`text-xs font-semibold px-3 py-1 rounded-full border ${statusColors[project.status]}`}>
@@ -202,7 +202,7 @@ export default function LandingPage() {
 								<p className="text-muted-foreground text-sm leading-relaxed flex-1">
 									{project.desc}
 								</p>
-								<div className="mt-4 flex items-center text-xs text-muted-foreground group-hover:text-[#DAA520] transition-colors">
+								<div className="mt-4 flex items-center text-xs text-muted-foreground group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors">
 									<span>Built by JT</span>
 								</div>
 							</Link>
@@ -236,7 +236,7 @@ export default function LandingPage() {
 							and we ship work that speaks for itself.
 						</motion.p>
 						<motion.div variants={fadeUp} custom={3}>
-							<Button asChild variant="outline" className="border-[#DAA520]/30 text-[#DAA520] hover:bg-[#DAA520]/10 rounded-xl px-6 py-5 h-auto">
+							<Button asChild variant="outline" className="border-goldenrod/40 text-goldenrod-dark dark:text-goldenrod hover:bg-goldenrod/10 rounded-xl px-6 py-5 h-auto">
 								<Link href="/profile">
 									Meet the Developer <ArrowRight className="w-4 h-4 ml-2" />
 								</Link>
@@ -261,7 +261,7 @@ export default function LandingPage() {
 						let&apos;s talk about what you&apos;re building.
 					</motion.p>
 					<motion.div variants={fadeUp} custom={2} className="mt-8">
-						<Button asChild size="lg" className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-10 py-6 text-lg rounded-xl">
+						<Button asChild size="lg" className="btn-gold font-bold px-10 py-6 text-lg rounded-xl">
 							<Link href="/contact">
 								Let&apos;s Work Together <ArrowRight className="w-5 h-5 ml-2" />
 							</Link>

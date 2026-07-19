@@ -4,7 +4,7 @@
  */
 export default function SettingsLoading() {
 	return (
-		<div className="min-h-screen bg-[#0a0a0a] pt-16 animate-in fade-in duration-300">
+		<div className="min-h-[calc(100vh-3.5rem)] bg-background pt-16 animate-in fade-in duration-300">
 			<div className="max-w-7xl mx-auto px-1 sm:px-4 lg:px-6 py-4">
 				{/* Header */}
 				<div className="mb-8 space-y-2">
@@ -14,7 +14,7 @@ export default function SettingsLoading() {
 
 				<div className="grid md:grid-cols-[240px_1fr] gap-6">
 					{/* Sidebar Nav Skeleton */}
-					<div className="bg-white/3 backdrop-blur-xl border border-white/8 rounded-2xl p-3 h-fit space-y-1">
+					<div className="bg-card border border-border shadow-sm rounded-2xl p-3 h-fit space-y-1">
 						{[1, 2, 3, 4, 5].map((i) => (
 							<div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl animate-pulse">
 								<div className="w-4 h-4 rounded bg-muted/20" />
@@ -24,7 +24,7 @@ export default function SettingsLoading() {
 					</div>
 
 					{/* Content Skeleton */}
-					<div className="bg-white/3 backdrop-blur-xl border border-white/8 rounded-2xl p-6 space-y-6">
+					<div className="bg-card border border-border shadow-sm rounded-2xl p-6 space-y-6">
 						<div className="space-y-2">
 							<div className="h-6 w-20 rounded bg-muted/20 animate-pulse" />
 							<div className="h-4 w-56 rounded bg-muted/10 animate-pulse" />
@@ -41,7 +41,7 @@ export default function SettingsLoading() {
 						</div>
 
 						{/* Submit Button */}
-						<div className="h-11 w-36 rounded-xl bg-blue-600/20 animate-pulse" />
+						<div className="h-11 w-36 rounded-xl bg-primary/20 animate-pulse" />
 					</div>
 				</div>
 			</div>

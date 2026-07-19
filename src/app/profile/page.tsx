@@ -110,7 +110,7 @@ export default async function ProfilePage() {
 						<Image
 							src={profile.avatar_url}
 							alt="Jesus Torres"
-							className="relative rounded-full border-2 border-[#DAA520]/20 shadow-2xl object-cover"
+							className="relative rounded-full border-2 border-goldenrod/30 shadow-2xl object-cover"
 							width={160}
 							height={160}
 							priority
@@ -140,9 +140,9 @@ export default async function ProfilePage() {
 								href={profile.html_url}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 hover:scale-110 transition-all duration-300 border border-white/5 hover:border-[#DAA520]/50"
+								className="p-2.5 rounded-full bg-muted/60 hover:bg-muted hover:scale-110 transition-all duration-300 border border-border hover:border-goldenrod/50"
 							>
-								<Github className="w-5 h-5 text-[#DAA520]/80" />
+								<Github className="w-5 h-5 text-goldenrod-dark/90 dark:text-goldenrod/80" />
 							</Link>
 						)}
 						{profile?.blog && (
@@ -150,15 +150,15 @@ export default async function ProfilePage() {
 								href={profile.blog.startsWith("http") ? profile.blog : `https://${profile.blog}`}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 hover:scale-110 transition-all duration-300 border border-white/5 hover:border-[#DAA520]/50"
+								className="p-2.5 rounded-full bg-muted/60 hover:bg-muted hover:scale-110 transition-all duration-300 border border-border hover:border-goldenrod/50"
 							>
-								<Globe className="w-5 h-5 text-[#DAA520]/80" />
+								<Globe className="w-5 h-5 text-goldenrod-dark/90 dark:text-goldenrod/80" />
 							</Link>
 						)}
 
 						<ResumeDownloadButton />
 
-						<Button asChild size="sm" variant="outline" className="h-10 px-4 rounded-xl border-[#DAA520]/30 text-[#DAA520] hover:bg-[#DAA520]/10">
+						<Button asChild size="sm" variant="outline" className="h-10 px-4 rounded-xl border-goldenrod/40 text-goldenrod-dark dark:text-goldenrod hover:bg-goldenrod/10">
 							<Link href="/contact">
 								<Mail className="w-4 h-4 mr-2" />
 								Hire Me
@@ -170,7 +170,7 @@ export default async function ProfilePage() {
 
 			{/* ═══════════════ TECH STACK ═══════════════ */}
 			<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-100">
-				<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Tech Stack</h2>
+				<h2 className="text-2xl font-bold text-goldenrod-dark dark:text-goldenrod tracking-wide">Tech Stack</h2>
 				<div className="p-4 md:p-5 rounded-2xl border border-border bg-card/40 backdrop-blur-sm shadow-xl">
 					<TechStackDisplay />
 				</div>
@@ -178,7 +178,7 @@ export default async function ProfilePage() {
 
 			{/* ═══════════════ EXPERIENCE TIMELINE ═══════════════ */}
 			<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-200">
-				<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Experience</h2>
+				<h2 className="text-2xl font-bold text-goldenrod-dark dark:text-goldenrod tracking-wide">Experience</h2>
 				<div className="relative">
 					{/* Timeline line */}
 					<div className="absolute left-[19px] top-0 bottom-0 w-px bg-border"></div>
@@ -186,12 +186,12 @@ export default async function ProfilePage() {
 					<div className="space-y-3">
 						{timeline.map((item, i) => (
 							<div key={i} className="flex gap-3 sm:gap-4 relative group">
-								<div className="relative z-10 p-2 rounded-xl bg-card border border-border group-hover:border-[#DAA520]/30 transition-colors shrink-0 h-fit">
-									<item.icon className="w-5 h-5 text-[#DAA520]" />
+								<div className="relative z-10 p-2 rounded-xl bg-card border border-border group-hover:border-goldenrod/30 transition-colors shrink-0 h-fit">
+									<item.icon className="w-5 h-5 text-goldenrod-dark dark:text-goldenrod" />
 								</div>
 								<div className="pb-3 min-w-0">
 									<div className="flex items-start sm:items-center gap-x-3 gap-y-1 flex-wrap">
-										<h3 className="font-bold text-foreground group-hover:text-[#DAA520] transition-colors">
+										<h3 className="font-bold text-foreground group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors">
 											{item.role}
 										</h3>
 										<span className="text-xs font-medium px-2 py-0.5 rounded-full bg-accent/20 text-muted-foreground whitespace-nowrap">
@@ -216,14 +216,14 @@ export default async function ProfilePage() {
 				<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-300">
 					<div className="flex items-center justify-between gap-4">
 						<div>
-							<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">Featured Projects</h2>
+							<h2 className="text-2xl font-bold text-goldenrod-dark dark:text-goldenrod tracking-wide">Featured Projects</h2>
 							<p className="text-sm text-muted-foreground mt-1">My most-starred repositories on GitHub.</p>
 						</div>
 						{profile && (
 							<Link
 								href={profile.html_url + "?tab=repositories"}
 								target="_blank"
-								className="text-sm font-medium text-muted-foreground hover:text-[#DAA520] transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
+								className="text-sm font-medium text-muted-foreground hover:text-goldenrod-dark dark:hover:text-goldenrod transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
 							>
 								View All <ExternalLink className="w-3 h-3" />
 							</Link>
@@ -236,14 +236,14 @@ export default async function ProfilePage() {
 								href={repo.html_url}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="group p-5 sm:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/30 hover:shadow-lg hover:shadow-[#DAA520]/5 transition-all duration-300 flex flex-col justify-between gap-4 h-full"
+								className="group p-5 sm:p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm hover:border-goldenrod/30 hover:shadow-lg hover:shadow-goldenrod/5 transition-all duration-300 flex flex-col justify-between gap-4 h-full"
 							>
 								<div className="space-y-2 min-w-0">
 									<div className="flex items-center justify-between gap-3">
-										<h3 className="font-bold text-lg group-hover:text-[#DAA520] transition-colors truncate">
+										<h3 className="font-bold text-lg group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors truncate">
 											{repo.name}
 										</h3>
-										<ExternalLink className="w-4 h-4 text-muted-foreground/60 group-hover:text-[#DAA520] transition-colors shrink-0" />
+										<ExternalLink className="w-4 h-4 text-muted-foreground/60 group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors shrink-0" />
 									</div>
 									<p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
 										{repo.description || "No description provided."}
@@ -254,7 +254,7 @@ export default async function ProfilePage() {
 										<Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> {repo.stargazers_count}
 									</span>
 									<span className="flex items-center gap-1">
-										<GitFork className="w-4 h-4 text-blue-500" /> {repo.forks_count}
+										<GitFork className="w-4 h-4 text-primary" /> {repo.forks_count}
 									</span>
 									{repo.language && (
 										<span className="ml-auto px-2 py-0.5 rounded-full bg-accent/20 text-accent-foreground truncate max-w-[45%]">
@@ -272,11 +272,11 @@ export default async function ProfilePage() {
 			{profile && (
 				<section className="space-y-4 animate-in slide-in-from-bottom-5 duration-700 delay-400">
 					<div className="flex justify-between items-center gap-4">
-						<h2 className="text-2xl font-bold text-[#DAA520] tracking-wide">GitHub Activity</h2>
+						<h2 className="text-2xl font-bold text-goldenrod-dark dark:text-goldenrod tracking-wide">GitHub Activity</h2>
 						<Link
 							href={profile.html_url}
 							target="_blank"
-							className="text-sm font-medium text-muted-foreground hover:text-[#DAA520] transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
+							className="text-sm font-medium text-muted-foreground hover:text-goldenrod-dark dark:hover:text-goldenrod transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
 						>
 							View Profile <ExternalLink className="w-3 h-3" />
 						</Link>
@@ -291,9 +291,9 @@ export default async function ProfilePage() {
 						].map((stat) => (
 							<div
 								key={stat.label}
-								className="rounded-xl border border-border bg-card/40 p-4 text-center hover:border-[#DAA520]/30 transition-colors"
+								className="rounded-xl border border-border bg-card/40 p-4 text-center hover:border-goldenrod/30 transition-colors"
 							>
-								<p className="text-2xl sm:text-3xl font-extrabold text-[#DAA520]">{stat.value ?? 0}</p>
+								<p className="text-2xl sm:text-3xl font-extrabold text-goldenrod-dark dark:text-goldenrod">{stat.value ?? 0}</p>
 								<p className="text-[11px] sm:text-xs text-muted-foreground mt-1 tracking-wide">{stat.label}</p>
 							</div>
 						))}
@@ -312,11 +312,11 @@ export default async function ProfilePage() {
 
 			{/* ═══════════════ CTA ═══════════════ */}
 			<section className="flex flex-col items-center justify-center p-6 rounded-2xl bg-linear-to-b from-accent/10 to-transparent border border-border backdrop-blur-sm text-center space-y-4">
-				<h2 className="text-2xl font-bold text-[#DAA520]">Let&apos;s Work Together</h2>
+				<h2 className="text-2xl font-bold text-goldenrod-dark dark:text-goldenrod">Let&apos;s Work Together</h2>
 				<p className="text-muted-foreground max-w-md">
 					Have a project in mind or want to discuss an opportunity? I&apos;m always open to new collaborations.
 				</p>
-				<Button asChild className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-6 py-5 h-auto text-base rounded-xl">
+				<Button asChild className="btn-gold font-bold px-6 py-5 h-auto text-base rounded-xl">
 					<Link href="/contact" className="flex items-center gap-2">
 						<Mail className="w-5 h-5" /> Get In Touch
 					</Link>

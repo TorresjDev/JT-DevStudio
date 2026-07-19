@@ -98,14 +98,14 @@ export default function ContactPage() {
 	const fieldGroupClasses = "space-y-1.5";
 	const gridRowClasses = "grid grid-cols-1 md:grid-cols-2 gap-5";
 	const fieldBaseClasses =
-		"w-full h-11 px-3 rounded-xl bg-background/50 border border-border text-foreground placeholder:text-muted-foreground focus:border-[#DAA520]/50 focus:ring-1 focus:ring-[#DAA520]/40 outline-none transition-all duration-200 text-sm";
+		"w-full h-11 px-3 rounded-xl bg-background/50 border border-border text-foreground placeholder:text-muted-foreground focus:border-goldenrod/50 focus:ring-1 focus:ring-goldenrod/40 outline-none transition-all duration-200 text-sm";
 	const inputClasses = fieldBaseClasses;
 	const selectClasses = `${fieldBaseClasses} appearance-none cursor-pointer pr-10`;
-	const optionClasses = "bg-white text-neutral-900";
-	const placeholderOptionClasses = "bg-white text-neutral-500";
+	const optionClasses = "bg-popover text-popover-foreground";
+	const placeholderOptionClasses = "bg-popover text-muted-foreground";
 	const optionStyle = { backgroundColor: "#ffffff", color: "#111111" };
 	const placeholderOptionStyle = { backgroundColor: "#ffffff", color: "#737373" };
-	const requiredMark = <span className="text-[#DAA520] ml-0.5" aria-hidden="true">*</span>;
+	const requiredMark = <span className="text-goldenrod-dark dark:text-goldenrod ml-0.5" aria-hidden="true">*</span>;
 
 	return (
 		<section
@@ -114,7 +114,7 @@ export default function ContactPage() {
 		>
 			{/* Header */}
 			<div className="flex flex-col items-center text-center space-y-4 max-w-2xl mx-auto">
-				<p className="text-sm font-semibold tracking-[0.25em] uppercase text-[#DAA520]/80">
+				<p className="text-sm font-semibold tracking-[0.25em] uppercase text-goldenrod-dark/80 dark:text-goldenrod/80">
 					Contact
 				</p>
 				<h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-[#DAA520] via-yellow-400 to-[#DAA520]">
@@ -128,15 +128,15 @@ export default function ContactPage() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
 				{/* Contact Info Sidebar */}
 				<div className="space-y-6 flex flex-col justify-start">
-					<div className="p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm space-y-4 shadow-xl hover:border-[#DAA520]/20 transition-all duration-300">
-						<h3 className="text-xl font-bold text-[#DAA520]">Connect Directly</h3>
+					<div className="p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm space-y-4 shadow-xl hover:border-goldenrod/20 transition-all duration-300">
+						<h3 className="text-xl font-bold text-goldenrod-dark dark:text-goldenrod">Connect Directly</h3>
 						<p className="text-sm text-muted-foreground">
 							Prefer to reach out another way? Use any of these channels.
 						</p>
 
 						<div className="flex flex-col gap-3">
-							<Link href="mailto:j.torres3.dev@gmail.com" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 hover:translate-x-1 border border-white/5 hover:border-[#DAA520]/30 transition-all duration-300 group">
-								<div className="p-2 rounded-lg bg-[#DAA520]/10 text-[#DAA520]">
+							<Link href="mailto:j.torres3.dev@gmail.com" className="flex items-center gap-3 p-3 rounded-xl bg-muted/60 hover:bg-muted hover:translate-x-1 border border-border hover:border-goldenrod/30 transition-all duration-300 group">
+								<div className="p-2 rounded-lg bg-goldenrod/10 text-goldenrod-dark dark:text-goldenrod">
 									<Mail className="w-5 h-5" />
 								</div>
 								<div>
@@ -145,8 +145,8 @@ export default function ContactPage() {
 								</div>
 							</Link>
 
-							<Link href="https://github.com/torresjdev" target="_blank" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 hover:translate-x-1 border border-white/5 hover:border-[#DAA520]/30 transition-all duration-300 group">
-								<div className="p-2 rounded-lg bg-[#DAA520]/10 text-[#DAA520]">
+							<Link href="https://github.com/torresjdev" target="_blank" className="flex items-center gap-3 p-3 rounded-xl bg-muted/60 hover:bg-muted hover:translate-x-1 border border-border hover:border-goldenrod/30 transition-all duration-300 group">
+								<div className="p-2 rounded-lg bg-goldenrod/10 text-goldenrod-dark dark:text-goldenrod">
 									<Github className="w-5 h-5" />
 								</div>
 								<div>
@@ -155,8 +155,8 @@ export default function ContactPage() {
 								</div>
 							</Link>
 
-							<Link href="https://linkedin.com/in/torresjdev" target="_blank" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 hover:translate-x-1 border border-white/5 hover:border-[#DAA520]/30 transition-all duration-300 group">
-								<div className="p-2 rounded-lg bg-[#DAA520]/10 text-[#DAA520]">
+							<Link href="https://linkedin.com/in/torresjdev" target="_blank" className="flex items-center gap-3 p-3 rounded-xl bg-muted/60 hover:bg-muted hover:translate-x-1 border border-border hover:border-goldenrod/30 transition-all duration-300 group">
+								<div className="p-2 rounded-lg bg-goldenrod/10 text-goldenrod-dark dark:text-goldenrod">
 									<Linkedin className="w-5 h-5" />
 								</div>
 								<div>
@@ -170,17 +170,17 @@ export default function ContactPage() {
 
 				{/* Contact Form */}
 				<div className="lg:col-span-2">
-					<div className="p-6 md:p-8 rounded-2xl border border-border bg-card/40 backdrop-blur-sm shadow-2xl relative overflow-hidden group hover:border-[#DAA520]/20 transition-all duration-300">
+					<div className="p-6 md:p-8 rounded-2xl border border-border bg-card/40 backdrop-blur-sm shadow-2xl relative overflow-hidden group hover:border-goldenrod/20 transition-all duration-300">
 						<div className="absolute -inset-1 bg-linear-to-r from-[#DAA520] to-yellow-600 rounded-2xl blur opacity-5 group-hover:opacity-10 transition duration-500"></div>
 
 						{status === "success" ? (
 							<div className="flex flex-col items-center justify-center py-12 text-center space-y-4 animate-in zoom-in duration-300">
-								<CheckCircle className="w-16 h-16 text-green-500" />
-								<h2 className="text-2xl font-bold text-[#DAA520]">Message Sent!</h2>
+								<CheckCircle className="w-16 h-16 text-emerald-500" />
+								<h2 className="text-2xl font-bold text-goldenrod-dark dark:text-goldenrod">Message Sent!</h2>
 								<p className="text-muted-foreground max-w-sm">
 									Thank you for reaching out. We&apos;ll review your inquiry and get back to you within 48 hours.
 								</p>
-								<Button onClick={() => setStatus("idle")} className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-6">
+								<Button onClick={() => setStatus("idle")} className="btn-gold font-bold px-6">
 									Send Another
 								</Button>
 							</div>
@@ -323,7 +323,7 @@ export default function ContactPage() {
 								<Button
 									type="submit"
 									disabled={status === "loading"}
-									className="w-full bg-[#DAA520] hover:enabled:bg-[#c9951d] text-black font-bold px-6 py-6 h-auto text-base rounded-xl flex items-center justify-center gap-2 transform active:enabled:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-[#DAA520]"
+									className="w-full bg-goldenrod hover:enabled:bg-goldenrod-dark text-black font-bold px-6 py-6 h-auto text-base rounded-xl flex items-center justify-center gap-2 transform active:enabled:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-goldenrod"
 								>
 									{status === "loading" ? (
 										<span className="animate-spin h-5 w-5 border-2 border-black border-t-transparent rounded-full" />

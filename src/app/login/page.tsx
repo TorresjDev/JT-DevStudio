@@ -71,7 +71,7 @@ function PasswordRequirements({
         <span
           key={label}
           className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${
-            met ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-white/30'
+            met ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-muted text-muted-foreground/70'
           }`}
         >
           {met ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
@@ -204,7 +204,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background overflow-hidden relative">
+    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-background overflow-hidden relative">
       {/* Dynamic Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/10 blur-[120px] rounded-full" />
@@ -241,7 +241,7 @@ function LoginForm() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center gap-2 text-green-400 text-sm"
+                className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-sm"
               >
                 <Check className="w-4 h-4 shrink-0" />
                 <span>{info}</span>
@@ -252,7 +252,7 @@ function LoginForm() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-red-400 text-sm"
+                className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-2 text-destructive text-sm"
               >
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
@@ -300,25 +300,25 @@ function LoginForm() {
                         onChange={(e) => handleInputChange('username', e.target.value.toLowerCase())}
                         required={!isLogin}
                         className={`bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${usernameStatus === 'taken' ? 'border-destructive/50' :
-                          usernameStatus === 'available' ? 'border-green-500/50' : ''
+                          usernameStatus === 'available' ? 'border-emerald-500/60' : ''
                           }`}
                       />
                       {usernameStatus !== 'idle' && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
                           {usernameStatus === 'checking' && (
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div className="w-4 h-4 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
                           )}
                           {usernameStatus === 'available' && (
-                            <Check className="w-4 h-4 text-green-400" />
+                            <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                           )}
                           {usernameStatus === 'taken' && (
-                            <X className="w-4 h-4 text-red-400" />
+                            <X className="w-4 h-4 text-destructive" />
                           )}
                         </div>
                       )}
                     </div>
                     {usernameStatus === 'taken' && (
-                      <p className="text-xs text-red-400 ml-1">Username is already taken</p>
+                      <p className="text-xs text-destructive ml-1">Username is already taken</p>
                     )}
                   </div>
                 </motion.div>
@@ -337,7 +337,7 @@ function LoginForm() {
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   required
-                  className="bg-white/2 border-white/10 pl-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300"
+                  className="bg-secondary/50 border-input pl-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                 />
               </div>
             </div>
@@ -362,18 +362,18 @@ function LoginForm() {
                       onChange={(e) => handleInputChange('confirmEmail', e.target.value)}
                       required={!isLogin}
                       className={`bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${formData.confirmEmail && formData.email !== formData.confirmEmail
-                        ? 'border-red-500/50'
+                        ? 'border-destructive/60'
                         : formData.confirmEmail && formData.email === formData.confirmEmail
-                          ? 'border-green-500/50'
+                          ? 'border-emerald-500/60'
                           : ''
                         }`}
                     />
                     {formData.confirmEmail && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
                         {formData.email === formData.confirmEmail ? (
-                          <Check className="w-4 h-4 text-green-400" />
+                          <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                         ) : (
-                          <X className="w-4 h-4 text-red-400" />
+                          <X className="w-4 h-4 text-destructive" />
                         )}
                       </div>
                     )}
@@ -394,12 +394,12 @@ function LoginForm() {
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   required
-                  className="bg-white/2 border-white/10 pl-10 pr-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300"
+                  className="bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -441,24 +441,24 @@ function LoginForm() {
                       onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                       required={!isLogin}
                       className={`bg-secondary/50 border-input pl-10 pr-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300 ${formData.confirmPassword && formData.password !== formData.confirmPassword
-                        ? 'border-red-500/50'
+                        ? 'border-destructive/60'
                         : formData.confirmPassword && formData.password === formData.confirmPassword
-                          ? 'border-green-500/50'
+                          ? 'border-emerald-500/60'
                           : ''
                         }`}
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                       {formData.confirmPassword && (
                         formData.password === formData.confirmPassword ? (
-                          <Check className="w-4 h-4 text-green-400" />
+                          <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                         ) : (
-                          <X className="w-4 h-4 text-red-400" />
+                          <X className="w-4 h-4 text-destructive" />
                         )
                       )}
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="text-white/30 hover:text-white/60 transition-colors"
+                        className="text-muted-foreground/70 hover:text-foreground transition-colors"
                       >
                         {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -471,10 +471,10 @@ function LoginForm() {
             <Button
               type="submit"
               disabled={isLoading || (!isLogin && usernameStatus === 'taken')}
-              className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group mt-6"
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg shadow-primary/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group mt-6"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
               ) : (
                 <>
                   {isLogin ? <LogIn className="w-4 h-4 group-hover:translate-x-1 transition-transform" /> : <UserPlus className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
@@ -560,8 +560,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="w-8 h-8 border-2 border-white/20 border-t-blue-500 rounded-full animate-spin" />
+        <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-background">
+          <div className="w-8 h-8 border-2 border-border border-t-primary rounded-full animate-spin" />
         </div>
       }
     >

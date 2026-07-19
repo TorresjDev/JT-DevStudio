@@ -226,7 +226,7 @@ async function PostContent({ postId }: { postId: string }) {
 
         {/* Content - Render HTML from rich text editor */}
         <div
-          className="prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-em:text-foreground/90 prose-li:text-foreground/90 prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-blockquote:border-primary prose-blockquote:text-muted-foreground"
+          className="prose dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-em:text-foreground/90 prose-li:text-foreground/90 prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted prose-blockquote:border-primary prose-blockquote:text-muted-foreground"
           dangerouslySetInnerHTML={{ __html: sanitizePostContent(post.content) }}
         />
 

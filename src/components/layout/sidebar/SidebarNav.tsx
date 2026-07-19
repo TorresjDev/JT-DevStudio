@@ -18,10 +18,7 @@ export function SidebarNav() {
 	const isCollapsed = state === "collapsed";
 
 	return (
-		<Sidebar
-			collapsible="icon"
-			className="top-14 h-[calc(100svh-3.5rem)]"
-		>
+		<Sidebar collapsible="icon">
 			{/* Collapse / expand toggle — desktop only. In the mobile drawer the
 			    Sheet's own close button handles dismissal, so this is hidden. */}
 			{!isMobile && (
@@ -32,7 +29,7 @@ export function SidebarNav() {
 								onClick={toggleSidebar}
 								aria-label={isCollapsed ? "Open sidebar" : "Collapse sidebar"}
 								tooltip="Open sidebar"
-								className="transition-colors duration-200 hover:text-[#DAA520]/90"
+								className="hover:text-goldenrod-dark dark:hover:text-goldenrod/90"
 							>
 								{isCollapsed ? (
 									<PanelLeftOpen className="h-4 w-4 shrink-0" />
@@ -49,7 +46,8 @@ export function SidebarNav() {
 			<SidebarContent className="flex flex-col mt-0">
 				<StudioSidebarGroup />
 			</SidebarContent>
-			<SidebarFooter className="border-t border-white/5 pb-4">
+			<SidebarFooter className="border-t border-sidebar-border pb-4">
+				{/* Name/chevron hide via group-data-[collapsible=icon] so they fade with the width tween */}
 				<UserMenu dropdownAlign="left" />
 			</SidebarFooter>
 		</Sidebar>

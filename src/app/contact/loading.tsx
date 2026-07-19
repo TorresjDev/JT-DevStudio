@@ -75,7 +75,7 @@ export default function ContactLoading() {
 					</div>
 
 					{/* Submit Button */}
-					<div className="h-14 w-full rounded-xl bg-[#DAA520]/10" />
+					<div className="h-14 w-full rounded-xl bg-goldenrod/10" />
 				</div>
 			</div>
 		</section>

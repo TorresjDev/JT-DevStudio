@@ -19,7 +19,7 @@ const TECH_STACK = [
 		category: "Frameworks & Libraries",
 		icon: "💿",
 		items: [
-			{ name: "Next.js", icon: "https://cdn.simpleicons.org/nextdotjs/white" },
+			{ name: "Next.js", icon: "https://cdn.simpleicons.org/nextdotjs/808080" },
 			{ name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
 			{ name: ".NET Core", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" },
 			{ name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
@@ -53,7 +53,7 @@ export function TechStackDisplay() {
 				<div key={category.category} className="space-y-4">
 					<div className="flex items-center gap-2 sticky top-0 bg-background/80 backdrop-blur-md py-1 z-10">
 						<span className="text-xl">{category.icon}</span>
-						<h3 className="text-sm font-bold text-[#DAA520]/90 tracking-wider">
+						<h3 className="text-sm font-bold text-goldenrod-dark/90 dark:text-goldenrod/90 tracking-wider">
 							{category.category.toUpperCase()}
 						</h3>
 					</div>
@@ -61,7 +61,7 @@ export function TechStackDisplay() {
 						{category.items.map((item) => (
 							<div
 								key={item.name}
-								className="group flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card/40 backdrop-blur-sm hover:border-[#DAA520]/40 hover:shadow-lg hover:shadow-[#DAA520]/5 transition-all duration-300 transform hover:-translate-y-1"
+								className="group flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card/40 backdrop-blur-sm hover:border-goldenrod/40 hover:shadow-lg hover:shadow-goldenrod/5 transition-all duration-300 transform hover:-translate-y-1"
 							>
 								<div className="relative w-10 h-10 mb-2 flex items-center justify-center">
 									<img

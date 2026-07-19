@@ -178,7 +178,7 @@ export function MediaUploader({ postId, onUpload, onRemove, uploadedMedia }: Med
           relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
           ${isDragging 
             ? 'border-primary bg-primary/5' 
-            : 'border-border hover:border-[#DAA520]/50 hover:bg-[#DAA520]/5'
+            : 'border-border hover:border-goldenrod/50 hover:bg-goldenrod/5'
           }
         `}
       >
@@ -226,7 +226,7 @@ export function MediaUploader({ postId, onUpload, onRemove, uploadedMedia }: Med
                   <p className="text-xs text-red-500">{upload.error}</p>
                 )}
                 {upload.status === 'complete' && (
-                  <p className="text-xs text-green-500">Upload complete!</p>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400">Upload complete!</p>
                 )}
               </div>
             </div>

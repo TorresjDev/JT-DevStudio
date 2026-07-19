@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background overflow-hidden relative">
+    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-background overflow-hidden relative">
       {/* Dynamic Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/10 blur-[120px] rounded-full" />
@@ -59,9 +59,9 @@ export default function ForgotPasswordPage() {
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
-                className="mx-auto mb-6 w-20 h-20 rounded-full bg-blue-500/10 flex items-center justify-center"
+                className="mx-auto mb-6 w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center"
               >
-                <MailCheck className="w-10 h-10 text-blue-400" />
+                <MailCheck className="w-10 h-10 text-primary" />
               </motion.div>
 
               <h1 className="text-3xl font-bold text-foreground mb-3">Check Your Email</h1>
@@ -84,8 +84,8 @@ export default function ForgotPasswordPage() {
           ) : (
             <>
               <div className="text-center mb-8">
-                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center">
-                  <KeyRound className="w-7 h-7 text-blue-400" />
+                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                  <KeyRound className="w-7 h-7 text-primary" />
                 </div>
                 <h1 className="text-3xl font-bold text-foreground mb-2">Forgot Password?</h1>
                 <p className="text-muted-foreground text-sm">
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-red-400 text-sm"
+                    className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-2 text-destructive text-sm"
                   >
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{error}</span>
@@ -120,7 +120,7 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoFocus
-                      className="bg-white/2 border-white/10 pl-10 h-12 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300"
+                      className="bg-secondary/50 border-input pl-10 h-12 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -128,10 +128,10 @@ export default function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
+                  className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg shadow-primary/20 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
                   ) : (
                     <>
                       <Mail className="w-4 h-4" />
