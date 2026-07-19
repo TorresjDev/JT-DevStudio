@@ -69,9 +69,11 @@ export default function UserMenu({
 
 	if (!hasMounted || loading) {
 		return (
-			<div className="flex items-center gap-2 p-1">
-				<div className="h-8 w-8 animate-pulse rounded-full bg-white/5" />
-				{showName && <div className="h-4 w-20 animate-pulse rounded bg-white/5" />}
+			<div className="flex items-center justify-center gap-2 p-1 group-data-[collapsible=icon]:p-0">
+				<div className="h-8 w-8 shrink-0 animate-pulse rounded-full bg-muted" />
+				{showName && (
+					<div className="h-4 w-20 animate-pulse rounded bg-muted transition-opacity duration-200 group-data-[collapsible=icon]:hidden" />
+				)}
 			</div>
 		)
 	}
@@ -81,10 +83,13 @@ export default function UserMenu({
 			<Link
 				href="/login"
 				aria-label="Login"
-				className="ui-press group flex items-center gap-2 rounded-lg p-2 text-sm font-medium text-[#DAA520] transition-colors hover:bg-sidebar-accent hover:text-[#DAA520]/90 group-data-[collapsible=icon]:justify-center"
+				className="ui-press flex items-center justify-center gap-2 rounded-lg p-2 text-sm font-medium text-goldenrod-dark transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-sidebar-accent hover:opacity-90 dark:text-goldenrod group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0"
 			>
-				<LogIn className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
-				<span className="group-data-[collapsible=icon]:hidden">Login</span>
+				<LogIn className="h-4 w-4 shrink-0" />
+				{/* Always show in the top nav; icon-only inside a collapsed sidebar */}
+				<span className="transition-opacity duration-200 group-data-[collapsible=icon]:hidden">
+					Login
+				</span>
 			</Link>
 		)
 	}
@@ -99,7 +104,10 @@ export default function UserMenu({
 	const initials = displayName.slice(0, 2).toUpperCase()
 
 	return (
-		<div ref={containerRef} className="relative">
+		<div
+			ref={containerRef}
+			className="relative flex justify-start group-data-[collapsible=icon]:justify-center"
+		>
 			<motion.button
 				type="button"
 				onClick={() => setIsOpen((open) => !open)}
@@ -107,43 +115,46 @@ export default function UserMenu({
 				transition={springSnappy}
 				aria-expanded={isOpen}
 				aria-haspopup="menu"
+				aria-label={displayName}
 				className={cn(
-					'ui-press group flex items-center gap-2 rounded-full p-1 transition-colors',
-					'group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0.5',
-					isOpen ? 'bg-white/8 ring-1 ring-[#DAA520]/25' : 'hover:bg-white/5',
+					'ui-press group flex items-center overflow-hidden rounded-full p-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+					showName ? 'gap-2' : 'gap-1',
+					'group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0',
+					isOpen ? 'bg-accent ring-1 ring-goldenrod/25' : 'hover:bg-accent/60',
 				)}
 			>
-				<div className="relative">
+				<div className="relative size-8 shrink-0">
 					{avatarUrl ? (
 						<Image
 							src={avatarUrl}
 							alt="User"
 							width={32}
 							height={32}
-							className="rounded-full border border-[#DAA520]/20 object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+							className="size-8 rounded-full border border-goldenrod/30 object-cover transition-transform duration-200 hover:scale-[1.03]"
 						/>
 					) : (
-						<div className="flex h-8 w-8 items-center justify-center rounded-full border border-[#DAA520]/30 bg-linear-to-br from-[#DAA520]/30 to-[#DAA520]/10">
-							<span className="text-xs font-bold text-[#DAA520]">{initials}</span>
+						<div className="flex size-8 items-center justify-center rounded-full border border-goldenrod/30 bg-linear-to-br from-goldenrod/30 to-goldenrod/10">
+							<span className="text-xs font-bold text-goldenrod-dark dark:text-goldenrod">{initials}</span>
 						</div>
 					)}
 					{isGithub && (
-						<div className="absolute -bottom-1 -right-1 rounded-full border border-white/20 bg-[#24292e] p-0.5">
+						<div className="absolute -bottom-1 -right-1 rounded-full border border-background bg-[#24292e] p-0.5 transition-opacity duration-200 group-data-[collapsible=icon]:opacity-0">
 							<Github className="h-2.5 w-2.5 text-white" />
 						</div>
 					)}
 				</div>
 
 				{showName && (
-					<div className="hidden flex-col items-start text-left md:flex md:group-data-[collapsible=icon]:hidden">
-						<span className="text-xs font-bold leading-none text-white/90">{displayName}</span>
-						<span className="mt-1 text-[10px] leading-none text-white/40">Logged in</span>
+					<div className="hidden min-w-0 flex-col items-start text-left transition-opacity duration-200 md:flex group-data-[collapsible=icon]:hidden">
+						<span className="truncate text-xs font-bold leading-none text-foreground/90">{displayName}</span>
+						<span className="mt-1 text-[10px] leading-none text-muted-foreground">Logged in</span>
 					</div>
 				)}
+				{/* Hidden in icon-collapsed sidebar via group-data; navbar (outside that group) keeps it */}
 				<ChevronDown
 					className={cn(
-						'h-4 w-4 text-white/40 transition-transform duration-300 ease-out group-data-[collapsible=icon]:hidden',
-						isOpen && 'rotate-180 text-[#DAA520]/70',
+						'h-4 w-4 shrink-0 text-muted-foreground transition-all duration-300 ease-out group-data-[collapsible=icon]:hidden',
+						isOpen && 'rotate-180 text-goldenrod/70',
 					)}
 				/>
 			</motion.button>
@@ -166,16 +177,16 @@ export default function UserMenu({
 							exit={{ opacity: 0, y: 12, scale: 0.98 }}
 							transition={springSnappy}
 							className={cn(
-								'z-100 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]/95 p-2 shadow-2xl shadow-black/50 backdrop-blur-xl',
+								'z-100 overflow-hidden rounded-2xl border border-border bg-popover/95 p-2 shadow-2xl shadow-black/10 dark:shadow-black/50 backdrop-blur-xl',
 								'max-sm:fixed max-sm:inset-x-3 max-sm:bottom-[max(0.75rem,env(safe-area-inset-bottom))] max-sm:top-auto max-sm:w-auto',
 								'sm:absolute sm:w-56 sm:max-w-[calc(100vw-2rem)]',
 								dropdownPlacement === 'top' ? 'sm:bottom-full sm:mb-2' : 'sm:top-full sm:mt-2',
 								dropdownAlign === 'right' ? 'sm:right-0' : 'sm:left-0',
 							)}
 						>
-							<div className="mb-2 border-b border-white/5 px-3 py-2">
-								<p className="mb-1 text-xs font-medium text-white/40">Signed in as</p>
-								<p className="truncate text-sm font-bold text-white">{user.email}</p>
+							<div className="mb-2 border-b border-border px-3 py-2">
+								<p className="mb-1 text-xs font-medium text-muted-foreground">Signed in as</p>
+								<p className="truncate text-sm font-bold text-foreground">{user.email}</p>
 							</div>
 
 							<motion.div variants={staggerContainer} initial="initial" animate="animate">
@@ -185,9 +196,9 @@ export default function UserMenu({
 											href={href}
 											role="menuitem"
 											onClick={() => setIsOpen(false)}
-											className="touch-target-inline ui-press group flex items-center gap-3 rounded-xl px-3 py-3 text-white/70 transition-colors hover:bg-white/6 hover:text-[#DAA520] sm:py-2.5"
+											className="touch-target-inline ui-press group flex items-center gap-3 rounded-xl px-3 py-3 text-foreground/80 transition-colors hover:bg-accent hover:text-goldenrod-dark dark:hover:text-goldenrod sm:py-2.5"
 										>
-											<Icon className="h-4 w-4 transition-colors duration-200 group-hover:text-[#DAA520]" />
+											<Icon className="h-4 w-4 transition-colors duration-200 group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod" />
 											<span className="text-sm font-medium">{label}</span>
 										</Link>
 									</motion.div>
@@ -198,7 +209,7 @@ export default function UserMenu({
 										type="button"
 										role="menuitem"
 										onClick={handleSignOut}
-										className="touch-target-inline ui-press mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-red-400/70 transition-colors hover:bg-red-400/8 hover:text-red-400 sm:py-2.5"
+										className="touch-target-inline ui-press mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-destructive/80 transition-colors hover:bg-destructive/10 hover:text-destructive sm:py-2.5"
 									>
 										<LogOut className="h-4 w-4" />
 										<span className="text-sm font-medium">Log Out</span>

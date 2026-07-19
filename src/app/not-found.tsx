@@ -13,10 +13,10 @@ export default function NotFound() {
 				loading="lazy"
 			/>
 
-			<p className="mt-4 text-lg text-silver/60">
+			<p className="mt-4 text-lg text-muted-foreground">
 				We can&apos;t seem to find the page you&apos;re looking for.
 			</p>
-			<Link href="/" className="my-3 hover:!text-[#DAA520]">
+			<Link href="/" className="my-3 hover:text-goldenrod-dark! dark:hover:text-goldenrod!">
 				Go back home
 			</Link>
 		</div>

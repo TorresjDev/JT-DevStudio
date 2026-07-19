@@ -131,7 +131,7 @@ export function PostReactions({
               transition-all duration-200 disabled:opacity-50
               ${isActive 
                 ? 'bg-primary/20 text-primary border border-primary/30' 
-                : 'bg-muted/50 text-muted-foreground border border-transparent hover:bg-[#DAA520]/10 hover:text-[#DAA520] hover:border-[#DAA520]/40'
+                : 'bg-muted/50 text-muted-foreground border border-transparent hover:bg-goldenrod/10 hover:text-goldenrod-dark dark:hover:text-goldenrod hover:border-goldenrod/40'
               }
             `}
             title={`${type.charAt(0).toUpperCase() + type.slice(1)} (${count})`}

@@ -14,7 +14,7 @@ export default function HomeLoading() {
 				</div>
 				<div className="h-5 w-md max-w-full bg-muted/10 rounded-lg mx-auto animate-pulse" />
 				<div className="flex justify-center gap-4 pt-4">
-					<div className="h-14 w-48 rounded-xl bg-[#DAA520]/10 animate-pulse" />
+					<div className="h-14 w-48 rounded-xl bg-goldenrod/10 animate-pulse" />
 					<div className="h-14 w-40 rounded-xl bg-muted/10 animate-pulse" />
 				</div>
 			</section>

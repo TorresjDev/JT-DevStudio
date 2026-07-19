@@ -34,7 +34,7 @@ export default function ProfileLoading() {
 
 						{/* Action Buttons */}
 						<div className="flex gap-3 pt-2">
-							<div className="h-11 w-36 rounded-xl bg-[#DAA520]/10 animate-pulse" />
+							<div className="h-11 w-36 rounded-xl bg-goldenrod/10 animate-pulse" />
 							<div className="h-11 w-32 rounded-xl bg-muted/10 animate-pulse" />
 						</div>
 					</div>

@@ -44,7 +44,7 @@ export default function ServicesLoading() {
 
 						{/* Price */}
 						<div className="pt-4 border-t border-border">
-							<div className="h-8 w-32 rounded-lg bg-[#DAA520]/10" />
+							<div className="h-8 w-32 rounded-lg bg-goldenrod/10" />
 						</div>
 					</div>
 				))}

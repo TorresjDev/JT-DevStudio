@@ -113,16 +113,16 @@ const projects: Project[] = [
 
 const statusConfig: Record<Status, { color: string; dot: string }> = {
 	Live: {
-		color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
-		dot: "bg-emerald-400",
+		color: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25",
+		dot: "bg-emerald-500 dark:bg-emerald-400",
 	},
 	"In Progress": {
 		color: "bg-amber-500/15 text-amber-400 border-amber-500/25",
 		dot: "bg-amber-400",
 	},
 	Planned: {
-		color: "bg-blue-500/15 text-blue-400 border-blue-500/25",
-		dot: "bg-blue-400",
+		color: "bg-primary/15 text-primary border-primary/25",
+		dot: "bg-primary",
 	},
 	Concept: {
 		color: "bg-purple-500/15 text-purple-400 border-purple-500/25",
@@ -136,7 +136,7 @@ type Filter = (typeof FILTERS)[number];
 // ─── Icon helper ──────────────────────────────────────────────────────────────
 
 function ProjectIcon({ icon }: { icon: string }) {
-	const cls = "w-5 h-5 text-[#DAA520]";
+	const cls = "w-5 h-5 text-goldenrod-dark dark:text-goldenrod";
 	switch (icon) {
 		case "cpu":       return <Cpu className={cls} />;
 		case "globe":     return <Globe className={cls} />;
@@ -194,12 +194,12 @@ export default function StudioPage() {
 					>
 						{/* Slim top bar */}
 						<div className="flex items-center justify-between px-5 py-2.5 bg-black/80 border-b border-white/8 backdrop-blur-sm shrink-0">
-							<span className="text-xs text-muted-foreground font-medium tracking-wide select-none">
+							<span className="text-xs text-white/60 font-medium tracking-wide select-none">
 								Arrow keys / WASD to move &nbsp;·&nbsp; Space to jump
 							</span>
 							<button
 								onClick={() => setActiveGame(null)}
-								className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-white px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/8 hover:border-white/20 transition-all"
+								className="flex items-center gap-1.5 text-xs text-white/60 hover:text-white px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/8 hover:border-white/20 transition-all"
 							>
 								<X className="w-3.5 h-3.5" />
 								Close
@@ -229,7 +229,7 @@ export default function StudioPage() {
 					<motion.p
 						variants={fadeUp}
 						custom={0}
-						className="text-sm font-semibold tracking-[0.25em] uppercase text-[#DAA520]/70"
+						className="text-sm font-semibold tracking-[0.25em] uppercase text-goldenrod-dark/80 dark:text-goldenrod/70"
 					>
 						The Studio
 					</motion.p>
@@ -286,8 +286,8 @@ export default function StudioPage() {
 									onClick={() => setFilter(f)}
 									className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
 										active
-											? "bg-[#DAA520] text-black shadow-sm"
-											: "text-muted-foreground hover:text-foreground hover:bg-white/5"
+											? "bg-goldenrod text-black shadow-sm"
+											: "text-muted-foreground hover:text-foreground hover:bg-accent/60"
 									}`}
 								>
 									{f}
@@ -332,16 +332,16 @@ export default function StudioPage() {
 										className={`relative flex flex-col h-full p-6 rounded-2xl border bg-card/60 backdrop-blur-sm transition-all duration-300 ${
 											isDim
 												? "border-border/40 opacity-60 hover:opacity-75"
-												: "border-border hover:border-[#DAA520]/30"
+												: "border-border hover:border-goldenrod/30"
 										}`}
 									>
 										{/* Top row */}
 										<div className="flex items-start justify-between mb-4 gap-2">
-											<div className="p-2 rounded-lg bg-[#DAA520]/10 border border-[#DAA520]/15 shrink-0">
+											<div className="p-2 rounded-lg bg-goldenrod/10 border border-goldenrod/20 shrink-0">
 												<ProjectIcon icon={project.icon} />
 											</div>
 											<div className="flex items-center gap-1.5 flex-wrap justify-end">
-												<span className="text-xs px-2 py-0.5 rounded-md border font-medium text-muted-foreground/60 bg-white/3 border-white/8">
+												<span className="text-xs px-2 py-0.5 rounded-md border font-medium text-muted-foreground/80 bg-muted/40 border-border">
 													{project.category}
 												</span>
 												<span className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full border ${status.color}`}>
@@ -352,7 +352,7 @@ export default function StudioPage() {
 										</div>
 
 										{/* Name */}
-										<h3 className="text-xl font-bold mb-2 group-hover:text-[#DAA520] transition-colors duration-200">
+										<h3 className="text-xl font-bold mb-2 group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors duration-200">
 											{project.name}
 										</h3>
 
@@ -381,9 +381,9 @@ export default function StudioPage() {
 													target="_blank"
 													rel="noopener noreferrer"
 													aria-label="View source on GitHub"
-													className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[#DAA520]/25 transition-all"
+													className="p-2 rounded-lg bg-muted/60 hover:bg-muted border border-border hover:border-goldenrod/30 transition-all"
 												>
-													<Github className="w-4 h-4 text-muted-foreground group-hover:text-[#DAA520] transition-colors" />
+													<Github className="w-4 h-4 text-muted-foreground group-hover:text-goldenrod-dark dark:group-hover:text-goldenrod transition-colors" />
 												</a>
 											)}
 
@@ -391,7 +391,7 @@ export default function StudioPage() {
 												{project.playable && project.live ? (
 													<button
 														onClick={() => setActiveGame(project.live!)}
-														className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg bg-[#DAA520] hover:bg-[#DAA520]/85 text-black transition-all active:scale-95"
+														className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg btn-gold"
 													>
 														<Play className="w-3.5 h-3.5 fill-black" />
 														Play Now
@@ -401,7 +401,7 @@ export default function StudioPage() {
 														href={project.live}
 														target="_blank"
 														rel="noopener noreferrer"
-														className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/8 hover:border-[#DAA520]/30 text-muted-foreground hover:text-[#DAA520] transition-all"
+														className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg bg-muted/60 hover:bg-muted border border-border hover:border-goldenrod/30 text-muted-foreground hover:text-goldenrod-dark dark:hover:text-goldenrod transition-all"
 													>
 														<ExternalLink className="w-3.5 h-3.5" />
 														View Live
@@ -436,7 +436,7 @@ export default function StudioPage() {
 						<Button
 							asChild
 							size="lg"
-							className="bg-[#DAA520] hover:bg-[#DAA520]/80 text-black font-bold px-8 py-6 text-base rounded-xl"
+							className="btn-gold font-bold px-8 py-6 text-base rounded-xl"
 						>
 							<Link href="/contact">
 								Start a Project <ArrowRight className="w-4 h-4 ml-2" />
@@ -446,7 +446,7 @@ export default function StudioPage() {
 							asChild
 							variant="outline"
 							size="lg"
-							className="px-8 py-6 text-base rounded-xl border-border hover:border-[#DAA520]/50 hover:text-[#DAA520]"
+							className="px-8 py-6 text-base rounded-xl border-border hover:border-goldenrod/50 hover:text-goldenrod-dark dark:hover:text-goldenrod"
 						>
 							<Link href="/services">View Services</Link>
 						</Button>
