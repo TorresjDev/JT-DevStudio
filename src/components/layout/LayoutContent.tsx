@@ -1,6 +1,5 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { SidebarNav } from '@/components/layout/sidebar/SidebarNav'
 import { Suspense } from 'react'
@@ -23,19 +22,6 @@ function PageFallback() {
 }
 
 export function LayoutContent({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const isLoginPage = pathname === '/login'
-
-  if (isLoginPage) {
-    return (
-      <main className="w-full min-h-screen">
-        <Suspense fallback={<PageFallback />}>
-          {children}
-        </Suspense>
-      </main>
-    )
-  }
-
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
