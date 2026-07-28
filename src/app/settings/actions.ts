@@ -524,7 +524,15 @@ export async function deleteAccount(formData: FormData): Promise<SettingsResult>
 
 /**
  * Fetch the current user's linked donation / payment history.
- * Anonymous donations (null user_id) never appear here.
+ *
+ * Includes donations placed while logged in (user_id = current user) AND
+ * "guest" donations made before the account existed, matched by the
+ * account's own verified email (user_id IS NULL). The email match runs
+ * server-side against the session's own verified email — never
+ * user-supplied input — so it can't be used to pull someone else's rows.
+ * Uses the service-role client because the RLS policy on `donations`
+ * (`user_id = auth.uid()`) intentionally can't express the email-match
+ * case; the two queries below enforce the equivalent scoping in code.
  */
 export async function getUserDonations(): Promise<{
     donations: Array<{
@@ -538,20 +546,38 @@ export async function getUserDonations(): Promise<{
     error: string | null
 }> {
     try {
-        const { supabase, user } = await requireAuth()
+        const { user } = await requireAuth()
+        const admin = createServiceClient()
+        const columns = 'id, provider, amount, currency, status, created_at'
 
-        const { data, error } = await supabase
-            .from('donations')
-            .select('id, provider, amount, currency, status, created_at')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(50)
+        const [ownResult, guestResult] = await Promise.all([
+            admin.from('donations').select(columns).eq('user_id', user.id),
+            user.email
+                ? admin
+                      .from('donations')
+                      .select(columns)
+                      .is('user_id', null)
+                      .eq('email', user.email)
+                : Promise.resolve({ data: [], error: null }),
+        ])
 
-        if (error) {
-            return { donations: [], error: error.message }
+        if (ownResult.error) {
+            return { donations: [], error: ownResult.error.message }
+        }
+        if (guestResult.error) {
+            return { donations: [], error: guestResult.error.message }
         }
 
-        return { donations: data ?? [], error: null }
+        const seen = new Set<string>()
+        const merged = [...(ownResult.data ?? []), ...(guestResult.data ?? [])].filter((row) => {
+            if (seen.has(row.id)) return false
+            seen.add(row.id)
+            return true
+        })
+
+        merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+        return { donations: merged.slice(0, 50), error: null }
     } catch (error) {
         return {
             donations: [],

@@ -709,7 +709,8 @@ export default function SettingsPage() {
                                 >
                                     <h2 className="text-xl font-semibold text-foreground mb-1">Payment History</h2>
                                     <p className="text-muted-foreground text-sm mb-4">
-                                        Donations you made while signed in. Anonymous gifts are not listed here.
+                                        Donations made while signed in, plus any earlier donations that match your
+                                        account&apos;s email. Fully anonymous gifts (different email, never linked) aren&apos;t listed here.
                                     </p>
 
                                     {donationsLoading ? (
@@ -721,7 +722,7 @@ export default function SettingsPage() {
                                             <Receipt className="w-8 h-8 text-muted-foreground/50 mx-auto mb-3" />
                                             <p className="text-foreground/80 text-sm font-medium mb-1">No payments yet</p>
                                             <p className="text-muted-foreground text-xs max-w-sm mx-auto">
-                                                When you donate while logged in, those payments will show up here.
+                                                Donations made while logged in, or matching your account&apos;s email, will show up here.
                                             </p>
                                         </div>
                                     ) : (

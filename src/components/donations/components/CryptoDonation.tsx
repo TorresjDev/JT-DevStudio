@@ -1,5 +1,7 @@
 "use client";
+
 import React from "react";
+import { Bitcoin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePayment } from "../hooks/usePayment";
 
@@ -21,23 +23,19 @@ export const CryptoDonation: React.FC<CryptoDonationProps> = ({
 	};
 
 	return (
-		<div
-			className={
-				compact
-					? className
-					: `ui-surface hover-lift hover-gold-surface rounded-xl border border-border p-2 sm:p-3 ${className}`
-			}
-		>
+		<div className={className}>
 			<Button
 				onClick={handleCryptoDonation}
-				disabled={isCryptoLoading}
+				disabled={isCryptoLoading || amount < 1}
 				variant="secondary"
 				size={compact ? "sm" : "default"}
-				className={`ui-press bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold transition-all ${compact ? "" : "w-full"}`}
+				className={`ui-press border border-border bg-secondary font-semibold text-secondary-foreground transition-all hover:border-[#DAA520] hover:bg-secondary/80 ${
+					compact ? "" : "h-12 w-full rounded-lg"
+				}`}
 			>
 				{isCryptoLoading ? (
 					<svg
-						className="h-5 w-5 animate-spin mx-auto text-secondary-foreground"
+						className="mx-auto h-5 w-5 animate-spin text-secondary-foreground"
 						viewBox="0 0 24 24"
 						aria-hidden="true"
 					>
@@ -57,17 +55,19 @@ export const CryptoDonation: React.FC<CryptoDonationProps> = ({
 						/>
 					</svg>
 				) : compact ? (
-					"₿"
+					<Bitcoin className="h-4 w-4" aria-label="Crypto payment" />
 				) : (
-					"Crypto ₿ 🪙"
+					<>
+						<Bitcoin className="h-4 w-4" aria-hidden="true" />
+						Donate with cryptocurrency
+					</>
 				)}
 			</Button>
 			{error && (
-				<p className="text-destructive text-sm mt-2 max-w-xs">
+				<p className="mt-2 text-left text-sm text-destructive" role="alert">
 					{error.message}
 				</p>
 			)}
 		</div>
 	);
 };
-
