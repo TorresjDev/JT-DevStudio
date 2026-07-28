@@ -1,5 +1,7 @@
 "use client";
+
 import React from "react";
+import { CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePayment } from "../hooks/usePayment";
 
@@ -21,23 +23,19 @@ export const StripeDonation: React.FC<StripeDonationProps> = ({
 	};
 
 	return (
-		<div
-			className={
-				compact
-					? className
-					: `ui-surface hover-lift hover-gold-surface rounded-xl border border-border p-2 sm:p-3 ${className}`
-			}
-		>
+		<div className={className}>
 			<Button
 				onClick={handleStripeDonation}
 				disabled={isStripeLoading || amount < 1}
 				variant="default"
 				size={compact ? "sm" : "default"}
-				className={`ui-press bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all ${compact ? "" : "w-full"}`}
+				className={`ui-press bg-primary font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:text-primary-foreground ${
+					compact ? "" : "h-12 w-full rounded-lg"
+				}`}
 			>
 				{isStripeLoading ? (
 					<svg
-						className="h-5 w-5 animate-spin mx-auto text-primary-foreground"
+						className="mx-auto h-5 w-5 animate-spin text-primary-foreground"
 						viewBox="0 0 24 24"
 						aria-hidden="true"
 					>
@@ -57,13 +55,16 @@ export const StripeDonation: React.FC<StripeDonationProps> = ({
 						/>
 					</svg>
 				) : compact ? (
-					"💳"
+					<CreditCard className="h-4 w-4" aria-label="Card payment" />
 				) : (
-					"Credit/Debit 💳"
+					<>
+						<CreditCard className="h-4 w-4" aria-hidden="true" />
+						Donate securely with card
+					</>
 				)}
 			</Button>
 			{error && (
-				<p className="text-destructive text-sm mt-2 max-w-xs">
+				<p className="mt-2 text-left text-sm text-destructive" role="alert">
 					{error.message}
 				</p>
 			)}

@@ -1,6 +1,7 @@
 "use client";
-import Image from "next/image";
+
 import React, { useState } from "react";
+import { CheckCircle2, LockKeyhole, ShieldCheck } from "lucide-react";
 import { CryptoDonation } from "./components/CryptoDonation";
 import { StripeDonation } from "./components/StripeDonation";
 
@@ -36,7 +37,6 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 
 	const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
-		// Only allow numbers and a single decimal point
 		if (/^\d*\.?\d{0,2}$/.test(value) || value === "") {
 			setCustomAmount(value);
 			setIsCustom(true);
@@ -46,9 +46,9 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 	if (compact) {
 		return (
 			<section
-				className={`bg-card text-center rounded-lg p-4 border border-border ${className}`}
+				className={`rounded-lg border border-border bg-card p-4 text-center ${className}`}
 			>
-				<h3 className="font-semibold text-foreground mb-3">
+				<h3 className="mb-3 font-semibold text-foreground">
 					Support this project
 				</h3>
 				<div className="flex items-center justify-center gap-3">
@@ -61,59 +61,69 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 
 	return (
 		<section
-			className={`bg-card rounded-xl py-6 px-4 md:px-6 w-full max-w-2xl lg:max-w-4xl mx-auto border border-border shadow-lg ${className}`}
+			className={`w-full rounded-2xl border border-border bg-card p-4 shadow-xl shadow-black/5 sm:p-6 ${className}`}
 		>
-			<h2 className="text-2xl font-semibold text-foreground mb-2 text-center">
-				Make a donation today
-			</h2>
+			<div className="mb-5 flex items-start gap-3 border-b border-border pb-5">
+				<div className="mt-0.5 rounded-full bg-primary/10 p-2 text-primary">
+					<ShieldCheck className="h-5 w-5" aria-hidden="true" />
+				</div>
+				<div>
+					<h2 className="text-xl font-semibold text-foreground sm:text-2xl">
+						Support Jesus Torres&apos;s work
+					</h2>
+					<p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+						Funds support open-source development, educational resources, and
+						the costs of maintaining this site.
+					</p>
+				</div>
+			</div>
 
-			{/* Responsive Grid layout: 1 column on mobile/tablet, 2 columns on desktop */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start mt-6">
-				{/* Left Column: Amount Selection */}
-				<div className="flex flex-col text-center lg:text-left h-full justify-between">
-					<div>
-						<h3 className="text-lg font-medium text-muted-foreground mb-4">
-							Choose an amount
-						</h3>
-						<div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3 mb-5">
-							{PRESET_AMOUNTS.map((amount) => (
-								<button
-									key={amount}
-									onClick={() => handlePresetClick(amount)}
-									className={`ui-press touch-target-inline px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-semibold text-sm border transition-all ${
-										isPresetActive(amount)
-											? "bg-primary text-primary-foreground border-primary shadow-md hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20"
-											: "bg-card text-foreground border-border hover-gold-surface"
-									}`}
-								>
-									${amount}
-								</button>
-							))}
-							<div className="relative">
-								<span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold text-sm">
-									$
-								</span>
-								<input
-									type="text"
-									inputMode="decimal"
-									placeholder="Custom"
-									value={customAmount}
-									onChange={handleCustomChange}
-									onFocus={() => setIsCustom(true)}
-									className={`ui-press ui-input touch-target-inline w-28 sm:w-32 pl-7 pr-3 py-2 sm:py-2.5 rounded-lg text-sm font-semibold border bg-card text-foreground placeholder:text-muted-foreground/50 transition-all ${
-										isCustom
-											? "border-primary shadow-md ring-1 ring-primary/20"
-											: "border-border hover-gold-surface"
-									}`}
-								/>
-							</div>
+			<div className="grid gap-5 md:grid-cols-[1fr_1.05fr] md:gap-6">
+				<div>
+					<h3 className="mb-3 text-sm font-semibold text-foreground">
+						Choose an amount
+					</h3>
+					<div className="grid grid-cols-3 gap-2">
+						{PRESET_AMOUNTS.map((amount) => (
+							<button
+								key={amount}
+								onClick={() => handlePresetClick(amount)}
+								className={`ui-press min-h-11 rounded-lg border px-3 py-2 text-sm font-semibold transition-all ${
+									isPresetActive(amount)
+										? "border-primary bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
+										: "border-border bg-card text-foreground hover-gold-surface"
+								}`}
+							>
+								${amount}
+							</button>
+						))}
+						<div className="relative">
+							<span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">
+								$
+							</span>
+							<input
+								type="text"
+								inputMode="decimal"
+								placeholder="Custom"
+								value={customAmount}
+								onChange={handleCustomChange}
+								onFocus={() => setIsCustom(true)}
+								aria-label="Custom donation amount"
+								className={`ui-press ui-input min-h-11 w-full rounded-lg border bg-card py-2 pl-7 pr-2 text-sm font-semibold text-foreground placeholder:text-muted-foreground/50 ${
+									isCustom
+										? "border-primary ring-1 ring-primary/20"
+										: "border-border hover-gold-surface"
+								}`}
+							/>
 						</div>
 					</div>
-					
 					{currentAmount > 0 && (
-						<div className="min-h-[24px]">
-							<p key={amountKey} className="animate-fade-slide-up text-sm text-muted-foreground">
-								Donating{" "}
+						<div className="mt-3 min-h-5">
+							<p
+								key={amountKey}
+								className="animate-fade-slide-up text-sm text-muted-foreground"
+							>
+								Selected:{" "}
 								<span className="font-bold text-primary">
 									${currentAmount.toFixed(2)}
 								</span>
@@ -122,46 +132,32 @@ export const DonationsJar: React.FC<DonationsJarProps> = ({
 					)}
 				</div>
 
-				{/* Right Column: Payment Options & Accents */}
-				<div className="flex flex-col text-center lg:text-left border-t lg:border-t-0 lg:border-l border-border pt-6 lg:pt-0 lg:pl-8">
-					<h3 className="text-lg font-medium text-muted-foreground mb-4">
-						Select a payment option 💸
+				<div className="border-t border-border pt-5 md:border-l md:border-t-0 md:pl-6 md:pt-0">
+					<h3 className="mb-3 text-sm font-semibold text-foreground">
+						Select a secure payment method
 					</h3>
-					
-					{/* Buttons stack vertically on mobile, side-by-side on tablet, and stack vertically in the desktop column */}
-					<div className="flex flex-col sm:flex-row lg:flex-col items-stretch justify-center gap-3 sm:gap-4 mb-6 w-full">
+					<div className="flex w-full flex-col gap-3">
 						<StripeDonation amount={currentAmount} className="w-full" />
 						<CryptoDonation amount={currentAmount} className="w-full" />
 					</div>
-
-					{/* Accepted Payment Icons */}
-					<div className="pt-4 border-t border-border w-full">
-						<p className="text-xs text-muted-foreground font-medium mb-3">
-							Currently accepting:
-						</p>
-						<div className="flex items-center justify-center lg:justify-start gap-4">
-							<Image
-								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/tech/visa.svg"
-								height={32}
-								width={32}
-								alt="visa icon"
-								className="drop-shadow-sm opacity-80 hover:opacity-100 transition-opacity"
+					<div className="mt-4 space-y-2 border-t border-border pt-4 text-xs text-muted-foreground">
+						<div className="flex items-center gap-2">
+							<LockKeyhole
+								className="h-3.5 w-3.5 text-primary"
+								aria-hidden="true"
 							/>
-							<Image
-								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/tech/master-card.svg"
-								height={32}
-								width={32}
-								alt="mastercard icon"
-								className="drop-shadow-sm opacity-80 hover:opacity-100 transition-opacity"
-							/>
-							<div className="mx-1 h-6 w-px bg-border" />
-							<Image
-								src="https://torresjdev.github.io/Nextjs-Asset-Host/assets/icons/tech/coinbase.svg"
-								height={40}
-								width={40}
-								alt="coinbase icon"
-								className="drop-shadow-sm opacity-80 hover:opacity-100 transition-opacity"
-							/>
+							<span>Encrypted, processor-hosted checkout</span>
+						</div>
+						<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+							<span className="font-semibold text-foreground">Powered by</span>
+							<span className="inline-flex items-center gap-1">
+								<CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+								Stripe for cards
+							</span>
+							<span className="inline-flex items-center gap-1">
+								<CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+								Coinbase for crypto
+							</span>
 						</div>
 					</div>
 				</div>

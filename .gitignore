@@ -55,5 +55,8 @@ next-env.d.ts
 /mynotes
 .claude
 
+# AI agent instructions (Claude Code / Fable 5 / Cursor conventions — local-only, never push)
+CLAUDE.md
+
 # dev-projects (local strategy, prompts, notes — never push to GitHub)
 /dev-projects
